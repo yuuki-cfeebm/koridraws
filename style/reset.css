@@ -31,3 +31,9 @@ img {
   max-width: 100%;
   display: block;
 }
+
+button {
+  border: none;
+  outline: none;
+  background: none;
+}

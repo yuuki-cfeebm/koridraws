@@ -3,11 +3,17 @@ section {
   flex-direction: column;
   max-width: 1500px;
   width: 100%;
-  background: gray;
+  background: rgb(177, 122, 122);
+  padding: 12px
 }
 
 .section-title {
   font-size: 36px;
   font-weight: bold;
-  
+  text-align: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
 }
