@@ -1,0 +1,27 @@
+@import url('./reset.css');
+@import url('./variables.css');
+@import url('./utils.css');
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  width: 100%;
+
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex-grow: 1;
+  background: rgb(127, 127, 127);
+}
+
+footer {
+  width: 100%;
+}
