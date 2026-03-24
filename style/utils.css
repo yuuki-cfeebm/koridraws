@@ -3,5 +3,11 @@ section {
   flex-direction: column;
   max-width: 1500px;
   width: 100%;
+  background: gray;
+}
 
+.section-title {
+  font-size: 36px;
+  font-weight: bold;
+  
 }
