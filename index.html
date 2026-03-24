@@ -9,19 +9,45 @@
 <body>
   <main>
     <section>
-      <h2>Novidades</h2>
-      <div class="card">
-        <div class="container-img">
-          <img src="" alt="">
+      <h2 class="section-title">Novidades</h2>
+      <template id="card-template">
+        <div class="card">
+          <div class="container-img">
+            <img src="assets/images/Rectangle.svg" alt="img-banco">
+          </div>
+          <div class="card-tags">
+            <div class="tag tag-offer">
+              <p></p>
+            </div>
+            <div class="tag tag-new">
+              <p></p>
+            </div>
+            <div class="tag tag-discount">
+              <p></p>
+            </div>
+          </div>
+          <div class="card-info flex-col">
+            <div class="card-text flex-col">
+              <h2></h2>
+              <p></p>
+            </div>
+            <div class="card-prices">
+              <div>
+                <p class="full-price"></p>
+                <p class="currently-price"></p>
+              </div>
+              <button>
+                <img src="assets/icons/heart.svg" alt="icon-heart">
+              </button>
+            </div>
+            <button class="buy-btn">Adicionar ao Carrinho</button>
+          </div>
         </div>
-        <div class="card-tags">
-
-        </div>
-        <div class="card-info">
-          
-        </div>
-      </div>
+      </template>
+      <div class="cards-container"></div>
     </section>
   </main>
 </body>
+
+<script type="module" src="js/index.js"></script>
 </html>
