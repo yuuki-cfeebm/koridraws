@@ -1,0 +1,165 @@
+/* ════════════════════════════════════════
+   HEADER – Koridraws
+   Importar em style.css:
+   @import url('./header.css');
+════════════════════════════════════════ */
+
+.site-header {
+  width: 100%;
+  background: var(--header-bg);
+  border-bottom: 2px solid var(--ink);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Barra superior: logo + ações ── */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  border-bottom: 1.5px solid rgba(26, 26, 26, 0.15);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink) 0%, var(--lilac) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-mark svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.logo-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.logo-name span {
+  color: var(--pink);
+}
+
+/* Ações (busca, login, carrinho) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: background 0.2s, transform 0.15s;
+  position: relative;
+}
+
+.action-btn:hover {
+  background: rgba(212, 120, 154, 0.15);
+  transform: scale(1.08);
+}
+
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* Badge do carrinho */
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--pink);
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--header-bg);
+}
+
+/* ── Navegação ── */
+.header-nav {
+  background: var(--nav-bg);
+  padding: 0 32px;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item a {
+  display: block;
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  position: relative;
+  transition: color 0.2s;
+}
+
+.nav-item a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--pink), var(--lilac));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-item a:hover { color: var(--pink); }
+.nav-item a:hover::after { transform: scaleX(1); }
+
+.nav-item.active a {
+  color: var(--pink);
+  font-weight: 700;
+}
+
+.nav-item.active a::after {
+  transform: scaleX(1);
+}
+
+
