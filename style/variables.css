@@ -1,1 +1,16 @@
 /* configuração de variáveis de cores e fontes */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
+ 
+:root {
+  --cream:        #F5F0E8;
+  --ink:          #1a1a1a;
+  --pink:         #D4789A;
+  --pink-light:   #F2C4D4;
+  --lilac:        #C5A8C8;
+  --gold:         #C8A96A;
+  --header-bg:    #5bbfe2;
+  --nav-bg:       #5bbfe2;
+  
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+}
