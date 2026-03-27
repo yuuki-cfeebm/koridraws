@@ -2,6 +2,7 @@
 @import url('./variables.css');
 @import url('./utils.css');
 @import url('./main.css');
+@import url('./header.css');
 
 body {
   display: flex;
