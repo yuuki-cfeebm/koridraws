@@ -2,7 +2,7 @@
 @import url('./variables.css');
 @import url('./utils.css');
 @import url('./main.css');
-
+@import url('./footer.css');
 body {
   display: flex;
   flex-direction: column;
