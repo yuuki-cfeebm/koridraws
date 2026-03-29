@@ -143,8 +143,7 @@
   color: var(--ink);
   transition: background 0.2s, transform 0.15s;
   position: relative;
-  color: red;
-
+  cursor: pointer;
 }
 
 .action-btn:hover {
@@ -153,11 +152,15 @@
 }
 
 .action-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   stroke: var(--color-white);
   stroke-width: 1.8;
   fill: none;
+}
+
+.user {
+  border: 1px solid var(--color-white);
 }
 
 /* Badge do carrinho */
