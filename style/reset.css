@@ -32,7 +32,7 @@ img {
   display: block;
 }
 
-button {
+button, input {
   border: none;
   outline: none;
   background: none;
