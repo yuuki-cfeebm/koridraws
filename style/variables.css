@@ -2,6 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap');
  
 :root {
+  --bg-primary: #5bbfe2;
+  --text-primary: #f3f3f3;
+  
+  --bg-footer: #5bbfe2;
+  --text-footer: #e3e3e3;
+
+  --color-white: #ffffff;
+  --color-black: #3F3F46;
+
   --cream:        #F5F0E8;
   --ink:          #1a1a1a;
   --pink:         #D4789A;

@@ -1,22 +1,21 @@
 .footer {
+  display: flex;
+  justify-content: center;
   background-color: #5bbfe2;
   padding: 40px 20px;
-  color: #fff;
-}
-
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
+  color: var(--color-white);
+  width: 100%;
 }
 
 .footer-title {
   font-size: 28px;
   margin-bottom: 25px;
-  color: #ffffff;
+  color: var(--color-white);
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.footer-links {
+.footer-links{
   list-style: none;
   padding: 0;
   margin: 0 auto 30px;
@@ -32,19 +31,26 @@
 }
 
 .footer-links a {
-  color: #dcdcdc;
+  color: var(--text-footer);
   text-decoration: none;
   padding: 8px 12px;
   transition: color 0.3s ease;
+  font-size: 18px;
 }
 
 .footer-links a:hover {
-  background-color: #285564;
-  color: #ffffff;
+  /* background-color: ; */
+  color: var(--color-white);
+}
+
+.footer-contact {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .footer-copy {
   margin-top: 20px;
   font-size: 14px;
-  color: #ffffff;
+  color: var(--color-white);
 }
