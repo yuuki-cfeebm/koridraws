@@ -1,4 +1,6 @@
 .site-header {
+  display: flex;
+  justify-content: center;
   width: 100%;
   background: var(--header-bg);
   border-bottom: 2px solid var(--ink);
@@ -12,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 32px;
+  padding: 14px 8px;
   border-bottom: 1.5px solid rgba(26, 26, 26, 0.15);
 }
 
@@ -53,63 +55,8 @@
   color: var(--pink);
 }
 
-/* busca, login, carrinho*/
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.action-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink);
-  transition: background 0.2s, transform 0.15s;
-  position: relative;
-}
-
-.action-btn:hover {
-  background: rgba(212, 120, 154, 0.15);
-  transform: scale(1.08);
-}
-
-.action-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke: var(--ink);
-  stroke-width: 1.8;
-  fill: none;
-}
-
-/* Badge do carrinho */
-.cart-btn {
-  position: relative;
-}
-
-.cart-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 16px;
-  height: 16px;
-  background: var(--pink);
-  border-radius: 50%;
-  font-size: 9px;
-  font-weight: 700;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid var(--header-bg);
-}
-
 /* Navegação */
 .header-nav {
-  background: var(--nav-bg);
   padding: 0 32px;
 }
 
@@ -126,7 +73,7 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--text-primary);
   position: relative;
   transition: color 0.2s;
 }
@@ -155,5 +102,63 @@
 .nav-item.active a::after {
   transform: scaleX(1);
 }
+
+/* busca, login, carrinho*/
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: background 0.2s, transform 0.15s;
+  position: relative;
+  color: red;
+
+}
+
+.action-btn:hover {
+  background: rgba(212, 120, 154, 0.15);
+  transform: scale(1.08);
+}
+
+.action-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-white);
+  stroke-width: 1.8;
+  fill: none;
+}
+
+/* Badge do carrinho */
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--pink);
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg-primary);
+}
+
+
 
 
