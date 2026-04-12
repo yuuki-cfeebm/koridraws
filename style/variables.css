@@ -4,12 +4,20 @@
 :root {
   --bg-primary: #5bbfe2;
   --text-primary: #f3f3f3;
-  
+  --bg-main: #ebcd6a;
   --bg-footer: #5bbfe2;
   --text-footer: #e3e3e3;
+  --text-title: #1B365D;
+  
+  /* cores testes */
+  --cor-teste-main: #fff9e5;
+  --text-primary: #543D28;    /* Um marrom bem escuro para ler melhor sobre o amarelo */
+  --accent-button: #F28482;   /* Salmão para os botões */
+  --card-border: #E9D8A6;     /* Amarelo médio para bordas discretas */
 
   --color-white: #ffffff;
   --color-black: #3F3F46;
+  --color-gray: #bdbdbd;
 
   --cream:        #F5F0E8;
   --ink:          #1a1a1a;

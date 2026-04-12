@@ -22,7 +22,7 @@ main {
   align-items: center;
   width: 100%;
   flex-grow: 1;
-  background: rgb(127, 127, 127);
+  background: var(--cor-teste-main);;
 }
 
 footer {

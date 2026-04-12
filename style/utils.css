@@ -1,14 +1,13 @@
 section {
   display: flex;
   flex-direction: column;
-  max-width: 1500px;
+  max-width: 1280px;
   width: 100%;
-  background: rgb(177, 122, 122);
-  padding: 12px
+  padding: 0 12px
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 1280px;
   width: 100%;
   padding: 0 8px;
 }
@@ -17,10 +16,19 @@ section {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
+  color: var(--text-title);
 }
 
 .flex-col-center {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.hidden-x {
+  overflow-x: hidden;
 }
