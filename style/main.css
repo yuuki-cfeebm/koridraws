@@ -57,8 +57,11 @@
   display: flex;
   gap: 50px;
   width: 100%;
-
+  padding: 12px 0px;
+  overflow: hidden;
+  box-shadow: 1px 0px 5px 5px rgba(0,0,0,0.2);
 }
+
 
 .card {
   display: flex;
@@ -71,6 +74,7 @@
   border: 1px solid var(--card-border);
   overflow: hidden;
   background: white;
+  flex-shrink: 0;
 }
 
 .container-img {
@@ -172,6 +176,6 @@
   border-radius: 12px;
   font-size: 18px;
   font-weight: bold;
-  background: var(--accent-button);
+  background: var(--cor-amarelo-teste);
   color: var(--color-white);
 }

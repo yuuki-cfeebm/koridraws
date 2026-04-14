@@ -1,3 +1,9 @@
+//funções
+
+
+//seções dinamicas
+
+//adicionando ccards
 const data = [
   {
     img: './assets/images/Rectangle.svg',
@@ -22,10 +28,26 @@ const data = [
     price: 200.00,
     new: false,
     discount: 10,
+  },
+  {
+    img: './assets/images/Rectangle.svg',
+    title: 'Banco 2',
+    description: 'descrição banco 2...',
+    price: 200.00,
+    new: false,
+    discount: 10,
+  },
+  {
+    img: './assets/images/image.png',
+    title: 'Banco 2',
+    description: 'descrição banco 2...',
+    price: 200.00,
+    new: false,
+    discount: 10,
   }
 ]
 
-const template = document.querySelector('#card-template')
+const template = document.querySelector('.section-new')
 const container = document.querySelector('.cards-container')
 
 data.forEach(item => {
@@ -63,7 +85,6 @@ data.forEach(item => {
 })
 
 //banner
-
 const imagesBanner = [
   { src: "/assets/images/image-teste1.png", alt: "teste1"},
   { src: "/assets/images/image-teste2.png", alt: "teste2"}
