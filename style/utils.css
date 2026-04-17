@@ -33,3 +33,11 @@ section {
 .hidden-x {
   overflow-x: hidden;
 }
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
