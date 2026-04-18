@@ -87,7 +87,10 @@ data.forEach(item => {
 //banner
 const imagesBanner = [
   { src: "/assets/images/image-teste1.png", alt: "teste1"},
-  { src: "/assets/images/image-teste2.png", alt: "teste2"}
+  { src: "/assets/images/image-teste2.png", alt: "teste2"},
+  // { src: "/assets/images/Rectangle.svg", alt: "aaa"},
+  // { src: "/assets/images/pinguim.png", alt: "bbb"}
+
 ]
 
 const templateBanner = document.querySelector('.banner-template')
@@ -108,6 +111,30 @@ const totalImages = imagesBanner.length;
 function updateCarousel() {
   const offset = -currentIndex * 100; 
   carousel.style.transform = `translateX(${offset}%)`;
+
+  dots.forEach((dot, index) => {
+    if (index === currentIndex) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+}
+
+function nextSlide() {
+  if (currentIndex < totalImages - 1) {
+    currentIndex++;
+  } else {
+    currentIndex = 0;
+  }
+  updateCarousel();
+}
+
+let autoPlay = setInterval(nextSlide, 3000)
+
+function resetAutoPlay() {
+  clearInterval(autoPlay)
+  autoPlay = setInterval(nextSlide, 3000)
 }
 
 document.querySelector('.btn-carousel.next').addEventListener('click', () => {
@@ -117,6 +144,7 @@ document.querySelector('.btn-carousel.next').addEventListener('click', () => {
     currentIndex = 0;
   }
   updateCarousel();
+  resetAutoPlay()
 });
 
 document.querySelector('.btn-carousel.back').addEventListener('click', () => {
@@ -126,16 +154,49 @@ document.querySelector('.btn-carousel.back').addEventListener('click', () => {
     currentIndex = totalImages - 1;
   }
   updateCarousel();
+  resetAutoPlay()
 });
 
-if(imagesBanner.length > 0) {
-  const divBullets = document.querySelector('.bullets')
-  imagesBanner.forEach(() => {
-    const bullet = document.createElement('div')
-    bullet.style.padding = '4px'
-    bullet.style.background = '#cbcbcb'
-    bullet.style.borderRadius = '50%'
+const dots = [];
 
-    divBullets.appendChild(bullet)
+if(imagesBanner.length > 0) {
+  const divBullets = document.querySelector('.bullets');
+  imagesBanner.forEach((_, index) => {
+    const bullet = document.createElement('div');
+    bullet.classList.add('bullet');
+    
+    bullet.addEventListener('click', () => {
+      currentIndex = index;
+      updateCarousel();
+      resetAutoPlay();
+    });
+
+    divBullets.appendChild(bullet);
+    dots.push(bullet);
   })
+  updateCarousel()
 }
+
+
+//carousel-produto
+const btnBack = document.querySelector('.back .btn-product')
+const btnNext = document.querySelector('.next .btn-product')
+
+
+//banner personalizavel
+const bannerText = [
+  { src: "/assets/images/image-teste1.png", text: "vai tomando gatos e gatos vai tomando gatos e gatos vai tomando gatos e gatos"},
+  // { src: "", text: ""},
+]
+
+const templateBannerText = document.querySelector('.section-template')
+const containerBannerText = document.querySelector('.banner-text')
+
+bannerText.forEach(item => {
+  const clone = templateBannerText.content.cloneNode(true)
+  console.log(item.text)
+  clone.querySelector('.banner-content p').textContent = item.text
+  clone.querySelector('.banner-text-img').src = item.src
+
+  containerBannerText.appendChild(clone)
+})

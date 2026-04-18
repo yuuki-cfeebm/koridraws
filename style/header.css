@@ -21,37 +21,27 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
 .logo-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--pink) 0%, var(--lilac) 100%);
+  max-width: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.logo-mark svg {
-  width: 20px;
-  height: 20px;
+.logo-mark img {
+  width: 100%;
   fill: white;
 }
 
 .logo-name {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  color: var(--ink);
+  font-family: var(--font-mont);
+  font-size: 24px;
+  font-weight: bolder;
+  color: var(--color-white);
   line-height: 1;
-}
-
-.logo-name span {
-  color: var(--pink);
 }
 
 /* Navegação */
@@ -66,15 +56,15 @@
 
 .nav-item a {
   display: block;
-  padding: 12px 20px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
+  padding: 8px 20px;
+  font-family: var(--font-mont);
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: var(--color-white);
   position: relative;
   transition: color 0.2s;
+  font-weight: bold;
 }
 
 .nav-item a::after {
@@ -84,17 +74,17 @@
   left: 20px;
   right: 20px;
   height: 2px;
-  background: linear-gradient(90deg, var(--pink), var(--lilac));
+  background: var(--pinguim-cinza);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease;
 }
 
-.nav-item a:hover { color: var(--pink); }
+.nav-item a:hover { color: var(--pinguim-cinza); }
 .nav-item a:hover::after { transform: scaleX(1); }
 
 .nav-item.active a {
-  color: var(--pink);
+  color: var(--pinguim-cinza);
   font-weight: 700;
 }
 
@@ -117,7 +107,7 @@
   align-items: center;
   justify-content: center;
   color: var(--ink);
-  transition: background 0.2s, transform 0.15s;
+  transition: background 0.2s, transform 0.15s, ease 0.2s;
   position: relative;
   color: red;
 
@@ -125,15 +115,22 @@
 
 .action-btn:hover {
   background: rgba(212, 120, 154, 0.15);
+  color: var(--corvo);
   transform: scale(1.08);
 }
 
+
+
 .action-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   stroke: var(--color-white);
   stroke-width: 1.8;
   fill: none;
+}
+
+.action-btn svg:hover {
+  stroke: var(--pinguim-cinza);
 }
 
 /* Badge do carrinho */
@@ -143,13 +140,13 @@
 
 .cart-badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 16px;
-  height: 16px;
-  background: var(--pink);
+  top: 0px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  background: var(--bico-pinguim);
   border-radius: 50%;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--color-white);
   display: flex;

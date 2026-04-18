@@ -12,6 +12,7 @@
   height: auto;
   display: flex;
   overflow-x: hidden;
+  transition: ease 0.5s;
 }
 
 .img-banner {
@@ -40,6 +41,15 @@
   left: 16px;
 }
 
+.bullet {
+  width: 12px;
+  height: 12px;
+  background-color: #cbcbcb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
 .bullets {
   width: auto;
   padding: 4px 8px;
@@ -51,6 +61,11 @@
   border-radius: 16px;
   position: absolute;
   bottom: 10px;
+}
+
+.bullet.active {
+  background: var(--pinguim);
+  transform: scale(1.2);
 }
 
 .container-product-carousel {
@@ -192,4 +207,22 @@
   font-weight: bold;
   background: var(--cor-amarelo-teste);
   color: var(--color-white);
+}
+
+/* banner personalizavel*/
+.banner-text {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.banner-content {
+  text-align: center;
+  width: 40%;
+  font-size: 18px;
+}
+
+.banner-text-img {
+  width: 60%;
+  object-fit: contain;
 }

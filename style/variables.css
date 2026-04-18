@@ -31,4 +31,13 @@
   
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'DM Sans', sans-serif;
+
+  --font-mont: 'Montserrat', sans-serif;
+
+  --corvo: #2E394E;
+  --bico-pinguim: #E66F40;
+  --pinguim: #708E9A;
+  --pinguim-branco: #F6F7F6;
+  --pinguim-cinza: #6B838C;
+
 }

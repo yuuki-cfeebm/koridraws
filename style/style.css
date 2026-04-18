@@ -4,6 +4,7 @@
 @import url('./main.css');
 @import url('./header.css');
 @import url('./footer.css');
+
 body {
   display: flex;
   flex-direction: column;
@@ -23,7 +24,8 @@ main {
   align-items: center;
   width: 100%;
   flex-grow: 1;
-  background: var(--cor-teste-main);;
+  background: var(--cor-teste-main);
+  gap: 16px;
 }
 
 footer {
