@@ -10,45 +10,62 @@ const data = [
     title: 'Banco 1',
     description: 'descrição banco 1...',
     price: 500.00,
-    new: true,
-    discount: 50,
+    tags: {
+      discount: true,
+      new: false,
+      discountValue: 50
+    } 
   },
   {
     img: './assets/images/Rectangle.svg',
     title: 'Banco 2',
     description: 'descrição banco 2...',
     price: 200.00,
-    new: false,
-    discount: 10,
+    tags: {
+      discount: true,
+      new: false,
+      discountValue: 20
+    } 
   },
   {
     img: './assets/images/image.png',
     title: 'Banco 2',
     description: 'descrição banco 2...',
     price: 200.00,
-    new: false,
-    discount: 10,
+    tags: {
+      discount: true,
+      new: false,
+      discountValue: 10
+    } 
   },
   {
     img: './assets/images/Rectangle.svg',
     title: 'Banco 2',
     description: 'descrição banco 2...',
     price: 200.00,
-    new: false,
-    discount: 10,
+    tags: {
+      discount: false,
+      new: true,
+      discountValue: 0
+    } 
   },
   {
     img: './assets/images/image.png',
     title: 'Banco 2',
     description: 'descrição banco 2...',
     price: 200.00,
-    new: false,
-    discount: 10,
+    tags: {
+      discount: false,
+      new: true,
+      discountValue: 0
+    } 
   }
 ]
 
-const template = document.querySelector('.section-new')
-const container = document.querySelector('.cards-container')
+const template = document.querySelector('.template-cards') //tempalte dos cards
+const sectionNew = document.querySelector('#section-new')
+const sectionDiscount = document.querySelector('#section-discount')
+
 
 data.forEach(item => {
   const clone = template.content.cloneNode(true)
@@ -66,22 +83,30 @@ data.forEach(item => {
   clone.querySelector('.full-price').textContent = `R$ ${item.price.toFixed(2)}`
   clone.querySelector('.currently-price').textContent = `R$ ${finalPrice.toFixed(2)}`
 
-  // tags
-  if(item.new) {
-    clone.querySelector('.tag-new p').textContent = "novo"
-  } else {
-    clone.querySelector('.tag-new').style.display = "none"
+  //bola = desconto || fita = novidade
+  if(item.tags.discount) {
+    clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png'
   }
 
-  if(item.discount) {
-    clone.querySelector('.tag-offer p').textContent = "oferta"
-    clone.querySelector('.tag-discount p').textContent = `-${item.discount}%`
-  } else {
-    clone.querySelector('.tag-offer').style.display = "none"
-    clone.querySelector('.tag-discount').style.display = "none"
+  if(item.tags.new) {
+    clone.querySelector('.tag-new img').src = '/assets/icons/fita.png'
   }
 
-  container.appendChild(clone)
+  // if(item.tags.discountValue) {
+  //   clone.querySelector('.tag-offer p').textContent = "oferta"
+  //   clone.querySelector('.tag-discount p').textContent = `-${item.discount}%`
+  // } else {
+  //   clone.querySelector('.tag-offer').style.display = "none"
+  //   clone.querySelector('.tag-discount').style.display = "none"
+  // }
+
+  if(item.tags.discount) {
+    sectionDiscount.appendChild(clone)
+  } else if(item.tags.new) {
+    sectionNew.appendChild(clone)
+  } else {
+    console.log("algo de erardo")
+  }
 })
 
 //banner

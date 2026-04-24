@@ -120,24 +120,25 @@
 
 .card-tags {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  padding: 0 12px;
   gap: 4px;
   position: absolute;
-  padding: 12px;
-  top: 0;
-  right: 0;
-  /* background: rgb(187, 187, 187); */
+  /* top: -50px; */
+  z-index: 10000;
 }
 
 .tag {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1px 4px;
-  border-radius: 8px;
-  font-size: 14px;
+  max-width: 100px;
+  min-height: 50px;
 }
 
+.tag img {
+  width: 100%;
+  object-fit: contain;
+}
+/* 
 .tag-offer {
   background: rgb(255, 87, 87);
 }
@@ -148,7 +149,7 @@
 
 .tag-discount {
   background: rgb(165, 60, 60);
-}
+} */
 
 .card-info {
   align-items: center;
