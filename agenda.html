@@ -45,6 +45,42 @@
 
   <main class="events-main">
 
+    <section class="events-section event-form-section">
+      <h2 class="section-title events-section-title">Adicionar novo evento</h2>
+      <form class="event-form" id="event-form">
+        <div class="form-row">
+          <label for="event-title">Nome do evento</label>
+          <input type="text" id="event-title" name="event-title" placeholder="Feira de Arte Urbana" required>
+        </div>
+        <div class="form-row">
+          <label for="event-date">Data</label>
+          <input type="date" id="event-date" name="event-date" required>
+        </div>
+        <div class="form-row">
+          <label for="event-location">Local</label>
+          <input type="text" id="event-location" name="event-location" placeholder="Parque Villa-Lobos, SP" required>
+        </div>
+        <div class="form-row">
+          <label for="event-details">Detalhes</label>
+          <textarea id="event-details" name="event-details" placeholder="Ilustrações autorais, prints e zines." rows="3" required></textarea>
+        </div>
+        <div class="form-row">
+          <label for="event-image">Imagem</label>
+          <select id="event-image" name="event-image">
+            <option value="assets/images/image-teste1.png">Imagem teste 1</option>
+            <option value="assets/images/image-teste2.png">Imagem teste 2</option>
+            <option value="assets/images/image.png">Imagem padrão</option>
+            <option value="assets/images/Rectangle.svg">Imagem retângulo</option>
+          </select>
+          <img id="image-preview" class="event-image-preview" src="assets/images/image-teste1.png" alt="Prévia da imagem do evento">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="event-form-btn">Adicionar evento</button>
+          <p id="event-form-message" class="event-form-message" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
     <!-- Próximos Eventos -->
     <section class="events-section">
       <h2 class="section-title events-section-title">Próximos Eventos</h2>
@@ -171,6 +207,7 @@
 
   </main>
 
+  <script src="js/agenda.js" defer></script>
   <footer class="footer">
     <div class="container flex-col-center">
       <h2 class="footer-title">koridraws</h2>
