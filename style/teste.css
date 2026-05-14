@@ -1,0 +1,155 @@
+
+
+.torn-paper-title {
+  position: relative;
+  background: red;
+  padding: 20px 50px;
+  width: fit-content;
+  margin: -80px auto 40px auto; /* Faz o título "vazar" para fora da folha */
+  transform: rotate(-1deg);
+  filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.2));
+  /* Efeito de rasgado simples */
+  clip-path: polygon(2% 0%, 98% 2%, 100% 95%, 95% 100%, 5% 98%, 0% 90%);
+}
+
+.s1 { top: -20px; left: -20px; transform: rotate(-15deg); }
+.s2 { bottom: -10px; right: -25px; transform: rotate(10deg); }
+
+h1 {
+  font-family: 'Bangers', cursive; /* Uma fonte estilo anime/HQ */
+  font-size: 3rem;
+  color: #333;
+}
+
+.card-teste {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+  max-height: 400px;
+  background: rgb(206, 205, 205);
+  position: relative;
+  border-radius: 12px;
+  /* border: 4px solid #fff; */
+  outline: 2px solid #000;
+  /* box-shadow: 6px 6px 0px #7f7f7f; */
+  background: white;
+  flex-shrink: 0;
+  position: relative;
+  transition: ease-in 0.1s;
+}
+
+.card-teste:hover {
+  transform: rotate(-2deg) scale(1.05);
+  box-shadow: 8px 8px 0px #9d9d9d;
+}
+
+.card-teste .card-text-teste h2 {
+  font-size: 18px;
+}
+
+.img-card-teste {
+  max-width: 300px;
+  height: 260px;
+  object-fit: cover;
+  /* border: 4px solid white; */
+  /* outline: 1px solid black; */
+}
+
+
+.card-info-teste {
+  padding: 8px 12px;
+
+}
+.buy-btn-teste {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background: var(--cor-amarelo-teste);
+  color: var(--color-white);
+  width: 100%;
+  border: 2px solid black;
+  transition: ease-in 0.1s;
+}
+
+.buy-btn-teste:hover {
+  background-color: white;
+  color: var(--cor-amarelo-teste);
+}
+
+/* testes 2*/
+h1 {
+  font-family: 'Bangers', cursive; /* Uma fonte estilo anime/HQ */
+  font-size: 3rem;
+  color: #333;
+}
+
+.card-teste2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 350px;
+  width: 100%;
+  max-height: 400px;
+  background: rgb(206, 205, 205);
+  position: relative;
+  border-radius: 12px;
+  /* border: 4px solid #fff; */
+  outline: 2px solid #000;
+  /* box-shadow: 6px 6px 0px #7f7f7f; */
+  background: white;
+  flex-shrink: 0;
+  position: relative;
+  transition: ease-in 0.1s;
+  padding: 12px;
+}
+
+/* .card-teste2:hover {
+  transform: rotate(-2deg) scale(1.05);
+  box-shadow: 12px 12px 0px #9d9d9d;
+} */
+
+.card-teste2 .card-text-teste2 h2 {
+  font-size: 18px;
+}
+
+.img-card-teste2 {
+  max-width: 320px;
+  height: 260px;
+  object-fit: cover;
+  /* border: 4px solid white; */
+  /* outline: 1px solid black; */
+  /* transition: ease-in 0.1s; */
+    outline: 2px solid #000;
+  border-radius: 12px;
+  transition: ease-in 0.2s;
+}
+
+.img-card-teste2:hover {
+  transform: scale(1.02);
+  box-shadow: 6px 6px 0px rgb(168, 168, 168);
+
+}
+
+.card-info-teste2 {
+  width: 100%;
+  padding: 4px 12px;
+
+}
+.buy-btn-teste2 {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background: var(--cor-amarelo-teste);
+  color: var(--color-white);
+  width: 100%;
+  border: 2px solid black;
+  transition: ease-in 0.2s;
+}
+
+.buy-btn-teste2:hover {
+  transform: scale(1.02);
+  box-shadow: 6px 6px 0px rgb(168, 168, 168);
+}

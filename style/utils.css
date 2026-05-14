@@ -20,6 +20,17 @@ section {
   color: var(--text-title);
 }
 
+.footer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-black);
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
 .flex-col-center {
   display: flex;
   flex-direction: column;

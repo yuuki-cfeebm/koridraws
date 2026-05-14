@@ -28,6 +28,28 @@ const data = [
     } 
   },
   {
+    img: './assets/images/Rectangle.svg',
+    title: 'Banco 2',
+    description: 'descrição banco 2...',
+    price: 200.00,
+    tags: {
+      discount: true,
+      new: false,
+      discountValue: 20
+    } 
+  },
+  {
+    img: './assets/images/Rectangle.svg',
+    title: 'Banco 2',
+    description: 'descrição banco 2...',
+    price: 200.00,
+    tags: {
+      discount: true,
+      new: false,
+      discountValue: 20
+    } 
+  },
+  {
     img: './assets/images/image.png',
     title: 'Banco 2',
     description: 'descrição banco 2...',
@@ -70,35 +92,32 @@ const sectionDiscount = document.querySelector('#section-discount')
 data.forEach(item => {
   const clone = template.content.cloneNode(true)
 
-  // cálculo do preço final
+  //bola = desconto || fita = novidade
   let finalPrice = item.price
-  if(item.discount) {
-    finalPrice -= item.price * (item.discount / 100)
+
+  if(item.tags.discount) {
+    clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png'
+    clone.querySelector('.tag-new img').style.display = 'none'
+    
+    finalPrice -= item.price * (item.tags.discountValue / 100)
+  }
+
+  if(!item.tags.discount) {
+    clone.querySelector('.full-price').style.display = "none"
+  }
+
+  if(item.tags.new) {
+    clone.querySelector('.tag-new img').src = '/assets/icons/fita.png'
+    clone.querySelector('.tag-discount img').style.display = 'none'
+
   }
 
   // preencher card
   clone.querySelector('.img-card').src = item.img
   clone.querySelector('.card-text h2').textContent = item.title
-  clone.querySelector('.card-text p').textContent = item.description
-  clone.querySelector('.full-price').textContent = `R$ ${item.price.toFixed(2)}`
+  // clone.querySelector('.card-text p').textContent = item.description
+  // clone.querySelector('.full-price').textContent = `R$ ${item.price.toFixed(2)}`
   clone.querySelector('.currently-price').textContent = `R$ ${finalPrice.toFixed(2)}`
-
-  //bola = desconto || fita = novidade
-  if(item.tags.discount) {
-    clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png'
-  }
-
-  if(item.tags.new) {
-    clone.querySelector('.tag-new img').src = '/assets/icons/fita.png'
-  }
-
-  // if(item.tags.discountValue) {
-  //   clone.querySelector('.tag-offer p').textContent = "oferta"
-  //   clone.querySelector('.tag-discount p').textContent = `-${item.discount}%`
-  // } else {
-  //   clone.querySelector('.tag-offer').style.display = "none"
-  //   clone.querySelector('.tag-discount').style.display = "none"
-  // }
 
   if(item.tags.discount) {
     sectionDiscount.appendChild(clone)
@@ -225,3 +244,37 @@ bannerText.forEach(item => {
 
   containerBannerText.appendChild(clone)
 })
+
+/* injetando codigo HTML em header e footer*/
+async function includeHTML() {
+  const components = [
+    { id: 'header-placeholder', url: 'assets/components/header.html' },
+    { id: 'footer-placeholder', url: 'assets/components/footer.html' }
+  ];
+
+  for (const comp of components) {
+    const placeholder = document.getElementById(comp.id);
+    if (placeholder) {
+      try {
+        const response = await fetch(comp.url);
+        if (response.ok) {
+          const html = await response.text();
+          placeholder.innerHTML = html;
+        }
+      } catch (err) {
+        console.error("Erro ao carregar componente:", err);
+      }
+    }
+  }
+  inicializarMenu(); 
+}
+
+function inicializarMenu() {
+    const btn = document.querySelector('.action-btn');
+    if(btn) {
+        btn.addEventListener('click', () => console.log('Menu funcionando!'));
+    }
+}
+
+// Inicia o processo
+document.addEventListener('DOMContentLoaded', includeHTML)

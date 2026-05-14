@@ -7,27 +7,19 @@
   <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-  <header class="site-header" id="site-header">
+  <!-- <header class="site-header" id="site-header">
     <div class="header-top container">
       <a href="#" class="logo" aria-label="Koridraws – Página inicial">
         <div class="logo-mark">
-          <img src="assets/images/pinguim.png" alt="img-logo">
+          <img src="assets/images/pinguim-1.svg" alt="img-logo">
         </div>
         <span class="logo-name">Koridraws</span>
       </a>
-      <nav class="header-nav" aria-label="Navegação principal">
-        <ul class="nav-list">
-          <li class="nav-item active"><a href="#">Início</a></li>
-          <li class="nav-item"><a href="#">Produtos</a></li>
-          <li class="nav-item"><a href="#">Sobre</a></li>
-          <li class="nav-item"><a href="#">Agenda</a></li>
-          <li class="nav-item"><a href="#">Contato</a></li>
-        </ul>
-      </nav>
+      <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        <input type="text" placeholder="Digite...">
+      </div>
       <div class="header-actions">
-        <button class="action-btn" aria-label="Buscar">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
-        </button>
         <button class="action-btn" aria-label="Minha conta">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </button>
@@ -37,8 +29,21 @@
         </button>
       </div>
     </div>
-  </header>
+    <div class="header-bottom">
+      <nav class="header-nav" aria-label="Navegação principal">
+        <ul class="nav-list">
+          <li class="nav-item active"><a href="#">Início</a></li>
+          <li class="nav-item"><a href="#">Produtos</a></li>
+          <li class="nav-item"><a href="#">Sobre</a></li>
+          <li class="nav-item"><a href="#">Agenda</a></li>
+          <li class="nav-item"><a href="#">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header> -->
+  <header class="site-header" id="header-placeholder"></header>
   <main>
+
     <div class="banner">
       <template class="banner-template">
         <img class="img-banner" src="" alt="">
@@ -58,10 +63,10 @@
         
       </div>
     </div>
-    <section class="relative">
+    <section class="relative notebook-page">
       <h2 class="section-title">Novidades</h2>
       <template class="template-cards">
-        <div class="card">
+        <a href="" class="card">
           <div class="container-img">
             <img class="img-card" src="assets/images/Rectangle.svg" alt="img-banco">
           </div>
@@ -80,15 +85,15 @@
           <div class="card-info flex-col-center ">
             <div class="card-text">
               <h2></h2>
-              <p></p>
+              <!-- <p></p> -->
             </div>
             <div class="card-prices">
-                <p class="full-price"></p>
+                <!-- <p class="full-price"></p> -->
                 <p class="currently-price"></p>
             </div>
             <button class="buy-btn">Adicionar ao Carrinho</button>
           </div>
-        </div>
+        </a>
       </template>
       <div class="container-product-carousel flex">
         <button class="back btn-product">
@@ -96,14 +101,35 @@
         </button>
         <div id="section-new" class="cards-container">
           <!-- conteudo cards -->
+        <a href="" class="card-teste">
+          <img class="img-card-teste" src="assets/images/image-teste2.png" alt="img-banco">
+          <div class="card-info-teste flex-col-center ">
+            <div class="card-text-teste">
+              <h2>testes</h2>
+              <!-- <p>testestestinho</p> -->
+            </div>
+            <div class="card-prices-teste">
+                <!-- <p class="full-price">200</p> -->
+                <p class="currently-price">R$ 4000</p>
+            </div>
+            <button class="buy-btn-teste">Adicionar ao Carrinho</button>
+          </div>
+        </a>
+
         </div>
         <button class="next btn-product">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
     </section>
-    <div class="category-banner">
-      
+    <template class="section-template">
+      <div class="banner-content">
+        <p></p>
+      </div>
+      <img class="banner-text-img" src="" alt="">
+    </template>
+    <div class="banner-text">
+
     </div>
     <section>
       <h2 class="section-title">Promoções</h2>
@@ -120,29 +146,58 @@
       </div>
     </section>
   </main>
-  <footer class="footer">
-    <div class="container flex-col-center">
-      <h2 class="footer-title">koridraws</h2>
+  <footer id="footer-placeholder"></footer>
 
-      <ul class="footer-links">
-        <li><a href="#">Início</a></li>
-        <li><a href="#">Produtos</a></li>
-        <li><a href="#">Eventos</a></li>
-        <li><a href="#">Termos de Uso</a></li>
-        <li><a href="#">Pagamentos</a></li>
-        <li><a href="#">Envios</a></li>
-        <li><a href="#">Perguntas Frequentes</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Devoluções</a></li>
-        <li><a href="#">Reembolsos</a></li>
-      </ul>
-      <div class="footer-contact">
-        <p><a href="#">(11) 99999-9999 </a></p>
-        <p><a href="#">contato@meusite.com</a></p>
+  <!-- </footer> -->
+  <!-- <footer class="footer">
+    <div class="container flex-col">
+      <div class="footer-top">
+        <div class="footer-left flex-col">
+            <h2 class="footer-logo">
+              koridraws
+              <div class="bola bola-corvo"></div>
+              <div class="bola bola-pinguim"></div>
+
+            </h2>
+          <button class="btn-footer">
+            Voltar para o Topo
+          </button>
+        </div>
+        <div class="footer-right">
+          <div class="navigation">
+            <h3 class="footer-title">Navegação</h3>
+            <ul>
+              <li class="footer-item"><a href="#">Início</a></li>
+              <li class="footer-item"><a href="#">Produtos</a></li>
+              <li class="footer-item"><a href="#">Sobre</a></li>
+              <li class="footer-item"><a href="#">Agenda</a></li>
+              <li class="footer-item"><a href="#">Contato</a></li>
+            </ul>
+          </div>
+          <div class="footer-contact">
+            <h3 class="footer-title">Contatos</h3>
+            <p><a href="#">(11) 99999-9999 </a></p>
+            <p><a href="#">contato@meusite.com</a></p>
+          </div>
+          <div class="footer-links">
+            <ul>
+              <li><a href="#">Termos de Uso</a></li>
+               <li><a href="#">Pagamentos</a></li>
+              <li><a href="#">Envios</a></li>
+              <li><a href="#">Perguntas Frequentes</a></li>
+              <li><a href="#">Contato</a></li>
+              <li><a href="#">Devoluções</a></li>
+              <li><a href="#">Reembolsos</a></li>
+            </ul>
+          </div>
+          
+        </div>
       </div>
-      <p class="footer-copy">© 2026 KORIDRAWS - Todos os direitos reservados.</p>
+      <div class="footer-bottom">  
+        <p class="footer-copy">© 2026 KORIDRAWS - Todos os direitos reservados.</p>
+      </div>
     </div>
-  </footer>
+  </footer> -->
 </body>
 
 <script type="module" src="js/index.js"></script>
