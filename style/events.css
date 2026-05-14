@@ -1,0 +1,150 @@
+/* =============================================
+   Events Page – agenda.html
+   ============================================= */
+
+/* Tagline bar below header nav */
+.header-tagline {
+  width: 100%;
+  background: var(--cor-amarelo-teste);
+  text-align: center;
+  padding: 6px 12px;
+  font-family: var(--font-mont);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+/* Main layout override for events page */
+.events-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex-grow: 1;
+  background: var(--cor-teste-main);
+  gap: 48px;
+  padding: 40px 16px 60px;
+}
+
+/* Section container */
+.events-section {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.events-section-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-title);
+  margin-bottom: 28px;
+  letter-spacing: 0.02em;
+}
+
+/* Grid: 3 columns */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ---- Event Card ---- */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 14px;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.13);
+}
+
+/* Upcoming: blue border */
+.event-card--upcoming {
+  border: 2px solid var(--header-bg);
+}
+
+/* Past: pink/red border, slightly muted */
+.event-card--past {
+  border: 2px solid #c0392b;
+  opacity: 0.85;
+}
+
+.event-card--past:hover {
+  opacity: 1;
+}
+
+/* Card header: event name */
+.event-card__name {
+  font-family: var(--font-mont);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Image area */
+.event-card__img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--card-border);
+}
+
+.event-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Past events: desaturate image */
+.event-card--past .event-card__img {
+  filter: grayscale(40%);
+}
+
+/* Info block */
+.event-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-card__info p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.event-card__info strong {
+  font-weight: 600;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .events-section-title {
+    font-size: 26px;
+  }
+}
