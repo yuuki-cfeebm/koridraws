@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda – Koridraws</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/events.css">
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="header-top container">
+      <a href="index.html" class="logo" aria-label="Koridraws – Página inicial">
+        <div class="logo-mark">
+          <img src="assets/images/pinguim.png" alt="img-logo">
+        </div>
+        <span class="logo-name">Koridraws</span>
+      </a>
+      <nav class="header-nav" aria-label="Navegação principal">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="index.html">Início</a></li>
+          <li class="nav-item"><a href="#">Produtos</a></li>
+          <li class="nav-item"><a href="#">Sobre</a></li>
+          <li class="nav-item active"><a href="agenda.html">Agenda</a></li>
+          <li class="nav-item"><a href="#">Contato</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="action-btn" aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </button>
+        <button class="action-btn" aria-label="Minha conta">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+        <button class="action-btn cart-btn" aria-label="Carrinho">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>
+          <span class="cart-badge">3</span>
+        </button>
+      </div>
+    </div>
+    <div class="header-tagline">
+      <span>Artista de ideias e coisas do tipo</span>
+    </div>
+  </header>
+
+  <main class="events-main">
+
+    <!-- Próximos Eventos -->
+    <section class="events-section">
+      <h2 class="section-title events-section-title">Próximos Eventos</h2>
+      <div class="events-grid upcoming-grid">
+
+        <article class="event-card event-card--upcoming">
+          <h3 class="event-card__name">Feira de Arte Urbana</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste1.png" alt="Feira de Arte Urbana" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 25 de Maio, 2026</p>
+            <p><strong>Local:</strong> Parque Villa-Lobos, SP</p>
+            <p><strong>Detalhes:</strong> Ilustrações autorais, prints e zines.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--upcoming">
+          <h3 class="event-card__name">Estúdio Aberto</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste2.png" alt="Estúdio Aberto" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 07 de Junho, 2026</p>
+            <p><strong>Local:</strong> Ateliê Koridraws, SP</p>
+            <p><strong>Detalhes:</strong> Visita ao ateliê, obras originais à venda.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--upcoming">
+          <h3 class="event-card__name">Bazar Criativo</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image.png" alt="Bazar Criativo" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 21 de Junho, 2026</p>
+            <p><strong>Local:</strong> Mercado das Pulgas, RJ</p>
+            <p><strong>Detalhes:</strong> Coleção de verão em primeira mão.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Eventos Passados -->
+    <section class="events-section">
+      <h2 class="section-title events-section-title">Eventos Passados</h2>
+      <div class="events-grid past-grid">
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Arte na Praça</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste1.png" alt="Arte na Praça" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 12 de Abril, 2026</p>
+            <p><strong>Local:</strong> Praça da República, SP</p>
+            <p><strong>Detalhes:</strong> Exposição coletiva de artistas independentes.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Fanzine Fest</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste2.png" alt="Fanzine Fest" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 29 de Março, 2026</p>
+            <p><strong>Local:</strong> Centro Cultural SP</p>
+            <p><strong>Detalhes:</strong> Lançamento de zines e encontro de fãs.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Mercado Handmade</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image.png" alt="Mercado Handmade" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 08 de Março, 2026</p>
+            <p><strong>Local:</strong> Shopping Bela Vista, SP</p>
+            <p><strong>Detalhes:</strong> Produtos artesanais e personalizados.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Ilustra São Paulo</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste1.png" alt="Ilustra São Paulo" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 15 de Fevereiro, 2026</p>
+            <p><strong>Local:</strong> MASP, SP</p>
+            <p><strong>Detalhes:</strong> Mostra de ilustração contemporânea brasileira.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Bazar de Inverno</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image-teste2.png" alt="Bazar de Inverno" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 20 de Janeiro, 2026</p>
+            <p><strong>Local:</strong> Galeria Olido, SP</p>
+            <p><strong>Detalhes:</strong> Coleção especial de inverno com descontos.</p>
+          </div>
+        </article>
+
+        <article class="event-card event-card--past">
+          <h3 class="event-card__name">Arte & Design SP</h3>
+          <div class="event-card__img-wrap">
+            <img src="assets/images/image.png" alt="Arte & Design SP" class="event-card__img">
+          </div>
+          <div class="event-card__info">
+            <p><strong>Data:</strong> 05 de Dezembro, 2025</p>
+            <p><strong>Local:</strong> Pavilhão da Bienal, SP</p>
+            <p><strong>Detalhes:</strong> Encontro anual de arte e design autoral.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container flex-col-center">
+      <h2 class="footer-title">koridraws</h2>
+      <ul class="footer-links">
+        <li><a href="index.html">Início</a></li>
+        <li><a href="#">Produtos</a></li>
+        <li><a href="agenda.html">Eventos</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">Pagamentos</a></li>
+        <li><a href="#">Envios</a></li>
+        <li><a href="#">Perguntas Frequentes</a></li>
+        <li><a href="#">Contato</a></li>
+        <li><a href="#">Devoluções</a></li>
+        <li><a href="#">Reembolsos</a></li>
+      </ul>
+      <div class="footer-contact">
+        <p><a href="#">(11) 99999-9999</a></p>
+        <p><a href="#">contato@meusite.com</a></p>
+      </div>
+      <p class="footer-copy">© 2026 KORIDRAWS - Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
