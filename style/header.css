@@ -9,7 +9,6 @@
 
   background-color: rgba(255, 255, 255, 0.1); /* Quase invisível */
   backdrop-filter: blur(10px); /* O "pulo do gato": desfoca o que está atrás */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Linha bem fininha */
   transition: all 0.3s ease;
 }
 
@@ -79,6 +78,7 @@
 .nav-list {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .nav-item a {
@@ -124,6 +124,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
   /* width: 100; */
 }
 

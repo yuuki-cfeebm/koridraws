@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Koridraws</title>
-  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-  <header class="site-header" id="site-header">
+  <!-- <header class="site-header" id="site-header">
     <div class="header-top container">
       <a href="#" class="logo" aria-label="Koridraws – Página inicial">
         <div class="logo-mark">
-          <img src="assets/images/pinguim-1.svg" alt="img-logo">
+          <img src="/assets/images/pinguim-1.svg" alt="img-logo">
         </div>
         <span class="logo-name">Koridraws</span>
       </a>
@@ -40,15 +40,16 @@
         </ul>
       </nav>
     </div>
-  </header>
-  <header class="site-header" id="header-placeholder"></header>
+  </header> -->
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
   <main>
 
     <div class="banner">
       <template class="banner-template">
         <img class="img-banner" src="" alt="">
       </template>
-      <div class="container p-0 hidden-x">
+      <div class=" p-0 hidden-x">
         <div class="carousel">
 
         </div>
@@ -63,12 +64,22 @@
         
       </div>
     </div>
+    <div class="ruler">
+      <div class="container ruler-container">
+        <template class="template-ruler">
+          <div class="ruler-item">
+            <img class="img-ruler" src="" alt="">
+            <p class="description"></p>
+          </div>
+        </template>
+      </div>
+    </div>
     <section class="relative notebook-page">
       <h2 class="section-title">Novidades</h2>
       <template class="template-cards">
         <a href="" class="card">
           <div class="container-img">
-            <img class="img-card" src="assets/images/Rectangle.svg" alt="img-banco">
+            <img class="img-card" src="/assets/images/Rectangle.svg" alt="img-banco">
           </div>
           <div class="card-tags">
             <div class="tag tag-offer">
@@ -101,7 +112,7 @@
         <div id="section-new" class="cards-container">
           <!-- conteudo cards -->
         <a href="" class="card-teste">
-          <img class="img-card-teste" src="assets/images/image-teste2.png" alt="img-banco">
+          <img class="img-card-teste" src="/assets/images/image-teste2.png" alt="img-banco">
           <div class="card-info-teste flex-col-center ">
             <div class="card-text-teste">
               <h2>testes</h2>
@@ -147,8 +158,7 @@
   </main>
   <footer id="footer-placeholder"></footer>
 
-  < </footer> 
-  <footer class="footer">
+  <!-- <footer class="footer">
     <div class="container flex-col">
       <div class="footer-top">
         <div class="footer-left flex-col">
@@ -199,5 +209,5 @@
   </footer>
 </body>
 
-<script type="module" src="js/index.js"></script>
+<script type="module" src="/js/index.js"></script>
 </html>
