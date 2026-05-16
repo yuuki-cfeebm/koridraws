@@ -119,6 +119,11 @@
   transform: scaleX(1);
 }
 
+.active {
+  transform: scaleX(1);
+
+}
+
 /* busca, login, carrinho*/
 .header-actions {
   display: flex;
