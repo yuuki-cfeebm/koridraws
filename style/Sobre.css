@@ -1,0 +1,134 @@
+/* RESET */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* CORPO */
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f2f2f2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+
+    padding: 40px;
+}
+
+/* ========================= */
+/* QUEM SOMOS */
+/* ========================= */
+
+.quem-somos{
+    width: 900px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 60px;
+}
+
+/* TEXTO */
+.texto{
+    width: 55%;
+}
+
+.texto h1{
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.texto p{
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 15px;
+}
+
+/* FOTO */
+.imagem{
+    width: 250px;
+    height: 250px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    background-color: white;
+}
+
+.imagem img{
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+/* ========================= */
+/* EVENTOS */
+/* ========================= */
+
+.eventos{
+    width: 900px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 40px;
+}
+
+/* FOTO EVENTO */
+.card-evento{
+    width: 250px;
+    height: 250px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    background-color: white;
+}
+
+.card-evento img{
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+/* TEXTO EVENTO */
+.descricao-evento{
+    width: 60%;
+}
+
+.descricao-evento p{
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 15px;
+}
+
+
+/* RESPONSIVO */
+@media(max-width: 768px){
+
+    .quem-somos,
+    .eventos{
+        width: 100%;
+
+        flex-direction: column;
+
+        gap: 30px;
+    }
+
+    .texto,
+    .descricao-evento{
+        width: 100%;
+        text-align: center;
+    }
+}
