@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produtos – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/product.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+  
+  <main class="products-main">
+    <section class="products-section">
+      <h2 class="section-title">Nossos Produtos</h2>
+
+      <div id="loading-spinner" class="loading-state">
+        Carregando catálogo...
+      </div>
+
+      <div id="products-grid" class="products-grid"></div>
+
+      <template id="product-card-template">
+        <article class="card">
+          <div class="container-img">
+            <img class="img-card" src="" alt="Imagem do produto">
+          </div>
+          <div class="card-tags">
+            <div class="tag tag-new" style="display: none;">
+              <img src="/assets/icons/fita.png" alt="Novo">
+            </div>
+            <div class="tag tag-discount" style="display: none;">
+              <img src="/assets/icons/bola.png" alt="Desconto">
+            </div>
+          </div>
+          <div class="card-info flex-col-center">
+            <div class="card-text">
+              <h2 class="product-title">Nome do Produto</h2>
+            </div>
+            <div class="card-prices">
+              <p class="full-price" style="display: none;"></p>
+              <p class="currently-price">R$ 0,00</p>
+            </div>
+            <button class="buy-btn">Adicionar ao Carrinho</button>
+          </div>
+        </article>
+      </template>
+
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script type="module" src="/js/index.js"></script>
+</body>
+</html>

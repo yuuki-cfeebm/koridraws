@@ -18,7 +18,7 @@ const imagesBanner = [
 ];
 
 const bannerText = [
-  { src: "/assets/images/image-teste1.png", text: "vai tomando gatos e gatos vai tomando gatos e gatos vai tomando gatos e gatos"}
+  { src: "/assets/images/image-teste1.png", text: "Produto muito daora novo ae galera uhuu!"}
 ];
 
 const rulerData = [
@@ -217,4 +217,75 @@ if (btnBackProduct) {
 if (btnNextProduct) {
   // btnNextProduct.addEventListener('click', ...);
 }
+
+async function loadHomeProductsAPI() {
+  const templateCards = document.querySelector('.template-cards');
+  const sectionNew = document.querySelector('#section-new');
+  const sectionDiscount = document.querySelector('#section-discount');
+
+  if (!templateCards) return;
+
+  try {
+    const response = await fetch('https://koridrawsbanco.onrender.com/api/Itens');
+    
+    if (!response.ok) {
+      throw new Error(`Status: ${response.status}`);
+    }
+
+    const products = await response.json();
+
+    if (sectionNew) {
+      sectionNew.innerHTML = '';
+      const newProducts = products.slice(0, 3);
+      
+      newProducts.forEach(produto => {
+        const clone = templateCards.content.cloneNode(true);
+        
+        clone.querySelector('.card-text h2').textContent = produto.nome;
+        clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+        
+        const imgEl = clone.querySelector('.img-card');
+        if (produto.imagens && produto.imagens.length > 0) {
+          imgEl.src = `https://drive.google.com/thumbnail?id=${produto.imagens[0].caminhoCloud}&sz=w800`;
+        } else {
+          imgEl.src = '/assets/images/image.png';
+        }
+
+        clone.querySelector('.tag-new img').src = '/assets/icons/fita.png';
+        clone.querySelector('.tag-discount').style.display = 'none';
+
+        sectionNew.appendChild(clone);
+      });
+    }
+
+    if (sectionDiscount) {
+      sectionDiscount.innerHTML = '';
+      const discountProducts = products.slice(0, 10);
+      
+      discountProducts.forEach(produto => {
+        const clone = templateCards.content.cloneNode(true);
+        
+        clone.querySelector('.card-text h2').textContent = produto.nome;
+        clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+
+        const imgEl = clone.querySelector('.img-card');
+        if (produto.imagens && produto.imagens.length > 0) {
+          imgEl.src = `https://drive.google.com/thumbnail?id=${produto.imagens[0].caminhoCloud}&sz=w800`;
+        } else {
+          imgEl.src = '/assets/images/image.png';
+        }
+
+        clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png';
+        clone.querySelector('.tag-new').style.display = 'none';
+
+        sectionDiscount.appendChild(clone);
+      });
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadHomeProductsAPI);
 

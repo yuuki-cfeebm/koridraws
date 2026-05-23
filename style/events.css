@@ -43,6 +43,19 @@
   letter-spacing: 0.02em;
 }
 
+.events-section .cards-container {
+  display: flex;
+  gap: 24px;
+  overflow-x: hidden;
+  padding: 12px 24px;
+  scroll-behavior: smooth;
+  height: auto;
+}
+
+.event-card {
+  height: 100%;
+}
+
 /* Grid: 3 columns */
 .events-grid {
   display: grid;
