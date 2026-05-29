@@ -5,10 +5,13 @@ export function handleNavbarItem() {
   
   let currentPage = window.location.pathname.split('/').pop();
   console.log("Página atual lida pelo JS:", currentPage);
+  
+  console.log(document.querySelector('.cart-btn'))
 
   if (currentPage === '' || currentPage === '/') {
     currentPage = 'home.html';
   }
+
 
   navbarItems.forEach(item => {
     item.classList.remove('active');
@@ -26,3 +29,9 @@ export function handleNavbarItem() {
     }
   });
 }
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  handleNavbarItem()
+})

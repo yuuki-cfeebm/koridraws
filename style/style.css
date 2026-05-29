@@ -9,6 +9,8 @@
 @import url('./events.css');
 @import url('./sobre.css');
 
+@import url('./cart.css');
+
 body {
   display: flex;
   flex-direction: column;

@@ -2,13 +2,13 @@ import { handleNavbarItem } from './header.js';
 
 //dados globais para demonstração
 const data = [
-  { img: './assets/images/Rectangle.svg', title: 'Banco 1', description: 'descrição banco 1...', price: 500.00, tags: { discount: true, new: false, discountValue: 50 } },
-  { img: './assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: './assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: './assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: './assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 10 } },
-  { img: './assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } },
-  { img: './assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } }
+  { img: '/assets/images/Rectangle.svg', title: 'Banco 1', description: 'descrição banco 1...', price: 500.00, tags: { discount: true, new: false, discountValue: 50 } },
+  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+  { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 10 } },
+  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } },
+  { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } }
 ];
 
 const imagesBanner = [
@@ -34,7 +34,7 @@ const rulerData = [
 
 async function includeHTML() {
   const components = [
-    { id: 'header-placeholder', url: '/assets/components/header.html' },
+    { id: 'header-placeholder', url: '../components/header.html' },
     { id: 'footer-placeholder', url: '/assets/components/footer.html'},
     { id: 'navbar-placeholder', url: '/assets/components/navbar.html'} 
   ];
@@ -53,18 +53,8 @@ async function includeHTML() {
       }
     }
   }
-  inicializarMenu(); 
   handleNavbarItem()
 }
-
-function inicializarMenu() {
-    const btn = document.querySelector('.action-btn');
-    if(btn) {
-        btn.addEventListener('click', () => console.log('Menu funcionando!'));
-    }
-}
-
-// Inicia a injeção de htmls logo que a página carrega
 document.addEventListener('DOMContentLoaded', includeHTML);
 
 // --- A. Renderização dos Cards ---
@@ -79,14 +69,7 @@ if (templateCards) {
     let finalPrice = item.price;
 
     if(item.tags.discount) {
-      clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png';
-      clone.querySelector('.tag-new img').style.display = 'none';
       finalPrice -= item.price * (item.tags.discountValue / 100);
-    }
-
-    if(item.tags.new) {
-      clone.querySelector('.tag-new img').src = '/assets/icons/fita.png';
-      clone.querySelector('.tag-discount img').style.display = 'none';
     }
 
     clone.querySelector('.img-card').src = item.img;

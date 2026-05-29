@@ -1,3 +1,21 @@
+.overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100dvh;
+  z-index: 200;
+  overflow: hidden;
+  transition: 0.3s ease-in;
+  opacity: 0;
+  visibility: hidden;
+
+}
+
+.overlay-active {
+  background-color: rgba(0,0,0,0.6);
+  opacity: 1;
+  visibility: visible;
+}
+
 .banner {
   width: 100%;
   margin: auto;
