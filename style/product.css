@@ -1,0 +1,44 @@
+.products-main {
+  width: 100%;
+  min-height: calc(100vh - 150px);
+  padding: 40px 16px 80px;
+  display: flex;
+  justify-content: center;
+}
+
+
+.products-section {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.products-section .section-title {
+  margin-bottom: 40px;
+}
+
+.loading-state {
+  font-family: var(--font-body);
+  font-size: 18px;
+  text-align: center;
+  color: var(--text-title);
+  width: 100%;
+  padding: 40px;
+}
+
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px;
+  width: 100%;
+  justify-items: center;
+  min-height: 480px;
+}
+
+/* Garante que o card ocupe o espaço corretamente no grid sem amassar */
+.products-grid .card {
+  width: 100%;
+  max-width: 300px;
+  height: 100%; /* Padroniza a altura caso os títulos variem */
+  justify-content: space-between; 
+}
