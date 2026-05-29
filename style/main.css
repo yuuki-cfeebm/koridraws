@@ -193,6 +193,7 @@
 .card-info {
   align-items: center;
   padding: 8px;
+  gap: 8px;
 }
 
 .card-text {
@@ -249,6 +250,12 @@
 }
 
 .container-product-static {
+  display: flex;
+  gap: 16px;
+  height: 500px;
+}
+
+/* .container-product-static {
   display: flex;
   flex-direction: column;
   gap: 100px;
@@ -315,7 +322,7 @@
   box-shadow: 8px 8px 0px var(--cor-amarelo-teste);
   transform: rotate(-1.5deg);
   z-index: 10;
-}
+} */
 
 .banner-text {
   display: flex;

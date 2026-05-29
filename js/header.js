@@ -6,10 +6,10 @@ export function handleNavbarItem() {
   let currentPage = window.location.pathname.split('/').pop();
   console.log("Página atual lida pelo JS:", currentPage);
   
-  console.log(document.querySelector('.cart-btn'))
+  // console.log(document.querySelector('.cart-btn'))
 
   if (currentPage === '' || currentPage === '/') {
-    currentPage = 'home.html';
+    currentPage = 'index.html';
   }
 
 

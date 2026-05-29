@@ -1,15 +1,15 @@
 import { handleNavbarItem } from './header.js';
 
 //dados globais para demonstração
-const data = [
-  { img: '/assets/images/Rectangle.svg', title: 'Banco 1', description: 'descrição banco 1...', price: 500.00, tags: { discount: true, new: false, discountValue: 50 } },
-  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-  { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 10 } },
-  { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } },
-  { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } }
-];
+// const data = [
+//   { img: '/assets/images/Rectangle.svg', title: 'Banco 1', description: 'descrição banco 1...', price: 500.00, tags: { discount: true, new: false, discountValue: 50 } },
+//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
+//   { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 10 } },
+//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } },
+//   { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } }
+// ];
 
 const imagesBanner = [
   { src: "/assets/images/image-teste2.png", alt: "teste2"},
@@ -18,7 +18,7 @@ const imagesBanner = [
 ];
 
 const bannerText = [
-  { src: "/assets/images/image-teste1.png", text: "Produto muito daora novo ae galera uhuu!"}
+  { src: "/assets/images/image-teste1.png", text: "Produto muito daora novo ae galera uhuuuuu!"}
 ];
 
 const rulerData = [
@@ -34,7 +34,7 @@ const rulerData = [
 
 async function includeHTML() {
   const components = [
-    { id: 'header-placeholder', url: '../components/header.html' },
+    { id: 'header-placeholder', url: '/assets/components/header.html' },
     { id: 'footer-placeholder', url: '/assets/components/footer.html'},
     { id: 'navbar-placeholder', url: '/assets/components/navbar.html'} 
   ];
@@ -63,26 +63,26 @@ const sectionNew = document.querySelector('#section-new');
 const sectionDiscount = document.querySelector('#section-discount');
 
 // O GUARDIÃO: Só tenta renderizar se achar o template na página atual
-if (templateCards) {
-  data.forEach(item => {
-    const clone = templateCards.content.cloneNode(true);
-    let finalPrice = item.price;
+// if (templateCards) {
+//   data.forEach(item => {
+//     const clone = templateCards.content.cloneNode(true);
+//     let finalPrice = item.price;
 
-    if(item.tags.discount) {
-      finalPrice -= item.price * (item.tags.discountValue / 100);
-    }
+//     if(item.tags.discount) {
+//       finalPrice -= item.price * (item.tags.discountValue / 100);
+//     }
 
-    clone.querySelector('.img-card').src = item.img;
-    clone.querySelector('.card-text h2').textContent = item.title;
-    clone.querySelector('.currently-price').textContent = `R$ ${finalPrice.toFixed(2)}`;
+//     clone.querySelector('.img-card').src = item.img;
+//     clone.querySelector('.card-text h2').textContent = item.title;
+//     clone.querySelector('.currently-price').textContent = `R$ ${finalPrice.toFixed(2)}`;
 
-    if(item.tags.discount && sectionDiscount) {
-      sectionDiscount.appendChild(clone);
-    } else if(item.tags.new && sectionNew) {
-      sectionNew.appendChild(clone);
-    }
-  });
-}
+//     if(item.tags.discount && sectionDiscount) {
+//       sectionDiscount.appendChild(clone);
+//     } else if(item.tags.new && sectionNew) {
+//       sectionNew.appendChild(clone);
+//     }
+//   });
+// }
 
 
 // --- B. Lógica do Banner Principal (Carrossel) ---
@@ -234,8 +234,8 @@ async function loadHomeProductsAPI() {
           imgEl.src = '/assets/images/image.png';
         }
 
-        clone.querySelector('.tag-new img').src = '/assets/icons/fita.png';
-        clone.querySelector('.tag-discount').style.display = 'none';
+        // clone.querySelector('.tag-new img').src = '/assets/icons/fita.png';
+        // clone.querySelector('.tag-discount').style.display = 'none';
 
         sectionNew.appendChild(clone);
       });
@@ -258,8 +258,8 @@ async function loadHomeProductsAPI() {
           imgEl.src = '/assets/images/image.png';
         }
 
-        clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png';
-        clone.querySelector('.tag-new').style.display = 'none';
+        // clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png';
+        // clone.querySelector('.tag-new').style.display = 'none';
 
         sectionDiscount.appendChild(clone);
       });

@@ -39,8 +39,12 @@ async function loadProducts() {
     products.forEach(produto => {
       const clone = template.content.cloneNode(true);
 
+      clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`
+
       clone.querySelector('.product-title').textContent = produto.nome;
       
+
+
       const priceEl = clone.querySelector('.currently-price');
       priceEl.textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
 

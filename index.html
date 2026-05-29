@@ -1,13 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-    <script>
-        window.location.href = "assets/pages/home.html"
-    </script>
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+  <div class="overlay">
+    <div class="cart-modal">
+      <div class="cart-container">
+        <div class="cart-top">
+          <span class="cart-title">Carrinho</span>
+          <div class="cart-btn-close">
+            <img src="/assets/icons/x.svg" alt="icon-x">
+          </div>
+        </div>
+        <div class="cart-content">
+          <template id="template-cart">
+            <div class="item-container">
+              <div class="img-item">
+                <img src="" alt="">
+              </div>
+              <div class="item-content">
+                <div class="item-top">
+                  <span></span>
+                  <div>
+                    LIXO
+                  </div>
+                </div>
+                <div class="item-bottom">
+                  <div class="add-items">
+
+                  </div>
+                  <div class="price">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main>
+
+    <div class="banner">
+      <template class="banner-template">
+        <img class="img-banner" src="" alt="">
+      </template>
+      <div class="p-0 hidden-x">
+        <div class="carousel"></div>
+      </div>
+      <button class="next btn-carousel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <button class="back btn-carousel">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="bullets"></div>
+    </div>
+   
+    <div class="ruler">
+      <div class="container ruler-container">
+        <template class="template-ruler">
+          <div class="ruler-item">
+            <img class="img-ruler" src="" alt="">
+            <p class="description"></p>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <section class="relative notebook-page">
+      <h2 class="section-title">Novidades</h2>
+ 
+      <template class="template-cards">
+        <a href="" class="card">
+          <div class="container-img">
+            <img class="img-card" src="/assets/images/Rectangle.svg" alt="img-banco">
+          </div>
+          <!-- <div class="card-tags">
+            <div class="tag tag-offer">
+              <img src="" alt="">
+            </div>
+            <div class="tag tag-new">
+              <img src="" alt="tag-new-icon">
+            </div>
+            <div class="tag tag-discount">
+              <img src="" alt="tag-discount-icon">
+            </div>
+          </div> -->
+          <div class="card-info flex-col-center ">
+            <div class="card-text">
+              <h2></h2>
+            </div>
+            <div class="card-prices">
+                <p class="full-price" style="display: none;"></p>
+                <p class="currently-price"></p>
+            </div>
+            <button class="buy-btn">Adicionar ao Carrinho</button>
+          </div>
+        </a>
+      </template>
+
+      <div id="section-new" class="container-product-static"></div>
+    </section>
+
+    <template class="section-template">
+      <div class="banner-content">
+        <p></p>
+      </div>
+      <img class="banner-text-img" src="" alt="">
+    </template>
+
+    <div class="banner-text"></div>
+
+    <section>
+      <h2 class="section-title">Promoções</h2>
+      <div class="container-product-carousel flex">
+        <button class="back btn-product">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+  
+        <div id="section-discount" class="cards-container"></div>
+
+        <button class="next btn-product">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
 </body>
+
+<script type="module" src="/js/index.js"></script>
 </html>
