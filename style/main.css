@@ -93,7 +93,7 @@
 .container-product-carousel {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .cards-container {
@@ -251,8 +251,10 @@
 
 .container-product-static {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 30px;
   height: 500px;
+  position: relative;
 }
 
 /* .container-product-static {

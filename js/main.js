@@ -1,16 +1,5 @@
 import { handleNavbarItem } from './header.js';
 
-//dados globais para demonstração
-// const data = [
-//   { img: '/assets/images/Rectangle.svg', title: 'Banco 1', description: 'descrição banco 1...', price: 500.00, tags: { discount: true, new: false, discountValue: 50 } },
-//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 20 } },
-//   { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: true, new: false, discountValue: 10 } },
-//   { img: '/assets/images/Rectangle.svg', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } },
-//   { img: '/assets/images/image.png', title: 'Banco 2', description: 'descrição banco 2...', price: 200.00, tags: { discount: false, new: true, discountValue: 0 } }
-// ];
-
 const imagesBanner = [
   { src: "/assets/images/image-teste2.png", alt: "teste2"},
   { src: "/assets/images/image-teste1.png", alt: "teste1"},
@@ -27,11 +16,6 @@ const rulerData = [
   {img: "/assets/images/pinguim.png", description: "CashBack"},
 ];
 
-
-/* =========================================================================
-   2. INJEÇÃO DE COMPONENTES GLOBAIS (Roda em todas as páginas)
-   ========================================================================= */
-
 async function includeHTML() {
   const components = [
     { id: 'header-placeholder', url: '/assets/components/header.html' },
@@ -46,6 +30,7 @@ async function includeHTML() {
         const response = await fetch(comp.url);
         if (response.ok) {
           const html = await response.text();
+          console.log(html)
           placeholder.innerHTML = html;
         }
       } catch (err) {
@@ -223,6 +208,8 @@ async function loadHomeProductsAPI() {
       
       newProducts.forEach(produto => {
         const clone = templateCards.content.cloneNode(true);
+
+        clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`
         
         clone.querySelector('.card-text h2').textContent = produto.nome;
         clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;

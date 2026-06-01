@@ -1,0 +1,60 @@
+.pdp-container {
+  display: flex;
+  align-items: start;
+  gap: 20px;
+  padding: 60px 0px;
+}
+
+.content-left {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: start;
+  max-width: 50%;
+  width: 100%;
+  gap: 16px;
+}
+
+.container-imgs {
+  width: 120px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+}
+
+.img-other {
+  width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+.container-img-main {
+  /* max-width: 600px; */
+  max-height: 600px;
+}
+
+.img-main {
+  width: 600px;
+  max-height: 600px;
+  object-fit: cover;
+}
+
+.content-right {
+  max-width: 50%;
+  width: 100%;
+
+}
+
+.pdp-title {
+  font-size: 30px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: var(--text-title);
+}
+
+.pdp-price {
+  font-size: 30px;
+  font-weight: 600;
+}
+

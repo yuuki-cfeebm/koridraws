@@ -6,11 +6,6 @@ async function carregarDetalhesDoProduto() {
     const idProduct = url.get('id');
     console.log(idProduct)
 
-    // if (!idProduct) {
-    //     window.location.href = 'index.html';
-    //     return;
-    // }
-
     try {
         const resposta = await fetch(`https://koridrawsbanco.onrender.com/api/Itens/${idProduct}`);
         
@@ -26,10 +21,33 @@ async function carregarDetalhesDoProduto() {
     }
 }
 
+const imagesTeste = [
+    "/assets/images/kori.jpg",
+    "/assets/images/kori.jpg",
+    "/assets/images/kori.jpg"
+]
+
 function preencherTela(produto) {
     document.querySelector('.pdp-title').textContent = produto.nome;
     document.querySelector('.pdp-price').textContent = `R$ ${produto.preco}`;
-    document.querySelector('.pdp-image').src = produto.imagem[0];
+    const otherImgsContainer = document.querySelector('.container-imgs')
+    otherImgsContainer.style.display = "none"
+
+    const imgMain = document.querySelector('.img-main').src = imagesTeste[0];
+
+    if(imagesTeste.length > 1) {
+        otherImgsContainer.style.display = "flex"
+        imagesTeste.slice(1).forEach(item => {
+            const newImg = document.createElement('img')
+            newImg.src = item
+
+            newImg.classList.add('img-other')
+
+            otherImgsContainer.appendChild(newImg)
+
+        })
+
+    }
     // document.querySelector('.pdp-descricao').textContent = produto.descricao;
 }
 

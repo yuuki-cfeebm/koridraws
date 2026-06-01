@@ -58,7 +58,7 @@
   align-items: center;
   background: var(--amarelo-claro);
   padding: 8px 10px;
-  border-radius: 16px;
+  border-radius: 999px;
   width: 35%;
   font-size: 18px;
   gap: 16px;
