@@ -1,8 +1,6 @@
 @import url('./footer.css');
 @import url('./header.css');
 
-
-/* Tagline bar below header nav */
 .header-tagline {
   width: 100%;
   background: var(--cor-amarelo-teste);
@@ -15,7 +13,6 @@
   letter-spacing: 0.04em;
 }
 
-/* Main layout override for events page */
 .events-main {
   display: flex;
   flex-direction: column;
@@ -27,7 +24,6 @@
   padding: 40px 16px 60px;
 }
 
-/* Section container */
 .events-section {
   width: 100%;
   max-width: 1100px;
@@ -52,18 +48,20 @@
   height: auto;
 }
 
-.event-card {
-  height: 100%;
+.events-section .cards-container .event-card {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  flex: 0 0 auto;
+  height: auto;
 }
 
-/* Grid: 3 columns */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
-/* ---- Event Card ---- */
 .event-card {
   display: flex;
   flex-direction: column;
@@ -74,6 +72,7 @@
   gap: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
 }
 
 .event-card:hover {
@@ -81,12 +80,10 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.13);
 }
 
-/* Upcoming: blue border */
 .event-card--upcoming {
   border: 2px solid var(--header-bg);
 }
 
-/* Past: pink/red border, slightly muted */
 .event-card--past {
   border: 2px solid #c0392b;
   opacity: 0.85;
@@ -96,7 +93,6 @@
   opacity: 1;
 }
 
-/* Card header: event name */
 .event-card__name {
   font-family: var(--font-mont);
   font-size: 15px;
@@ -106,28 +102,27 @@
   text-transform: uppercase;
 }
 
-/* Image area */
 .event-card__img-wrap {
   width: 100%;
   aspect-ratio: 4 / 3;
   border-radius: 6px;
   overflow: hidden;
   background: var(--card-border);
+  flex-shrink: 0;
 }
 
 .event-card__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 
-/* Past events: desaturate image */
 .event-card--past .event-card__img {
   filter: grayscale(40%);
 }
 
-/* Info block */
 .event-card__info {
   display: flex;
   flex-direction: column;
@@ -145,7 +140,6 @@
   font-weight: 600;
 }
 
-/* ---- Responsive ---- */
 @media (max-width: 900px) {
   .events-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -156,7 +150,6 @@
   .events-grid {
     grid-template-columns: 1fr;
   }
-
   .events-section-title {
     font-size: 26px;
   }

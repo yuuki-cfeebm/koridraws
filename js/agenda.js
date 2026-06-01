@@ -115,8 +115,6 @@ async function loadEventsAPI() {
 
       const article = document.createElement('article');
       article.className = `event-card ${isPast ? 'event-card--past' : 'event-card--upcoming'}`;
-      article.style.minWidth = '280px'; 
-      article.style.flexShrink = '0';
 
    let imgSrc = '/assets/images/image.png';
       if (evento.imagens && evento.imagens.length > 0) {
