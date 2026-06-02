@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar ou Cadastrar – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/auth.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+
+  <main class="auth-main">
+    <section class="auth-section">
+      
+      <div class="auth-container">
+        
+        <div class="auth-card" id="login-card">
+          <h2 class="section-title">Já tenho conta</h2>
+          <form id="form-login" class="event-form">
+            <div class="form-row">
+              <label for="login-email">E-mail</label>
+              <input type="email" id="login-email" required>
+            </div>
+            <div class="form-row">
+              <label for="login-senha">Senha</label>
+              <input type="password" id="login-senha" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="event-form-btn">Entrar</button>
+            </div>
+          </form>
+          <p class="auth-toggle-text">Não tem uma conta? <button type="button" id="btn-show-register" class="auth-toggle-btn">Cadastre-se</button></p>
+        </div>
+
+        <div class="auth-card" id="register-card" style="display: none;">
+          <h2 class="section-title">Criar nova conta</h2>
+          <form id="form-register" class="event-form">
+            <div class="form-row">
+              <label for="reg-nome">Nome</label>
+              <input type="text" id="reg-nome" required>
+            </div>
+            <div class="form-row">
+              <label for="reg-sobrenome">Sobrenome</label>
+              <input type="text" id="reg-sobrenome" required>
+            </div>
+            <div class="form-row">
+              <label for="reg-email">E-mail</label>
+              <input type="email" id="reg-email" required>
+            </div>
+            <div class="form-row">
+              <label for="reg-telefone">Telefone</label>
+              <input type="tel" id="reg-telefone" required>
+            </div>
+            <div class="form-row">
+              <label for="reg-senha">Senha</label>
+              <input type="password" id="reg-senha" required>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="event-form-btn">Cadastrar</button>
+            </div>
+          </form>
+          <p class="auth-toggle-text">Já tem uma conta? <button type="button" id="btn-show-login" class="auth-toggle-btn">Entrar</button></p>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+</body>
+</html>

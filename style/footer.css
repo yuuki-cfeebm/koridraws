@@ -52,8 +52,14 @@ footer {
   color: var();
 }
 
+.footer-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 1px;
+}
+
 .footer-item {
-  padding: 4px 10px;
+  padding: 4px 1px;
   color: var(--grey-70);
   font-weight: bold;
   font-size: 16px;
@@ -66,27 +72,26 @@ footer {
 .footer-logo {
   position: relative;
   /* display: flex; */
-  font-size: 32px;
+  font-size: 36px;
   color: var(--color-black);
   font-weight: bold;
   text-transform: uppercase;
 }
 
-.bola {
-  width: 14px;
-  height: 14px;
-  /* padding: 10px; */
-  border-radius: 10px;
-  position: absolute;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.bola-corvo {
-  width: 9px;
-  height: 9px;
-  top: 15px;
-  right: -13px;
-  background: var(--corvo);
+.logo-mark {
+  max-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
+
 
 .bola-pinguim {
   bottom: 10px;
@@ -150,7 +155,7 @@ footer {
 
 .socials {
   display: flex;
-  gap: 16px;
+  gap: 1px;
   align-items: center;
   flex-wrap: wrap;
 }

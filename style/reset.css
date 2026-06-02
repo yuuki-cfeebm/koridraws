@@ -6,7 +6,7 @@
 body {
   display: flex;
   flex-direction: column;
-  width: 100vw;
+
   flex-grow: 1;
 }
 

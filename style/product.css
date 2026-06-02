@@ -10,6 +10,7 @@
 .products-section {
   width: 100%;
   max-width: 1200px;
+  overflow: visible; /* Permite que os cards cresçam sem restrição */
 }
 
 .products-section .section-title {

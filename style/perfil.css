@@ -1,0 +1,139 @@
+.perfil-main {
+  width: 100%;
+  padding: 60px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.perfil-section {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.perfil-header .section-title {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.perfil-info-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  outline: 2px solid #000;
+}
+
+.perfil-info-card p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-title);
+  margin-bottom: 8px;
+}
+
+.enderecos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.subsection-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-title);
+}
+
+.btn-action {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  background: var(--header-bg);
+  color: #fff;
+  border: 2px solid #000;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+.btn-cancel {
+  background: #f3f3f3;
+  color: #000;
+}
+
+.enderecos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.endereco-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease;
+}
+
+.endereco-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.endereco-info p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.endereco-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-edit, .btn-delete {
+  font-family: var(--font-mont);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pinguim-cinza);
+  padding: 0;
+}
+
+.btn-delete {
+  color: #c0392b;
+}
+
+.btn-edit:hover, .btn-delete:hover {
+  text-decoration: underline;
+}
+
+.endereco-form-container {
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-top: 32px;
+  outline: 2px solid #000;
+}
+
+.empty-state {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  font-style: italic;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/perfil.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+
+  <main class="perfil-main">
+    <section class="perfil-section">
+      
+      <div class="perfil-header">
+        <h2 class="section-title">Meu Perfil</h2>
+        <div class="perfil-info-card">
+          <p><strong>Nome:</strong> <span id="perfil-nome">Carregando...</span></p>
+          <p><strong>E-mail:</strong> <span id="perfil-email">Carregando...</span></p>
+        </div>
+      </div>
+
+      <div class="enderecos-container">
+        <div class="enderecos-header">
+          <h3 class="subsection-title">Meus Endereços</h3>
+          <button id="btn-novo-endereco" class="btn-action">Adicionar Novo Endereço</button>
+        </div>
+
+        <div id="enderecos-list" class="enderecos-grid">
+        </div>
+
+        <div id="endereco-form-container" class="endereco-form-container" style="display: none;">
+          <h4 id="form-endereco-title" class="subsection-title">Adicionar Endereço</h4>
+          <form id="form-endereco" class="event-form">
+            <input type="hidden" id="end-id">
+            
+            <div class="form-row">
+              <label for="end-cep">CEP</label>
+              <input type="text" id="end-cep">
+            </div>
+            <div class="form-row">
+              <label for="end-rua">Rua *</label>
+              <input type="text" id="end-rua" required>
+            </div>
+            <div class="form-row">
+              <label for="end-numero">Número *</label>
+              <input type="text" id="end-numero" required>
+            </div>
+            <div class="form-row">
+              <label for="end-complemento">Complemento</label>
+              <input type="text" id="end-complemento">
+            </div>
+            <div class="form-row">
+              <label for="end-bairro">Bairro</label>
+              <input type="text" id="end-bairro">
+            </div>
+            
+            <div class="form-row">
+              <label for="end-estado">Estado *</label>
+              <select id="end-estado" required>
+                <option value="" disabled selected>Selecione um estado</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="end-cidadeId">Cidade *</label>
+              <select id="end-cidadeId" required disabled>
+                <option value="" disabled selected>Selecione um estado primeiro</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="event-form-btn">Salvar Endereço</button>
+              <button type="button" id="btn-cancelar-endereco" class="btn-action btn-cancel">Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+<script type="module" src="/js/global.js"></script>
+  <script type="module" src="/js/perfil.js"></script>
+</body>
+</html>

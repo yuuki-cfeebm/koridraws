@@ -1,3 +1,6 @@
+import { API_BASE_URL } from './config.js';
+import { addToCart } from './cart.js';
+
 async function loadProducts() {
   console.log("[Produtos] Iniciando a função loadProducts...");
   
@@ -14,7 +17,7 @@ async function loadProducts() {
     console.log("[Produtos] Disparando fetch para a API...");
     const fetchStart = performance.now();
     
-    const response = await fetch('https://koridrawsbanco.onrender.com/api/Itens');
+    const response = await fetch(`${API_BASE_URL}/Itens`);
     
     const fetchEnd = performance.now();
     console.log(`[Produtos] Resposta da API recebida em ${(fetchEnd - fetchStart).toFixed(2)}ms. Status: ${response.status}`);
@@ -39,22 +42,35 @@ async function loadProducts() {
     products.forEach(produto => {
       const clone = template.content.cloneNode(true);
 
-      clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`
-
+      clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`;
       clone.querySelector('.product-title').textContent = produto.nome;
-      
-
 
       const priceEl = clone.querySelector('.currently-price');
       priceEl.textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
 
       const imgEl = clone.querySelector('.img-card');
+      let imageUrl = '/assets/images/image.png';
       
-   if (produto.imagens && produto.imagens.length > 0) {
+      if (produto.imagens && produto.imagens.length > 0) {
         const fileId = produto.imagens[0].caminhoCloud;
-        imgEl.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
-      } else {
-        imgEl.src = '/assets/images/image.png';
+        imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+      }
+      
+      imgEl.src = imageUrl;
+
+      const btnComprar = clone.querySelector('.buy-btn');
+      if (btnComprar) {
+        btnComprar.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          addToCart({
+            id: produto.id,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: imageUrl
+          });
+        });
       }
 
       grid.appendChild(clone);

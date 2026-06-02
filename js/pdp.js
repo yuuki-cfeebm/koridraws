@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './config.js';
+
 async function carregarDetalhesDoProduto() {
     const url = new URLSearchParams(window.location.search);
     const path = window.location.pathname
@@ -7,7 +9,7 @@ async function carregarDetalhesDoProduto() {
     console.log(idProduct)
 
     try {
-        const resposta = await fetch(`https://koridrawsbanco.onrender.com/api/Itens/${idProduct}`);
+        const resposta = await fetch(`${API_BASE_URL}/Itens/${idProduct}`);
         
         if (resposta.ok) {
             const produto = await resposta.json();

@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './config.js';
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, '&amp;')
@@ -100,7 +102,7 @@ async function loadEventsAPI() {
   if (!upcomingContainer || !pastContainer) return;
 
   try {
-    const response = await fetch('https://koridrawsbanco.onrender.com/api/Eventos');
+    const response = await fetch(`${API_BASE_URL}/Eventos`);
     
     if (!response.ok) {
       throw new Error(`Erro de rede: ${response.status}`);

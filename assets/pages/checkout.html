@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/checkout.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+
+  <main class="checkout-main">
+    <section class="checkout-section">
+      <h2 class="section-title">Finalizar Compra</h2>
+      
+      <div class="checkout-container">
+        <div class="checkout-summary">
+          <h3 class="subsection-title">Resumo do Pedido</h3>
+          <div id="cart-items-container" class="cart-items">
+          </div>
+          <div class="checkout-total">
+            <span>Total:</span>
+            <span id="checkout-total-price">R$ 0,00</span>
+          </div>
+        </div>
+
+        <div class="checkout-form-container">
+          <h3 class="subsection-title">Entrega e Pagamento</h3>
+          
+          <div id="no-address-warning" class="warning-box" style="display: none;">
+            <p>Você não possui nenhum endereço cadastrado.</p>
+            <a href="/assets/pages/perfil.html" class="event-form-btn text-center">Cadastrar Endereço no Perfil</a>
+          </div>
+
+          <form id="form-checkout" class="event-form" style="display: none;">
+            <div class="form-row">
+              <label for="checkout-endereco">Endereço de Entrega *</label>
+              <select id="checkout-endereco" required>
+                <option value="" disabled selected>Carregando endereços...</option>
+              </select>
+            </div>
+            
+            <div class="form-row">
+              <label for="checkout-pagamento">Método de Pagamento *</label>
+              <select id="checkout-pagamento" required>
+                <option value="" disabled selected>Selecione uma forma de pagamento</option>
+                <option value="CartaoCredito">Cartão de Crédito</option>
+                <option value="CartaoDebito">Cartão de Débito</option>
+                <option value="Boleto">Boleto Bancário</option>
+                <option value="Pix">PIX</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="btn-submit-order" class="event-form-btn w-100">Confirmar e Pagar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/checkout.js"></script>
+</body>
+</html>

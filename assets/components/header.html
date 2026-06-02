@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="header-top container">
-    <a href="#" class="logo" aria-label="Koridraws – Página inicial">
+    <a href="/assets/pages/home.html" class="logo" aria-label="Koridraws – Página inicial">
       <div class="logo-mark">
         <img src="/assets/images/pinguim-1.svg" alt="img-logo">
       </div>
@@ -13,12 +13,20 @@
     </div>
 
     <div class="header-actions">
-      <button class="action-btn" aria-label="Minha Conta">
-        <img src="/assets/icons/user.svg" alt="icon-user">
-      </button>
+      
+      <div class="user-menu-container">
+        <button class="action-btn" aria-label="Minha Conta">
+          <img src="/assets/icons/user.svg" alt="icon-user">
+        </button>
+        <div id="user-dropdown" class="user-dropdown"></div>
+      </div>
+
       <button class="action-btn cart-btn" aria-label="Carrinho">
         <img src="/assets/icons/shopping-cart.svg" alt="icon-cart">
       </button>
     </div>
   </div>  
 </header>
+
+<div class="overlay"></div>
+<div class="cart-modal"></div>
