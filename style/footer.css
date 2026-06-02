@@ -54,7 +54,7 @@ footer {
 
 .footer-item {
   padding: 4px 10px;
-  color: var(--grey-70);
+  color: var(--cinza-escuro);
   font-weight: bold;
   font-size: 16px;
 }
@@ -67,7 +67,7 @@ footer {
   position: relative;
   /* display: flex; */
   font-size: 32px;
-  color: var(--color-black);
+  color: var(--grey-70);
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -85,13 +85,13 @@ footer {
   height: 9px;
   top: 15px;
   right: -13px;
-  background: var(--corvo);
+  background: var(--grey-70);
 }
 
 .bola-pinguim {
   bottom: 10px;
   right: -16px;
-  background: var(--pinguim);
+  background: var(--grey-55);
 }
 
 .footer-links{
@@ -133,14 +133,14 @@ footer {
   font-size: 16px;
   font-weight: bold;
   padding: 6px 10px;
-  color: var(--grey-70);
+  color: var(--cinza-escuro);
 }
 
 .footer-bottom {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid black;
+  border-top: 1px solid var(--cinza-escuro);
 }
 
 /* .footer-social a img {
@@ -158,5 +158,5 @@ footer {
 .footer-copy {
   margin-top: 20px;
   font-size: 14px;
-  color: var(--color-black);
+  color: var(--cinza-escuro);
 }

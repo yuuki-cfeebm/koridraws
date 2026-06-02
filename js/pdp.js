@@ -11,6 +11,7 @@ async function carregarDetalhesDoProduto() {
         
         if (resposta.ok) {
             const produto = await resposta.json();
+            console.log(produto)
             preencherTela(produto);
         } else {
             console.error("Produto não encontrado!");
@@ -23,32 +24,99 @@ async function carregarDetalhesDoProduto() {
 
 const imagesTeste = [
     "/assets/images/kori.jpg",
-    "/assets/images/kori.jpg",
-    "/assets/images/kori.jpg"
+    "/assets/images/pinguim.jpg",
+    "/assets/images/image.png"
 ]
+
+function formatDriveLink(url) {
+    if (!url.includes('/d/')) return url;
+
+    const idImg = url.split('/d/')[1].split('/')[0];
+    console.log(idImg)
+    
+    return `https://drive.google.com/thumbnail?id=${idImg}&sz=w1000`;
+}
 
 function preencherTela(produto) {
     document.querySelector('.pdp-title').textContent = produto.nome;
     document.querySelector('.pdp-price').textContent = `R$ ${produto.preco}`;
     const otherImgsContainer = document.querySelector('.container-imgs')
     otherImgsContainer.style.display = "none"
+    otherImgsContainer.innerHTML = ""
 
-    const imgMain = document.querySelector('.img-main').src = imagesTeste[0];
+    console.log(produto.imagens)
 
-    if(imagesTeste.length > 1) {
+    const imgMain = document.querySelector('.img-main') 
+    imgMain.src = formatDriveLink(produto.imagens[0].url)
+
+    if(produto.imagens) {
+
         otherImgsContainer.style.display = "flex"
-        imagesTeste.slice(1).forEach(item => {
-            const newImg = document.createElement('img')
-            newImg.src = item
+        
 
+        produto.imagens.forEach((item, index) => {
+            const newImg = document.createElement('img')
+            newImg.src = formatDriveLink(item.url)
             newImg.classList.add('img-other')
 
+            if (index === 0) {
+                newImg.classList.add('active');
+            }
+
+            newImg.addEventListener('click', () => {
+                imgMain.src = formatDriveLink(item.url)
+                const allImgs = document.querySelectorAll('.img-other')
+                allImgs.forEach(item => item.classList.remove('active'))
+
+                newImg.classList.add('active')
+            })
+
             otherImgsContainer.appendChild(newImg)
-
         })
-
     }
-    // document.querySelector('.pdp-descricao').textContent = produto.descricao;
 }
 
-window.addEventListener('DOMContentLoaded', carregarDetalhesDoProduto);
+function handleCartItens() {
+    const num = document.querySelector('.add-itens span')
+    const btnAdd = document.querySelector('.plus')
+    const btnRemove = document.querySelector('.minus')
+    let number = 0
+
+    console.log(btnAdd)
+
+    btnAdd.addEventListener('click', () => {
+        number += 1
+        num.textContent = number
+    })
+
+    btnRemove.addEventListener('click', () => {
+        if(number > 0) {
+            number -= 1
+            num.textContent = number
+        } else {
+            number = 0
+            return
+        }
+    })
+}
+
+function cepMask() {
+    const inputCep = document.querySelector('.cep-mask');
+
+    if (!inputCep) return; 
+
+    inputCep.addEventListener('input', (evento) => {
+        
+        let valor = evento.target.value;
+        valor = valor.replace(/\D/g, "");
+        valor = valor.replace(/^(\d{5})(\d)/, "$1-$2");
+
+        evento.target.value = valor;
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    carregarDetalhesDoProduto()
+    handleCartItens()
+    cepMask()
+});

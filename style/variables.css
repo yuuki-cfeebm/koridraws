@@ -5,6 +5,7 @@
   --bg-primary: #5bbfe2;
   --text-primary: #f3f3f3;
   --bg-main: #ebcd6a;
+  --bg-main-50: #e6c350; 
   --bg-footer: #5bbfe2;
   --text-footer: #e3e3e3;
   --text-title: #1B365D;
@@ -37,19 +38,9 @@
 
   --font-mont: 'Montserrat', sans-serif;
 
-  --corvo: #2E394E;
-  --bico-pinguim: #E66F40;
-  --pinguim: #708E9A;
-  --pinguim-branco: #F6F7F6;
-  --pinguim-cinza: #6B838C;
-
-
-
   --shadow-color: #9d9d9d;
 
-  --ink:    #000000;
-  --paper:  #ffffff;
-  --accent: #e73888;
+  --cinza-escuro: #222222;
 
   --grey-04: #fafafa;
   --grey-08: #f4f4f4;

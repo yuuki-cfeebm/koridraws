@@ -10,7 +10,7 @@ section {
 .container {
   max-width: 1280px;
   width: 100%;
-  padding: 0 8px;
+  padding: 0 24px;
 }
 
 .section-title {
@@ -23,7 +23,7 @@ section {
 .footer-title {
   font-size: 18px;
   font-weight: 700;
-  color: var(--corvo);
+  color: var(--grey-70);
   text-transform: uppercase;
   letter-spacing: -0.02em;
 }

@@ -21,8 +21,35 @@
         </div>
       </div>
       <div class="content-right">
-        <p class="pdp-title"></p>
-        <p class="pdp-price"></p>
+        <div class="info-product">
+          <p class="pdp-title"></p>
+          <p class="pdp-desc">asdfjasklfjadçsklfjasklçfjaklsdjfaklsdjfalfasdfasdfasdfasdfsdfksjdflkjsadklfçjasdjf</p>
+          <p class="pdp-price"></p>
+        </div>
+        <div class="actions">
+          <div class="variations">
+            <p>Variação</p>
+          </div>
+          <div class="buy-item">
+            <div class="add-itens">
+              <button class="btn minus">
+                <img src="/assets/icons/minus.svg" alt="icon-minus">
+              </button>
+              <span>0</span>
+              <button class="btn plus">
+                <img src="/assets/icons/plus.svg" alt="icon-plus">
+              </button>
+            </div>
+            <button class="buy-btn">
+              <img src="/assets/icons/shopping-cart.svg" alt="icon-cart">
+              Adicionar ao carrinho
+            </button>
+          </div>
+          <form class="calc-frete" action="">
+            <input type="text" class="cep-mask" maxlength="9" placeholder="00000-000">
+            <button class="btn-frete" type="button">Calcular Frete</button>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -33,9 +60,7 @@
 
   <script type="module" src="/js/pdp.js"></script>
   <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/header.js"></script>
+
 </body>
 </html>
-
-
-
-<!-- PRECISO FAZER A LOGICA DE CLIQUE NA IMG E COLOCAR ACTIVE, GEMINI CHAT KORIDRAWS -->

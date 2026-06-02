@@ -30,7 +30,6 @@ async function includeHTML() {
         const response = await fetch(comp.url);
         if (response.ok) {
           const html = await response.text();
-          console.log(html)
           placeholder.innerHTML = html;
         }
       } catch (err) {
@@ -42,35 +41,13 @@ async function includeHTML() {
 }
 document.addEventListener('DOMContentLoaded', includeHTML);
 
-// --- A. Renderização dos Cards ---
+// --- Renderização dos Cards ---
 const templateCards = document.querySelector('.template-cards');
 const sectionNew = document.querySelector('#section-new');
 const sectionDiscount = document.querySelector('#section-discount');
 
-// O GUARDIÃO: Só tenta renderizar se achar o template na página atual
-// if (templateCards) {
-//   data.forEach(item => {
-//     const clone = templateCards.content.cloneNode(true);
-//     let finalPrice = item.price;
 
-//     if(item.tags.discount) {
-//       finalPrice -= item.price * (item.tags.discountValue / 100);
-//     }
-
-//     clone.querySelector('.img-card').src = item.img;
-//     clone.querySelector('.card-text h2').textContent = item.title;
-//     clone.querySelector('.currently-price').textContent = `R$ ${finalPrice.toFixed(2)}`;
-
-//     if(item.tags.discount && sectionDiscount) {
-//       sectionDiscount.appendChild(clone);
-//     } else if(item.tags.new && sectionNew) {
-//       sectionNew.appendChild(clone);
-//     }
-//   });
-// }
-
-
-// --- B. Lógica do Banner Principal (Carrossel) ---
+// --- lógica do Banner Principal (Carrossel) ---
 const templateBanner = document.querySelector('.banner-template');
 const carousel = document.querySelector('.carousel');
 
