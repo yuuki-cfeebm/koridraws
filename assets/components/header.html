@@ -23,10 +23,52 @@
 
       <button class="action-btn cart-btn" aria-label="Carrinho">
         <img src="/assets/icons/shopping-cart.svg" alt="icon-cart">
+        <span class="cart-badge">0</span>
       </button>
     </div>
   </div>  
 </header>
+<div class="overlay">
+    <div class="cart-modal">
+      <div class="cart-container">
+        <div class="cart-top">
+          <span class="cart-title">Carrinho</span>
+          <div class="cart-btn-close">
+            <img src="/assets/icons/x.svg" alt="icon-x">
+          </div>
+        </div>
+        <div class="cart-content">
+          <template id="template-cart">
+            <div class="item-container">
+              <img class="cart-img-item" src="" alt="">
+              <div class="item-cart-content">
+                <div class="item-top">
+                  <span class="cart-item-title"></span>
+                  <div>
+                    LIXO
+                  </div>
+                </div>
+                <div class="item-bottom">
+                  <div class="add-itens">
+                    <button class="btn-minus">
+                      <img src="/assets/icons/minus.svg" alt="icon-minus">
+                    </button>
+                    <span class="item-qtd">0</span>
+                    <button class="btn-plus">
+                      <img src="/assets/icons/plus.svg" alt="icon-plus">
+                    </button>
+                  </div>
+                  <div class="cart-item-price"> 
 
-<div class="overlay"></div>
-<div class="cart-modal"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/cart.js"></script>
+  <script type="module" src="/js/index.js"></script>

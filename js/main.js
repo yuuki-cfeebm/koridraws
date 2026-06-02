@@ -193,6 +193,8 @@ async function loadHomeProductsAPI() {
   } catch (error) {
     console.error("Erro nos produtos:", error);
   }
+
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
