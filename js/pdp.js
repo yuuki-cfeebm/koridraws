@@ -1,17 +1,16 @@
+// import { lerCarrinho, salvarCarrinho } from "./cart";
+
 async function carregarDetalhesDoProduto() {
     const url = new URLSearchParams(window.location.search);
     const path = window.location.pathname
-    console.log(path)
 
     const idProduct = url.get('id');
-    console.log(idProduct)
 
     try {
         const resposta = await fetch(`https://koridrawsbanco.onrender.com/api/Itens/${idProduct}`);
         
         if (resposta.ok) {
             const produto = await resposta.json();
-            console.log(produto)
             preencherTela(produto);
         } else {
             console.error("Produto não encontrado!");
@@ -22,17 +21,10 @@ async function carregarDetalhesDoProduto() {
     }
 }
 
-const imagesTeste = [
-    "/assets/images/kori.jpg",
-    "/assets/images/pinguim.jpg",
-    "/assets/images/image.png"
-]
-
 function formatDriveLink(url) {
     if (!url.includes('/d/')) return url;
 
     const idImg = url.split('/d/')[1].split('/')[0];
-    console.log(idImg)
     
     return `https://drive.google.com/thumbnail?id=${idImg}&sz=w1000`;
 }
@@ -44,8 +36,6 @@ function preencherTela(produto) {
     otherImgsContainer.style.display = "none"
     otherImgsContainer.innerHTML = ""
 
-    console.log(produto.imagens)
-
     const imgMain = document.querySelector('.img-main') 
     imgMain.src = formatDriveLink(produto.imagens[0].url)
 
@@ -53,7 +43,6 @@ function preencherTela(produto) {
 
         otherImgsContainer.style.display = "flex"
         
-
         produto.imagens.forEach((item, index) => {
             const newImg = document.createElement('img')
             newImg.src = formatDriveLink(item.url)
@@ -76,29 +65,35 @@ function preencherTela(produto) {
     }
 }
 
-function handleCartItens() {
-    const num = document.querySelector('.add-itens span')
-    const btnAdd = document.querySelector('.plus')
-    const btnRemove = document.querySelector('.minus')
-    let number = 0
+// function handleCartItens(produto) {
+//     const num = document.querySelector('.add-itens span');
+    
+//     const carrinho = lerCarrinho();
+//     const itemExistente = carrinho.find(item => item.id === produtoAtual.id);
+    
+//     let number = itemExistente ? itemExistente.quantidade : 1;
+//     if (num) num.textContent = number;
 
-    console.log(btnAdd)
+//     const num = document.querySelector('.add-itens span')
+//     const btnAdd = document.querySelector('.plus')
+//     const btnRemove = document.querySelector('.minus')
+//     let number = 0
 
-    btnAdd.addEventListener('click', () => {
-        number += 1
-        num.textContent = number
-    })
+//     btnAdd.addEventListener('click', () => {
+//         number += 1
+//         num.textContent = number
+//     })
 
-    btnRemove.addEventListener('click', () => {
-        if(number > 0) {
-            number -= 1
-            num.textContent = number
-        } else {
-            number = 0
-            return
-        }
-    })
-}
+//     btnRemove.addEventListener('click', () => {
+//         if(number > 0) {
+//             number -= 1
+//             num.textContent = number
+//         } else {
+//             number = 0
+//             return
+//         }
+//     })
+// }
 
 function cepMask() {
     const inputCep = document.querySelector('.cep-mask');
@@ -117,6 +112,6 @@ function cepMask() {
 
 window.addEventListener('DOMContentLoaded', () => {
     carregarDetalhesDoProduto()
-    handleCartItens()
+    // handleCartItens()
     cepMask()
 });

@@ -1,5 +1,5 @@
 .overlay {
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100dvh;
   z-index: 200;
@@ -7,7 +7,7 @@
   transition: 0.3s ease-in;
   opacity: 0;
   visibility: hidden;
-
+  top: 0;
 }
 
 .overlay-active {
@@ -99,11 +99,12 @@
 .cards-container {
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 77px;
   width: 100%;
   padding: 12px 24px;
   overflow-x: hidden;
   height: 480px;
+  /* transform: translateX(100px); */
 }
 
 .card {

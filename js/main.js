@@ -1,4 +1,5 @@
 import { handleNavbarItem } from './header.js';
+import { handleAddtoCart, handleCartModal } from './cart.js';
 
 const imagesBanner = [
   { src: "/assets/images/image-teste2.png", alt: "teste2"},
@@ -38,8 +39,11 @@ async function includeHTML() {
     }
   }
   handleNavbarItem()
+  handleCartModal()
 }
 document.addEventListener('DOMContentLoaded', includeHTML);
+
+
 
 // --- Renderização dos Cards ---
 const templateCards = document.querySelector('.template-cards');
@@ -152,16 +156,38 @@ if (templateRuler && containerRuler) {
   //  add logica do ruler
 }
 
-const btnBackProduct = document.querySelector('.back.btn-product');
-const btnNextProduct = document.querySelector('.next.btn-product');
+// novidades
+const btnBackNew = document.querySelector('.back.btn-product-new')
+const btnNextNew = document.querySelector('.next.btn-product-new')
+const containerNew = document.querySelector('#section-new')
+moveCarousel(btnNextNew, btnBackNew, containerNew)
 
-if (btnBackProduct) {
-   // btnBackProduct.addEventListener('click', ...);
+// promoções
+const btnBackProduct = document.querySelector('.back.btn-disc');
+const btnNextProduct = document.querySelector('.next.btn-disc');
+const containerDisc = document.querySelector('#section-discount')
+moveCarousel(btnNextProduct, btnBackProduct, containerDisc)
+
+function moveCarousel(btnNext, btnBack, container) {
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      container.scrollBy({
+        left: 376,
+        behavior: 'smooth'
+      });
+    });
+  }
+
+  if (btnBack) {
+    btnBack.addEventListener('click', () => {
+      container.scrollBy({
+        left: -376,
+        behavior: 'smooth'
+      });
+    });
+  }
 }
 
-if (btnNextProduct) {
-  // btnNextProduct.addEventListener('click', ...);
-}
 
 async function loadHomeProductsAPI() {
   const templateCards = document.querySelector('.template-cards');
@@ -206,11 +232,13 @@ async function loadHomeProductsAPI() {
     }
 
     if (sectionDiscount) {
+
       sectionDiscount.innerHTML = '';
       const discountProducts = products.slice(0, 10);
       
       discountProducts.forEach(produto => {
         const clone = templateCards.content.cloneNode(true);
+        clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`
         
         clone.querySelector('.card-text h2').textContent = produto.nome;
         clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
@@ -222,16 +250,22 @@ async function loadHomeProductsAPI() {
           imgEl.src = '/assets/images/image.png';
         }
 
-        // clone.querySelector('.tag-discount img').src = '/assets/icons/bola.png';
-        // clone.querySelector('.tag-new').style.display = 'none';
+        const btnBuy = clone.querySelector('.buy-btn')
+        
+        btnBuy.addEventListener('click', (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          handleAddtoCart(produto)
+        })
 
         sectionDiscount.appendChild(clone);
       });
     }
-
   } catch (error) {
     console.error(error);
   }
+
+
 }
 
 document.addEventListener('DOMContentLoaded', loadHomeProductsAPI);
