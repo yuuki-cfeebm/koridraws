@@ -43,3 +43,36 @@
   height: 100%; /* Padroniza a altura caso os títulos variem */
   justify-content: space-between; 
 }
+
+.filters-container {
+  display: flex;
+ 
+  justify-content: center;
+  margin-bottom: 38px;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 12px;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 2px solid var(--cor-amarelo-teste);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--cor-amarelo-teste);
+  overflow: visible;
+}
+
+.filter-btn:hover {
+  background: #f0f0f0;
+}
+
+.filter-btn.active {
+  background: var(--text-title);
+  color: #fff;
+}

@@ -45,22 +45,27 @@ export function addToCart(item) {
   
   const existingItemIndex = cart.findIndex(cartItem => (cartItem.id || cartItem.Id).toString() === (item.id || item.Id).toString());
   
+  // Define a quantidade a ser adicionada. Se veio no 'item', usa ela. Se não, assume 1.
+  const quantidadeAdicionada = item.quantidade ? parseInt(item.quantidade) : 1;
+
   if (existingItemIndex > -1) {
-    cart[existingItemIndex].quantidade += 1;
+    // Se o item já existe, soma a quantidade selecionada em vez de somar apenas 1
+    cart[existingItemIndex].quantidade += quantidadeAdicionada;
   } else {
+    // Se for um item novo, insere com a quantidade correta
     cart.push({
       id: item.id || item.Id,
       nome: item.nome || item.Nome,
       preco: item.preco || item.Preco,
       imagem: item.imagem || item.Imagem,
-      quantidade: 1
+      quantidade: quantidadeAdicionada
     });
   }
   
   localStorage.setItem('koridraws_cart', JSON.stringify(cart));
   
   const nomeItem = item.nome || item.Nome;
-  showToast(`${nomeItem} foi adicionado ao carrinho!`);
+  showToast(`${quantidadeAdicionada}x ${nomeItem} adicionado(s) ao carrinho!`);
   
   renderCartModal();
 }
@@ -145,6 +150,7 @@ export function renderCartModal() {
   if (cart.length === 0) {
     cartContainer.innerHTML = '<p style="font-family: var(--font-body); color: var(--text-primary); text-align: center; margin-top: 40px;">O seu carrinho está vazio.</p>';
     totalContainer.innerHTML = '';
+    updateCartBadge();
     return;
   }
 
@@ -194,6 +200,8 @@ export function renderCartModal() {
       removeFromCart(e.target.dataset.id);
     });
   });
+
+  updateCartBadge();
 }
 
 export function getCartItemHTML(item) {
@@ -221,6 +229,21 @@ export function getCartItemHTML(item) {
       </div>
     </div>
   `;
+}
+
+export function updateCartBadge() {
+  const badges = document.querySelectorAll('.cart-badge');
+  if (badges.length === 0) return;
+
+  const cart = getCart();
+  
+  const totalItens = cart.reduce((total, item) => total + (item.quantidade || 1), 0);
+
+  badges.forEach(badge => {
+    badge.textContent = totalItens;
+    
+    badge.style.display = totalItens > 0 ? 'flex' : 'none';
+  });
 }
 
 export function initCartGlobal() {

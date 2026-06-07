@@ -1,117 +1,133 @@
-// import { lerCarrinho, salvarCarrinho } from "./cart";
+import { API_BASE_URL } from './config.js';
+import { addToCart } from './cart.js';
+
+let produtoAtual = null;
+let quantidadeSelecionada = 1;
+let imagemPrincipal = '/assets/images/image.png';
 
 async function carregarDetalhesDoProduto() {
     const url = new URLSearchParams(window.location.search);
-    const path = window.location.pathname
-
     const idProduct = url.get('id');
+
+    if (!idProduct) return;
 
     try {
         const resposta = await fetch(`${API_BASE_URL}/Itens/${idProduct}`);
         
         if (resposta.ok) {
-            const produto = await resposta.json();
-            preencherTela(produto);
+            produtoAtual = await resposta.json();
+            preencherTela(produtoAtual);
+            configurarControlesQuantidade();
+            configurarBotaoComprar();
         } else {
             console.error("Produto não encontrado!");
         }
-
     } catch (erro) {
         console.error("Erro de conexão:", erro);
     }
 }
 
 function formatDriveLink(url) {
-    if (!url.includes('/d/')) return url;
-
+    if (!url || !url.includes('/d/')) return url;
     const idImg = url.split('/d/')[1].split('/')[0];
-    
     return `https://drive.google.com/thumbnail?id=${idImg}&sz=w1000`;
 }
 
 function preencherTela(produto) {
     document.querySelector('.pdp-title').textContent = produto.nome;
-    document.querySelector('.pdp-price').textContent = `R$ ${produto.preco}`;
-    const otherImgsContainer = document.querySelector('.container-imgs')
-    otherImgsContainer.style.display = "none"
-    otherImgsContainer.innerHTML = ""
+    document.querySelector('.pdp-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+    
+    const otherImgsContainer = document.querySelector('.container-imgs');
+    otherImgsContainer.style.display = "none";
+    otherImgsContainer.innerHTML = "";
 
-    const imgMain = document.querySelector('.img-main') 
-    imgMain.src = formatDriveLink(produto.imagens[0].url)
-
-    if(produto.imagens) {
-
-        otherImgsContainer.style.display = "flex"
+    const imgMain = document.querySelector('.img-main');
+    
+    if (produto.imagens && produto.imagens.length > 0) {
+        imagemPrincipal = formatDriveLink(produto.imagens[0].url || produto.imagens[0].caminhoCloud);
+        imgMain.src = imagemPrincipal;
+        
+        otherImgsContainer.style.display = "flex";
         
         produto.imagens.forEach((item, index) => {
-            const newImg = document.createElement('img')
-            newImg.src = formatDriveLink(item.url)
-            newImg.classList.add('img-other')
+            const newImg = document.createElement('img');
+            const currentItemUrl = item.url || item.caminhoCloud;
+            newImg.src = formatDriveLink(currentItemUrl);
+            newImg.classList.add('img-other');
 
             if (index === 0) {
                 newImg.classList.add('active');
             }
 
             newImg.addEventListener('click', () => {
-                imgMain.src = formatDriveLink(item.url)
-                const allImgs = document.querySelectorAll('.img-other')
-                allImgs.forEach(item => item.classList.remove('active'))
+                imgMain.src = formatDriveLink(currentItemUrl);
+                const allImgs = document.querySelectorAll('.img-other');
+                allImgs.forEach(img => img.classList.remove('active'));
+                newImg.classList.add('active');
+            });
 
-                newImg.classList.add('active')
-            })
-
-            otherImgsContainer.appendChild(newImg)
-        })
+            otherImgsContainer.appendChild(newImg);
+        });
+    } else {
+        imgMain.src = imagemPrincipal;
     }
 }
 
-// function handleCartItens(produto) {
-//     const num = document.querySelector('.add-itens span');
-    
-//     const carrinho = lerCarrinho();
-//     const itemExistente = carrinho.find(item => item.id === produtoAtual.id);
-    
-//     let number = itemExistente ? itemExistente.quantidade : 1;
-//     if (num) num.textContent = number;
+function configurarControlesQuantidade() {
+    const spanQuantidade = document.querySelector('.add-itens span');
+    const btnMinus = document.querySelector('.btn.minus');
+    const btnPlus = document.querySelector('.btn.plus');
 
-//     const num = document.querySelector('.add-itens span')
-//     const btnAdd = document.querySelector('.plus')
-//     const btnRemove = document.querySelector('.minus')
-//     let number = 0
+    if (!spanQuantidade || !btnMinus || !btnPlus) return;
 
-//     btnAdd.addEventListener('click', () => {
-//         number += 1
-//         num.textContent = number
-//     })
+    spanQuantidade.textContent = quantidadeSelecionada;
 
-//     btnRemove.addEventListener('click', () => {
-//         if(number > 0) {
-//             number -= 1
-//             num.textContent = number
-//         } else {
-//             number = 0
-//             return
-//         }
-//     })
-// }
+    btnPlus.addEventListener('click', () => {
+        quantidadeSelecionada++;
+        spanQuantidade.textContent = quantidadeSelecionada;
+    });
+
+    btnMinus.addEventListener('click', () => {
+        if (quantidadeSelecionada > 1) {
+            quantidadeSelecionada--;
+            spanQuantidade.textContent = quantidadeSelecionada;
+        }
+    });
+}
+
+function configurarBotaoComprar() {
+    const btnComprar = document.querySelector('.buy-btn');
+    if (!btnComprar) return;
+
+    btnComprar.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!produtoAtual) return;
+
+        addToCart({
+            id: produtoAtual.id,
+            nome: produtoAtual.nome,
+            preco: produtoAtual.preco,
+            imagem: imagemPrincipal,
+            quantidade: quantidadeSelecionada
+        });
+    });
+}
 
 function cepMask() {
     const inputCep = document.querySelector('.cep-mask');
-
     if (!inputCep) return; 
 
     inputCep.addEventListener('input', (evento) => {
-        
         let valor = evento.target.value;
         valor = valor.replace(/\D/g, "");
         valor = valor.replace(/^(\d{5})(\d)/, "$1-$2");
-
         evento.target.value = valor;
     });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    carregarDetalhesDoProduto()
-    // handleCartItens()
-    cepMask()
+    carregarDetalhesDoProduto();
+    cepMask();
 });

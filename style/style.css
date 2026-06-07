@@ -191,4 +191,49 @@ footer {
     left: 10px;
     padding: 6px 12px;
   }
+
 }
+
+ .pedidos-container {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.pedidos-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pedidos-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.pedidos-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.pedido-items-list {
+  max-height: 75px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin: 8px 0 16px 0;
+  padding-left: 20px;
+  font-size: 0.9em;
+}
+
+.pedido-items-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.pedido-items-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.pedido-items-list::-webkit-scrollbar-thumb {
+  background: #aaa;
+  border-radius: 4px;
+}
+

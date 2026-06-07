@@ -1,8 +1,10 @@
 import { handleNavbarItem } from './header.js';
 import { API_BASE_URL } from './config.js';
 import { addToCart } from './cart.js';
+import { updateCartBadge } from './cart.js';
 
-// --- CONFIGURAÇÃO DE COMPONENTES ---
+import { updateHeaderGreeting } from './header.js'; 
+
 async function includeHTML() {
   const components = [
     { id: 'header-placeholder', url: '/assets/components/header.html' },
@@ -24,7 +26,10 @@ async function includeHTML() {
       }
     }
   }
+  
   handleNavbarItem();
+  updateCartBadge();
+  updateHeaderGreeting(); 
 }
 document.addEventListener('DOMContentLoaded', includeHTML);
 
@@ -137,7 +142,7 @@ async function loadBannerEvents() {
 }
 
 // --- BANNER DE TEXTO (Mantido estático) ---
-const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Produto muito daora novo ae galera uhuuuuu!" }];
+const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Bottons, Adesivos e Prints!", color: "000"}];
 const templateBannerText = document.querySelector('.section-template');
 const containerBannerText = document.querySelector('.banner-text');
 

@@ -14,12 +14,16 @@
 
     <div class="header-actions">
       
-      <div class="user-menu-container">
-        <button class="action-btn" aria-label="Minha Conta">
-          <img src="/assets/icons/user.svg" alt="icon-user">
-        </button>
-        <div id="user-dropdown" class="user-dropdown"></div>
-      </div>
+ <div class="user-menu-container" style="display: flex; align-items: center; gap: 12px; position: relative;">
+  
+  <span id="header-user-greeting" style="font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--text-primary); text-align: right;"></span>
+  
+  <a href="/assets/pages/perfil.html" class="action-btn" aria-label="Minha Conta" style="display: flex; align-items: center; justify-content: center; text-decoration: none;">
+    <img src="/assets/icons/user.svg" alt="icon-user">
+  </a>
+
+  <div id="user-dropdown" class="user-dropdown"></div>
+</div>
 
       <button class="action-btn cart-btn" aria-label="Carrinho">
         <img src="/assets/icons/shopping-cart.svg" alt="icon-cart">
@@ -59,7 +63,6 @@
                     </button>
                   </div>
                   <div class="cart-item-price"> 
-
                   </div>
                 </div>
               </div>

@@ -17,9 +17,16 @@
       
       <div class="perfil-header">
         <h2 class="section-title">Meu Perfil</h2>
+        
+  
+
         <div class="perfil-info-card">
+
           <p><strong>Nome:</strong> <span id="perfil-nome">Carregando...</span></p>
           <p><strong>E-mail:</strong> <span id="perfil-email">Carregando...</span></p>
+                  <button id="btn-logoff" style="background: #c0392b; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-family: var(--font-body); font-weight: bold; transition: opacity 0.2s;">
+    Sair da Conta
+  </button>
         </div>
       </div>
 
@@ -28,6 +35,7 @@
           <h3 class="subsection-title">Meus Endereços</h3>
           <button id="btn-novo-endereco" class="btn-action">Adicionar Novo Endereço</button>
         </div>
+
 
         <div id="enderecos-list" class="enderecos-grid">
         </div>
@@ -76,11 +84,17 @@
               <button type="button" id="btn-cancelar-endereco" class="btn-action btn-cancel">Cancelar</button>
             </div>
           </form>
+
         </div>
 
       </div>
 
     </section>
+
+            <section class="perfil-section">
+       <h3 class="subsection-title">Meus Pedidos</h3>
+  <div id="pedidos-list" class="pedidos-container"></div>
+</section>
   </main>
 
   <footer id="footer-placeholder"></footer>

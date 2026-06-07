@@ -45,6 +45,7 @@
 .subsection-title {
   font-family: var(--font-display);
   font-size: 24px;
+  margin-top: 24px;
   color: var(--text-title);
 }
 
@@ -130,6 +131,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   margin-top: 32px;
   outline: 2px solid #000;
+  overflow: visible;  
 }
 
 .empty-state {
