@@ -2,7 +2,6 @@ import { handleNavbarItem } from './header.js';
 import { API_BASE_URL } from './config.js';
 import { addToCart } from './cart.js';
 import { updateCartBadge } from './cart.js';
-
 import { updateHeaderGreeting } from './header.js'; 
 
 async function includeHTML() {
@@ -22,7 +21,7 @@ async function includeHTML() {
           placeholder.innerHTML = html;
         }
       } catch (err) {
-        console.error("Erro ao carregar componente:", err);
+        console.error(err);
       }
     }
   }
@@ -42,10 +41,9 @@ async function loadBannerEvents() {
 
   try {
     const response = await fetch(`${API_BASE_URL}/Eventos`);
-    if (!response.ok) throw new Error("Erro ao buscar eventos");
+    if (!response.ok) throw new Error();
     const eventos = await response.json();
     
-    // 1. Filtrar apenas eventos futuros e ordenar por data
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -54,23 +52,19 @@ async function loadBannerEvents() {
       .sort((a, b) => new Date(a.data) - new Date(b.data))
       .slice(0, 3);
 
-    // 2. Fallback caso não existam eventos
     if (nextEvents.length === 0) {
       const clone = templateBanner.content.cloneNode(true);
-      clone.querySelector('.img-banner').src = '/assets/images/image.png'; // Imagem padrão
+      clone.querySelector('.img-banner').src = '/assets/images/image.png'; 
       clone.querySelector('.img-banner').alt = 'Nenhum evento';
-      // Texto alterado conforme solicitado:
       clone.querySelector('.event-name-label').textContent = "Nenhum evento no momento";
       carousel.appendChild(clone);
       
-      // Esconder controles pois não há slides para deslizar
       document.querySelector('.btn-carousel.next')?.style.setProperty('display', 'none');
       document.querySelector('.btn-carousel.back')?.style.setProperty('display', 'none');
       if (divBullets) divBullets.style.display = 'none';
       return;
     }
 
-    // 3. Renderização Normal
     nextEvents.forEach(event => {
       const clone = templateBanner.content.cloneNode(true);
       
@@ -85,7 +79,6 @@ async function loadBannerEvents() {
       carousel.appendChild(clone);  
     });
 
-    // 4. Lógica do Slider
     let currentIndex = 0;
     const totalImages = nextEvents.length;
     const dots = [];
@@ -120,7 +113,6 @@ async function loadBannerEvents() {
       autoPlay = setInterval(nextSlide, 3000);
     });
 
-    // Criar bullets se houver eventos
     if(nextEvents.length > 0 && divBullets) {
       nextEvents.forEach((_, index) => {
         const bullet = document.createElement('div');
@@ -137,11 +129,10 @@ async function loadBannerEvents() {
       updateCarousel();
     }
   } catch (err) {
-    console.error("Erro no banner:", err);
+    console.error(err);
   }
 }
 
-// --- BANNER DE TEXTO (Mantido estático) ---
 const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Bottons, Adesivos e Prints!", color: "000"}];
 const templateBannerText = document.querySelector('.section-template');
 const containerBannerText = document.querySelector('.banner-text');
@@ -155,51 +146,103 @@ if (templateBannerText && containerBannerText) {
   });
 }
 
-// --- CARREGAR PRODUTOS (Apenas Promoções) ---
 async function loadHomeProductsAPI() {
   const templateCards = document.querySelector('.template-cards');
-  const sectionDiscount = document.querySelector('#section-discount');
+  const sectionNovidades = document.querySelector('#section-novidades');
+  const sectionUltimas = document.querySelector('#section-ultimas');
 
-  if (!templateCards || !sectionDiscount) return;
+  if (!templateCards) return;
 
   try {
     const response = await fetch(`${API_BASE_URL}/Itens`);
-    if (!response.ok) throw new Error(`Status: ${response.status}`);
+    if (!response.ok) throw new Error();
 
     const products = await response.json();
+    const itensOrdenados = [...products].sort((a, b) => b.id - a.id);
     
-    // Pegar apenas os últimos 5 itens
-    const discountProducts = products.slice(-5); 
+    const novidades = itensOrdenados.slice(0, 4);
+    const ultimas = itensOrdenados.filter(p => p.estoque > 0 && p.estoque < 5).slice(0, 4);
     
-    sectionDiscount.innerHTML = '';
-    
-    discountProducts.forEach(produto => {
-      const clone = templateCards.content.cloneNode(true);
+    if (novidades.length === 0) {
+      sectionNovidades.style.display = 'none';
+      const titleNovidades = sectionNovidades.previousElementSibling;
+      if (titleNovidades && titleNovidades.tagName === 'H2') titleNovidades.style.display = 'none';
+    } else {
+      renderProductList(sectionNovidades, novidades, templateCards);
+    }
 
-      clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`;
-      clone.querySelector('.card-text h2').textContent = produto.nome;
-      clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
-      
-      let imageUrl = '/assets/images/image.png';
-      if (produto.imagens && produto.imagens.length > 0) {
-        imageUrl = `https://drive.google.com/thumbnail?id=${produto.imagens[0].caminhoCloud}&sz=w800`;
-      }
-      clone.querySelector('.img-card').src = imageUrl;
-
-      clone.querySelector('.buy-btn')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        addToCart({ id: produto.id, nome: produto.nome, preco: produto.preco, imagem: imageUrl });
-      });
-
-      sectionDiscount.appendChild(clone);
-    });
+    if (ultimas.length === 0) {
+      sectionUltimas.style.display = 'none';
+      const titleUltimas = sectionUltimas.previousElementSibling;
+      if (titleUltimas && titleUltimas.tagName === 'H2') titleUltimas.style.display = 'none';
+    } else {
+      renderProductList(sectionUltimas, ultimas, templateCards);
+    }
 
   } catch (error) {
-    console.error("Erro nos produtos:", error);
+    console.error(error);
   }
+}
 
+function renderProductList(container, productsList, template) {
+  if (!container) return;
+  container.innerHTML = '';
 
+  productsList.forEach(produto => {
+    const clone = template.content.cloneNode(true);
+
+    clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`;
+    clone.querySelector('.card-text h2').textContent = produto.nome;
+    clone.querySelector('.currently-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+    
+    const imgEl = clone.querySelector('.img-card');
+    let imageUrl = '/assets/images/image.png';
+    if (produto.imagens && produto.imagens.length > 0) {
+      imageUrl = `https://drive.google.com/thumbnail?id=${produto.imagens[0].caminhoCloud}&sz=w800`;
+    }
+    imgEl.src = imageUrl;
+
+    const imgContainer = imgEl.parentElement;
+    imgContainer.style.position = 'relative';
+
+    if (produto.estoque === 0) {
+      const badge = document.createElement('span');
+      badge.className = 'badge-estoque badge-esgotado';
+      badge.textContent = 'Esgotado';
+      imgContainer.appendChild(badge);
+    } else if (produto.estoque < 5) {
+      const badge = document.createElement('span');
+      badge.className = 'badge-estoque badge-ultimas';
+      badge.textContent = 'Últimas unidades';
+      imgContainer.appendChild(badge);
+    }
+
+    const btnComprar = clone.querySelector('.buy-btn');
+    if (btnComprar) {
+      if (produto.estoque === 0) {
+        btnComprar.disabled = true;
+        btnComprar.textContent = "Indisponível";
+        btnComprar.style.backgroundColor = "#ccc";
+        btnComprar.style.cursor = "not-allowed";
+        btnComprar.style.color = "#666";
+      } else {
+        btnComprar.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          addToCart({ 
+            id: produto.id, 
+            nome: produto.nome, 
+            preco: produto.preco, 
+            imagem: imageUrl,
+            estoque: produto.estoque,
+            quantidade: 1
+          });
+        });
+      }
+    }
+
+    container.appendChild(clone);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

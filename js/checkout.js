@@ -2,9 +2,14 @@ import { API_BASE_URL } from './config.js';
 import { getCart, clearCart } from './cart.js';
 
 let selectEndereco, containerNovoEndereco, formNovoEndereco, btnCancelarEndereco;
-let selectEstado, selectCidade, selectPagamento;
+let selectEstado, selectCidade, selectPagamento, freteContainer;
 let cacheEstados = [];
 let token = localStorage.getItem('koridraws_token') || '';
+
+const CEP_ORIGEM_LOJA = "07260110";
+let valorFreteSelecionado = 0;
+let servicoFreteSelecionado = "";
+let prazoFreteSelecionado = 0;
 
 function bindElements() {
     selectEndereco = document.getElementById('select-endereco');
@@ -14,6 +19,7 @@ function bindElements() {
     selectEstado = document.getElementById('end-estado');
     selectCidade = document.getElementById('end-cidadeId');
     selectPagamento = document.getElementById('select-pagamento');
+    freteContainer = document.querySelector('.frete-container');
 }
 
 function renderizarResumo() {
@@ -45,6 +51,17 @@ function renderizarResumo() {
         `;
     });
 
+    if (valorFreteSelecionado > 0) {
+        const formatFrete = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valorFreteSelecionado);
+        listContainer.innerHTML += `
+            <div class="checkout-item" style="display:flex; justify-content: space-between; margin-bottom: 8px; border-top: 1px solid #ccc; padding-top: 8px; margin-top: 8px;">
+                <span>Frete</span>
+                <span>${formatFrete}</span>
+            </div>
+        `;
+    }
+
+    total += valorFreteSelecionado;
     totalContainer.textContent = `${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}`;
 }
 
@@ -68,11 +85,13 @@ async function carregarEnderecos() {
             window.location.href = '/assets/pages/auth.html';
         }
     } catch (erro) {
-        selectEndereco.innerHTML = '<option value="" disabled>Erro ao carregar endereços</option>';
+        if (selectEndereco) selectEndereco.innerHTML = '<option value="" disabled>Erro ao carregar endereços</option>';
     }
 }
 
 function renderizarDropdownEnderecos(enderecos) {
+    if (!selectEndereco) return;
+    
     selectEndereco.innerHTML = '';
 
     if (enderecos.length === 0) {
@@ -83,6 +102,7 @@ function renderizarDropdownEnderecos(enderecos) {
 
     selectEndereco.style.display = 'block';
     containerNovoEndereco.style.display = 'none';
+    if (freteContainer) freteContainer.style.display = 'none';
     
     const defaultOpt = document.createElement('option');
     defaultOpt.value = "";
@@ -94,6 +114,7 @@ function renderizarDropdownEnderecos(enderecos) {
     enderecos.forEach(end => {
         const opt = document.createElement('option');
         opt.value = end.id;
+        opt.dataset.cep = end.cep;
         const cidadeStr = end.cidade ? `${end.cidade.descricao}/${end.cidade.estado?.sigla}` : '';
         opt.textContent = `${end.rua}, ${end.numero} - ${end.bairro} (${cidadeStr})`;
         selectEndereco.appendChild(opt);
@@ -106,17 +127,21 @@ function renderizarDropdownEnderecos(enderecos) {
 }
 
 function mostrarFormularioNovoEndereco(temEnderecosAnteriores) {
+    if (!containerNovoEndereco) return;
+    
     containerNovoEndereco.style.display = 'block';
-    if (temEnderecosAnteriores) {
+    if (temEnderecosAnteriores && btnCancelarEndereco) {
         btnCancelarEndereco.style.display = 'block';
-    } else {
+    } else if (btnCancelarEndereco) {
         btnCancelarEndereco.style.display = 'none';
     }
     loadEstados();
 }
 
 async function loadEstados() {
+    if (!selectEstado) return;
     if (selectEstado.options.length > 1 && cacheEstados.length > 0) return cacheEstados;
+    
     try {
         const res = await fetch(`${API_BASE_URL}/Enderecos/estados`);
         if (res.ok) {
@@ -137,6 +162,8 @@ async function loadEstados() {
 }
 
 async function loadCidades(estadoId) {
+    if (!selectCidade) return;
+    
     selectCidade.innerHTML = '<option value="" disabled selected>A carregar...</option>';
     selectCidade.disabled = true;
 
@@ -194,10 +221,156 @@ async function criarEndereco(e) {
     }
 }
 
+function resetFrete() {
+    valorFreteSelecionado = 0;
+    servicoFreteSelecionado = "";
+    prazoFreteSelecionado = 0;
+    const containerResultados = document.getElementById('frete-results');
+    if (containerResultados) containerResultados.innerHTML = '';
+    renderizarResumo();
+}
+
+async function calcularFrete() {
+    const containerResultados = document.getElementById('frete-results');
+    if (!containerResultados) return;
+
+    if (!selectEndereco || !selectEndereco.value || selectEndereco.value === "novo") {
+        resetFrete();
+        return;
+    }
+
+    const selectedOption = selectEndereco.options[selectEndereco.selectedIndex];
+    const cepDestino = selectedOption.dataset.cep;
+
+    if (!cepDestino) {
+        mostrarMensagem("CEP do endereço selecionado é inválido.", true);
+        return;
+    }
+
+    const cepLimpo = cepDestino.replace(/\D/g, '');
+
+    if (cepLimpo.length !== 8) {
+        mostrarMensagem("CEP do endereço selecionado é inválido.", true);
+        return;
+    }
+
+    containerResultados.innerHTML = '<span style="font-family: var(--font-body); font-size: 14px;">Calculando opções de entrega...</span>';
+
+    const formData = new FormData();
+    formData.append('CepOrigem', CEP_ORIGEM_LOJA);
+    formData.append('CepDestino', cepLimpo);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Frete/calcular`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error();
+        }
+
+        const opcoesFrete = await response.json();
+        renderizarOpcoesFrete(opcoesFrete);
+    } catch (error) {
+        containerResultados.innerHTML = '<span style="color: #c0392b; font-family: var(--font-body); font-size: 14px;">Erro ao calcular o frete. Tente novamente.</span>';
+    }
+}
+
+function renderizarOpcoesFrete(opcoes) {
+    const containerResultados = document.getElementById('frete-results');
+    if (!containerResultados) return;
+    
+    containerResultados.innerHTML = '';
+
+    if (!opcoes || opcoes.length === 0) {
+        containerResultados.innerHTML = '<span style="font-family: var(--font-body); font-size: 14px;">Nenhuma opção de entrega encontrada para este CEP.</span>';
+        valorFreteSelecionado = 0;
+        servicoFreteSelecionado = "";
+        prazoFreteSelecionado = 0;
+        renderizarResumo();
+        return;
+    }
+
+    opcoes.forEach((opcao, index) => {
+        const label = document.createElement('label');
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+        label.style.padding = '12px';
+        label.style.border = '1px solid #e0e0e0';
+        label.style.borderRadius = '4px';
+        label.style.cursor = 'pointer';
+        label.style.transition = 'border-color 0.2s';
+        label.style.flexShrink = '0';
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'freteSelecionado';
+        radio.value = opcao.valor;
+        radio.dataset.servico = `${opcao.transportadora} - ${opcao.servico}`;
+        radio.dataset.prazoDias = opcao.prazoDias;
+        radio.style.marginRight = '12px';
+
+        if (index === 0) {
+            radio.checked = true;
+            label.style.borderColor = '#000';
+            valorFreteSelecionado = opcao.valor;
+            servicoFreteSelecionado = `${opcao.transportadora} - ${opcao.servico}`;
+            prazoFreteSelecionado = opcao.prazoDias;
+        }
+
+        radio.addEventListener('change', (e) => {
+            document.querySelectorAll('input[name="freteSelecionado"]').forEach(r => {
+                r.parentElement.style.borderColor = '#e0e0e0';
+            });
+            if (e.target.checked) {
+                e.target.parentElement.style.borderColor = '#000';
+                valorFreteSelecionado = parseFloat(e.target.value);
+                servicoFreteSelecionado = e.target.dataset.servico;
+                prazoFreteSelecionado = parseInt(e.target.dataset.prazoDias);
+                renderizarResumo();
+            }
+        });
+
+        const infoDiv = document.createElement('div');
+        infoDiv.style.display = 'flex';
+        infoDiv.style.flexDirection = 'column';
+        infoDiv.style.flex = '1';
+
+        const titulo = document.createElement('span');
+        titulo.textContent = `${opcao.transportadora} - ${opcao.servico}`;
+        titulo.style.fontFamily = 'var(--font-body)';
+        titulo.style.fontWeight = 'bold';
+        titulo.style.fontSize = '14px';
+
+        const prazo = document.createElement('span');
+        prazo.textContent = `Até ${opcao.prazoDias} dias úteis`;
+        prazo.style.fontFamily = 'var(--font-body)';
+        prazo.style.fontSize = '12px';
+        prazo.style.color = '#666';
+
+        infoDiv.appendChild(titulo);
+        infoDiv.appendChild(prazo);
+
+        const valorSpan = document.createElement('span');
+        valorSpan.textContent = `R$ ${opcao.valor.toFixed(2).replace('.', ',')}`;
+        valorSpan.style.fontFamily = 'var(--font-display)';
+        valorSpan.style.fontWeight = 'bold';
+
+        label.appendChild(radio);
+        label.appendChild(infoDiv);
+        label.appendChild(valorSpan);
+
+        containerResultados.appendChild(label);
+    });
+
+    renderizarResumo();
+}
+
 async function finalizarPedido(event) {
     event.preventDefault();
 
-    if (containerNovoEndereco.style.display === 'block') {
+    if (containerNovoEndereco && containerNovoEndereco.style.display === 'block') {
         mostrarMensagem("Por favor, salve o seu novo endereço antes de finalizar o pedido.", true);
         return;
     }
@@ -208,32 +381,49 @@ async function finalizarPedido(event) {
         return;
     }
 
-    const enderecoId = selectEndereco.value;
-    const pagamento = selectPagamento.value;
+    const enderecoId = selectEndereco ? selectEndereco.value : null;
+    const pagamento = selectPagamento ? selectPagamento.value : null;
 
     if (!enderecoId || enderecoId === "novo" || !pagamento) {
         mostrarMensagem("Selecione um endereço e método de pagamento.", true);
         return;
     }
 
+    if (!servicoFreteSelecionado) {
+        mostrarMensagem("Por favor, calcule e selecione uma opção de frete.", true);
+        return;
+    }
+
     const btnSubmit = document.querySelector('.btn-finish-order');
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = "Processando...";
+    if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Processando...";
+    }
 
-    const formData = new FormData();
-    formData.append('EnderecoId', parseInt(enderecoId));
-    formData.append('Pagamento', pagamento);
+    const itensPedido = cart.map(item => ({
+        itemId: parseInt(item.id),
+        quantidade: parseInt(item.quantidade)
+    }));
 
-    cart.forEach((item, index) => {
-        formData.append(`Itens[${index}].itemId`, item.id);
-        formData.append(`Itens[${index}].quantidade`, item.quantidade);
-    });
+    const payload = {
+        enderecoId: parseInt(enderecoId),
+        pagamento: pagamento,
+        itens: itensPedido,
+        frete: {
+            servico: servicoFreteSelecionado,
+            valor: parseFloat(valorFreteSelecionado),
+            prazoDias: parseInt(prazoFreteSelecionado)
+        }
+    };
 
     try {
         const resposta = await fetch(`${API_BASE_URL}/Pedidos`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: formData
+            headers: { 
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(payload)
         });
 
         if (resposta.ok) {
@@ -244,13 +434,17 @@ async function finalizarPedido(event) {
             }, 2000);
         } else {
             mostrarMensagem("Erro ao criar o pedido. Tente novamente.", true);
-            btnSubmit.disabled = false;
-            btnSubmit.textContent = "Confirmar Pedido";
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "Confirmar Pedido";
+            }
         }
     } catch (erro) {
         mostrarMensagem("Erro de conexão ao finalizar pedido.", true);
-        btnSubmit.disabled = false;
-        btnSubmit.textContent = "Confirmar Pedido";
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Confirmar Pedido";
+        }
     }
 }
 
@@ -259,7 +453,8 @@ function mostrarMensagem(texto, isError) {
     if (!msgEl) {
         msgEl = document.createElement('p');
         msgEl.id = 'checkout-message';
-        document.querySelector('.checkout-summary').appendChild(msgEl);
+        const summary = document.querySelector('.checkout-summary');
+        if (summary) summary.appendChild(msgEl);
     }
     msgEl.textContent = texto;
     msgEl.style.color = isError ? '#c0392b' : '#27ae60';
@@ -268,22 +463,37 @@ function mostrarMensagem(texto, isError) {
 }
 
 function setupListeners() {
-    selectEndereco.addEventListener('change', (e) => {
-        if (e.target.value === "novo") {
-            mostrarFormularioNovoEndereco(true);
-        } else {
-            containerNovoEndereco.style.display = 'none';
-        }
-    });
+    if (selectEndereco) {
+        selectEndereco.addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value === "novo") {
+                mostrarFormularioNovoEndereco(true);
+                if (freteContainer) freteContainer.style.display = 'none';
+                resetFrete();
+            } else if (value === "") {
+                if (containerNovoEndereco) containerNovoEndereco.style.display = 'none';
+                if (freteContainer) freteContainer.style.display = 'none';
+                resetFrete();
+            } else {
+                if (containerNovoEndereco) containerNovoEndereco.style.display = 'none';
+                if (freteContainer) freteContainer.style.display = 'block';
+                calcularFrete();
+            }
+        });
+    }
 
-    btnCancelarEndereco.addEventListener('click', () => {
-        containerNovoEndereco.style.display = 'none';
-        formNovoEndereco.reset();
-        selectEndereco.selectedIndex = 0;
-    });
+    if (btnCancelarEndereco) {
+        btnCancelarEndereco.addEventListener('click', () => {
+            if (containerNovoEndereco) containerNovoEndereco.style.display = 'none';
+            if (formNovoEndereco) formNovoEndereco.reset();
+            if (selectEndereco) selectEndereco.selectedIndex = 0;
+            if (freteContainer) freteContainer.style.display = 'none';
+            resetFrete();
+        });
+    }
 
-    selectEstado.addEventListener('change', (e) => loadCidades(e.target.value));
-    formNovoEndereco.addEventListener('submit', criarEndereco);
+    if (selectEstado) selectEstado.addEventListener('change', (e) => loadCidades(e.target.value));
+    if (formNovoEndereco) formNovoEndereco.addEventListener('submit', criarEndereco);
     
     const formCheckout = document.getElementById('checkout-form');
     if (formCheckout) {

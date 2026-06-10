@@ -44,30 +44,59 @@ export function addToCart(item) {
   let cart = JSON.parse(localStorage.getItem('koridraws_cart')) || [];
   
   const existingItemIndex = cart.findIndex(cartItem => (cartItem.id || cartItem.Id).toString() === (item.id || item.Id).toString());
-  
-  // Define a quantidade a ser adicionada. Se veio no 'item', usa ela. Se não, assume 1.
-  const quantidadeAdicionada = item.quantidade ? parseInt(item.quantidade) : 1;
+  const quantidadePedida = item.quantidade ? parseInt(item.quantidade) : 1;
+  let quantidadePossivel = quantidadePedida;
+  let estoqueInsuficiente = false;
 
   if (existingItemIndex > -1) {
-    // Se o item já existe, soma a quantidade selecionada em vez de somar apenas 1
-    cart[existingItemIndex].quantidade += quantidadeAdicionada;
+    const quantidadeAtualNoCarrinho = cart[existingItemIndex].quantidade;
+    const espacoDisponivel = item.estoque - quantidadeAtualNoCarrinho;
+
+    if (espacoDisponivel <= 0) {
+      showToast(`Estoque insuficiente.`, "#c0392b");
+      return;
+    }
+
+    if (quantidadePedida > espacoDisponivel) {
+      quantidadePossivel = espacoDisponivel;
+      estoqueInsuficiente = true;
+    }
+
+    cart[existingItemIndex].quantidade += quantidadePossivel;
+    cart[existingItemIndex].estoque = item.estoque; 
   } else {
-    // Se for um item novo, insere com a quantidade correta
+    if (quantidadePedida > item.estoque) {
+      quantidadePossivel = item.estoque;
+      estoqueInsuficiente = true;
+    }
+
     cart.push({
       id: item.id || item.Id,
       nome: item.nome || item.Nome,
       preco: item.preco || item.Preco,
       imagem: item.imagem || item.Imagem,
-      quantidade: quantidadeAdicionada
+      quantidade: quantidadePossivel,
+      estoque: item.estoque 
     });
   }
   
   localStorage.setItem('koridraws_cart', JSON.stringify(cart));
-  
+
   const nomeItem = item.nome || item.Nome;
-  showToast(`${quantidadeAdicionada}x ${nomeItem} adicionado(s) ao carrinho!`);
+
+  if (estoqueInsuficiente) {
+    if(quantidadePossivel > 1)
+    showToast(`Estoque parcialmente insuficiente. ${quantidadePossivel} ${nomeItem} foram adicionados ao carrinho.`, "#e7c738");
+  else
+    showToast(`Estoque parcialmente insuficiente. 1 ${nomeItem} foi adicionados ao carrinho.`, "#e7c738");
+  } else {
+
+    showToast(`${quantidadePossivel}x ${nomeItem} adicionado(s)!`, "#27ae60");
+  }
   
-  renderCartModal();
+  if (typeof renderCartModal === 'function') {
+    renderCartModal();
+  }
 }
 
 export function updateQuantity(id, delta) {
@@ -75,10 +104,20 @@ export function updateQuantity(id, delta) {
   const index = cart.findIndex(item => item.id.toString() === id.toString());
   
   if (index > -1) {
-    cart[index].quantidade += delta;
+    const novaQuantidade = cart[index].quantidade + delta;
+
+    // Validação ao clicar no botão "+" dentro do carrinho
+    if (delta > 0 && novaQuantidade > cart[index].estoque) {
+      showToast(`Você atingiu o limite de estoque deste item.`, "#c0392b");
+      return;
+    }
+
+    cart[index].quantidade = novaQuantidade;
+    
     if (cart[index].quantidade <= 0) {
       cart.splice(index, 1);
     }
+    
     localStorage.setItem('koridraws_cart', JSON.stringify(cart));
     renderCartModal();
   }
@@ -91,7 +130,7 @@ export function removeFromCart(id) {
   renderCartModal();
 }
 
-function showToast(message) {
+function showToast(message, color = "#c0392b") {
   let toast = document.getElementById('cart-toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -101,6 +140,10 @@ function showToast(message) {
   }
   
   toast.textContent = message;
+  
+    toast.style.backgroundColor = color;
+    toast.style.color = "#fff";
+
   
   toast.classList.remove('show');
   void toast.offsetWidth; 

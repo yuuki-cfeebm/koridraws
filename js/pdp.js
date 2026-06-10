@@ -34,8 +34,11 @@ function formatDriveLink(url) {
 }
 
 function preencherTela(produto) {
-    document.querySelector('.pdp-title').textContent = produto.nome;
-    document.querySelector('.pdp-price').textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
+    const pdpTitle = document.querySelector('.pdp-title');
+    pdpTitle.textContent = produto.nome;
+    
+    const pdpPrice = document.querySelector('.pdp-price');
+    pdpPrice.textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
     
     const otherImgsContainer = document.querySelector('.container-imgs');
     otherImgsContainer.style.display = "none";
@@ -71,6 +74,33 @@ function preencherTela(produto) {
     } else {
         imgMain.src = imagemPrincipal;
     }
+
+    const existingBadge = document.querySelector('.badge-pdp');
+    if (existingBadge) {
+        existingBadge.remove();
+    }
+
+    if (produto.estoque === 0) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-estoque badge-esgotado badge-pdp';
+        badge.textContent = 'Esgotado';
+        badge.style.position = 'static';
+        badge.style.display = 'inline-block';
+        badge.style.width = 'max-content';
+        badge.style.marginLeft = '12px';
+        badge.style.verticalAlign = 'middle';
+        pdpPrice.appendChild(badge);
+    } else if (produto.estoque < 5) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-estoque badge-ultimas badge-pdp';
+        badge.textContent = 'Últimas unidades';
+        badge.style.position = 'static';
+        badge.style.display = 'inline-block';
+        badge.style.width = 'max-content';
+        badge.style.marginLeft = '12px';
+        badge.style.verticalAlign = 'middle';
+        pdpPrice.appendChild(badge);
+    }
 }
 
 function configurarControlesQuantidade() {
@@ -78,13 +108,21 @@ function configurarControlesQuantidade() {
     const btnMinus = document.querySelector('.btn.minus');
     const btnPlus = document.querySelector('.btn.plus');
 
-    if (!spanQuantidade || !btnMinus || !btnPlus) return;
+    if (!spanQuantidade || !btnMinus || !btnPlus || !produtoAtual) return;
 
+    const controlesContainer = spanQuantidade.parentElement;
+
+    if (produtoAtual.estoque === 0) {
+        controlesContainer.style.display = 'none';
+        return;
+    }
+
+    controlesContainer.style.display = 'flex';
     spanQuantidade.textContent = quantidadeSelecionada;
 
     btnPlus.addEventListener('click', () => {
-        quantidadeSelecionada++;
-        spanQuantidade.textContent = quantidadeSelecionada;
+            quantidadeSelecionada++;
+            spanQuantidade.textContent = quantidadeSelecionada;
     });
 
     btnMinus.addEventListener('click', () => {
@@ -97,7 +135,16 @@ function configurarControlesQuantidade() {
 
 function configurarBotaoComprar() {
     const btnComprar = document.querySelector('.buy-btn');
-    if (!btnComprar) return;
+    if (!btnComprar || !produtoAtual) return;
+
+    if (produtoAtual.estoque === 0) {
+        btnComprar.disabled = true;
+        btnComprar.textContent = "Indisponível";
+        btnComprar.style.backgroundColor = "#ccc";
+        btnComprar.style.cursor = "not-allowed";
+        btnComprar.style.color = "#666";
+        return;
+    }
 
     btnComprar.addEventListener('click', (e) => {
         e.preventDefault();
@@ -110,7 +157,8 @@ function configurarBotaoComprar() {
             nome: produtoAtual.nome,
             preco: produtoAtual.preco,
             imagem: imagemPrincipal,
-            quantidade: quantidadeSelecionada
+            quantidade: quantidadeSelecionada,
+            estoque: produtoAtual.estoque 
         });
     });
 }

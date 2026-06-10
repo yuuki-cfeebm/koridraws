@@ -59,6 +59,8 @@
             </form>
           </div>
 
+
+
           <form id="checkout-form" class="event-form">
             <div class="form-row">
               <label for="select-endereco">Endereço de Entrega *</label>
@@ -66,6 +68,15 @@
                 <option value="" disabled selected>A carregar endereços...</option>
               </select>
             </div>
+
+            <div class="frete-container" style="margin: 24px 0; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
+  <h3 style="font-family: var(--font-display); margin-top: 0;">Opções de Entrega</h3>
+  
+  <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+  </div>
+
+  <div id="frete-results" style="display: flex; flex-direction: column; gap: 12px; max-height: 230px; overflow-y: auto; padding-right: 8px;"></div>
+</div>
             
             <div class="form-row">
               <label for="select-pagamento">Método de Pagamento *</label>

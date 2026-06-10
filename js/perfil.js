@@ -66,7 +66,7 @@ async function loadProfile() {
         localStorage.removeItem('koridraws_user_name');
         window.location.href = '/assets/pages/auth.html';
       }
-      throw new Error('Falha ao carregar o perfil');
+      throw new Error();
     }
 
     const perfilText = await response.text();
@@ -78,7 +78,6 @@ async function loadProfile() {
     renderEnderecos(data.enderecos || []);
     renderPedidos(data.pedidos || []);
   } catch (error) {
-    console.error(error);
     if (perfilNome) perfilNome.textContent = "Erro ao carregar dados";
   }
 }
@@ -156,6 +155,18 @@ function renderPedidos(pedidos) {
       itensHtml += `<li style="margin-bottom: 4px;">${item.quantidade}x ${item.nomeProduto} - ${precoItem}</li>`;
     });
 
+    let freteHtml = '';
+    if (pedido.frete) {
+      const valorFrete = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pedido.frete.valor);
+      freteHtml = `
+        <div style="border-top: 1px dashed #ccc; margin-top: 8px; padding-top: 8px;">
+            <p style="font-size: 0.9em; margin: 0; color: var(--text-primary);">
+                <strong>Frete (${pedido.frete.servico}):</strong> ${valorFrete} <span style="color: #666; font-size: 0.9em;">(Até ${pedido.frete.prazoDias} dias úteis)</span>
+            </p>
+        </div>
+      `;
+    }
+
     card.innerHTML = `
       <div class="pedido-header" style="border-bottom: 1px solid #ccc; margin-bottom: 12px; padding-bottom: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
@@ -170,10 +181,11 @@ function renderPedidos(pedidos) {
       </div>
       <div class="pedido-body">
         <p style="font-size: 0.9em; margin-bottom: 8px;"><strong>Entrega:</strong> ${pedido.enderecoEntregaResumido}</p>
-        <ul class="pedido-items-list">
+        <ul class="pedido-items-list" style="margin-bottom: 0;">
           ${itensHtml}
         </ul>
-        <p style="text-align: right; font-size: 1.1em; margin: 0;"><strong>Total: ${valorFormatado}</strong></p>
+        ${freteHtml}
+        <p style="text-align: right; font-size: 1.1em; margin-top: 12px; margin-bottom: 0;"><strong>Total: ${valorFormatado}</strong></p>
       </div>
     `;
     pedidosList.appendChild(card);
@@ -199,7 +211,6 @@ async function loadEstados() {
       return estados;
     }
   } catch (error) {
-    console.error(error);
   }
   return [];
 }
@@ -228,7 +239,6 @@ async function loadCidades(estadoId, cidadeSelecionadaId = null) {
       }
     }
   } catch (error) {
-    console.error(error);
     selectCidade.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
   }
 }
@@ -264,8 +274,6 @@ async function editEndereco(id, enderecos) {
 }
 
 async function deleteEndereco(id) {
-  if (!confirm('Tem a certeza que deseja remover esta morada?')) return;
-
   const token = localStorage.getItem('koridraws_token');
 
   try {
@@ -276,11 +284,10 @@ async function deleteEndereco(id) {
       }
     });
 
-    if (!response.ok) throw new Error('Falha ao remover a morada');
+    if (!response.ok) throw new Error();
 
     await loadProfile();
   } catch (error) {
-    console.error(error);
     alert('Erro ao remover a morada.');
   }
 }
@@ -358,13 +365,12 @@ function initProfile() {
           body: formData
         });
 
-        if (!response.ok) throw new Error('Falha ao guardar a morada');
+        if (!response.ok) throw new Error();
 
         formEnderecoContainer.style.display = 'none';
         formEndereco.reset();
         await loadProfile();
       } catch (error) {
-        console.error(error);
         alert('Erro ao guardar a morada.');
       }
     });
