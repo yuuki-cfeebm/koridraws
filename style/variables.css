@@ -17,21 +17,16 @@
   --card-border: #E9D8A6;     /* Amarelo médio para bordas discretas */
   --cor-amarelo-teste: #ebcd6a;
 
+  --marrom-1: #4A2E1B;
+  --marrom-2: #8C5A35;
+  --marrom-3: #5C4033;
+
   
   --amarelo-claro: #fffac8;
 
   --color-white: #ffffff;
   --color-black: #3F3F46;
   --color-gray: #bdbdbd;
-
-  --cream:        #F5F0E8;
-  --ink:          #1a1a1a;
-  --pink:         #D4789A;
-  --pink-light:   #F2C4D4;
-  --lilac:        #C5A8C8;
-  --gold:         #C8A96A;
-  --header-bg:    #5bbfe2;
-  --nav-bg:       #5bbfe2;
   
   --font-display: 'DM Sans', sans-serif;
   --font-body:    'DM Sans', sans-serif;

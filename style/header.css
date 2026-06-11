@@ -118,17 +118,17 @@ nav {
   left: 20px;
   right: 20px;
   height: 2px;
-  background: var(--cinza-escuro);
+  background: var(--marrom-2);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s ease;
 }
 
-.nav-item a:hover { color: var(--cinza-escuro); }
+.nav-item a:hover { color: var(--marrom-2); }
 .nav-item a:hover::after { transform: scaleX(1); }
 
 .nav-item.active a {
-  color: var(--cinza-escuro);
+  color: var(--marrom-2);
   font-weight: 700;
 }
 

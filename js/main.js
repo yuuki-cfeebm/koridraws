@@ -133,18 +133,18 @@ async function loadBannerEvents() {
   }
 }
 
-const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Bottons, Adesivos e Prints!", color: "000"}];
-const templateBannerText = document.querySelector('.section-template');
-const containerBannerText = document.querySelector('.banner-text');
+// const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Bottons, Adesivos e Prints!", color: "000"}];
+// const templateBannerText = document.querySelector('.section-template');
+// const containerBannerText = document.querySelector('.banner-text');
 
-if (templateBannerText && containerBannerText) {
-  bannerText.forEach(item => {
-    const clone = templateBannerText.content.cloneNode(true);
-    clone.querySelector('.banner-content p').textContent = item.text;
-    clone.querySelector('.banner-text-img').src = item.src;
-    containerBannerText.appendChild(clone);
-  });
-}
+// if (templateBannerText && containerBannerText) {
+//   bannerText.forEach(item => {
+//     const clone = templateBannerText.content.cloneNode(true);
+//     clone.querySelector('.banner-content p').textContent = item.text;
+//     clone.querySelector('.banner-text-img').src = item.src;
+//     containerBannerText.appendChild(clone);
+//   });
+// }
 
 async function loadHomeProductsAPI() {
   const templateCards = document.querySelector('.template-cards');
@@ -178,6 +178,26 @@ async function loadHomeProductsAPI() {
     } else {
       renderProductList(sectionUltimas, ultimas, templateCards);
     }
+
+    // ... seu código do discountProducts.forEach(...) ...
+
+    // --- NOVA LÓGICA DO CARROSSEL DE PRODUTOS ---
+    const cardsContainer = document.querySelector('#section-discount'); 
+    const productCarousel = document.querySelector('.container-product-carousel');
+    const btnNextProduct = productCarousel.querySelector('.next.btn-product');
+    const btnBackProduct = productCarousel.querySelector('.back.btn-product');
+
+    // Define o quanto a tela vai rolar para o lado a cada clique (ex: 300 pixels)
+    // Você pode ajustar esse valor para o tamanho exato do seu card!
+    const scrollAmount = 377; 
+
+    btnNextProduct?.addEventListener('click', () => {
+      cardsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    btnBackProduct?.addEventListener('click', () => {
+      cardsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
 
   } catch (error) {
     console.error(error);
