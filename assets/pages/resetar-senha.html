@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redefinir Senha – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/auth.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+
+  <main class="auth-main">
+    <section class="auth-section">
+      <div class="auth-container">
+        
+        <div class="auth-card">
+          <h2 class="section-title">Redefinir Senha</h2>
+          <p style="text-align: center; font-size: 0.9em; margin-bottom: 24px;">Crie uma nova senha para a sua conta.</p>
+          
+          <form id="form-reset" class="event-form">
+            <div class="form-row">
+              <label for="input-email-reset">E-mail</label>
+              <input type="email" id="input-email-reset" required>
+            </div>
+            <div class="form-row">
+              <label for="input-token-reset">Token</label>
+              <input type="text" id="input-token-reset" required>
+            </div>
+            <div class="form-row">
+              <label for="input-nova-senha">Nova Senha</label>
+              <input type="password" id="input-nova-senha" required minlength="6">
+            </div>
+            <div id="msg-reset-senha" style="margin-bottom: 16px; text-align: center; font-size: 0.9em; font-weight: bold;"></div>
+            <div class="form-actions">
+              <button type="submit" class="event-form-btn">Salvar Nova Senha</button>
+            </div>
+          </form>
+          
+          <p class="auth-toggle-text"><a href="/assets/pages/auth.html" class="auth-toggle-btn" style="text-decoration: none;">Voltar para o Login</a></p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+</body>

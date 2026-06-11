@@ -6,6 +6,8 @@ const btnShowRegister = document.getElementById('btn-show-register');
 const btnShowLogin = document.getElementById('btn-show-login');
 const formRegister = document.getElementById('form-register');
 const formLogin = document.getElementById('form-login');
+const formForgot = document.getElementById('form-forgot');
+const formReset = document.getElementById('form-reset');
 
 function toggleLoading(btn, isLoading, defaultText) {
   if (isLoading) {
@@ -76,12 +78,17 @@ if (formRegister) {
 
       const dataText = await resLogin.text();
       let token = dataText;
+      let primeiroNome = nome.split(' ')[0];
+
       try {
         const js = JSON.parse(dataText);
         if (js.token) token = js.token;
+        if (js.nome) primeiroNome = js.nome.split(' ')[0];
+        else if (js.perfil && js.perfil.nome) primeiroNome = js.perfil.nome.split(' ')[0];
       } catch(err) {}
 
       localStorage.setItem('koridraws_token', token);
+      localStorage.setItem('koridraws_user_name', primeiroNome);
       window.location.href = '/assets/pages/perfil.html';
 
     } catch (error) {
@@ -118,12 +125,17 @@ if (formLogin) {
 
       const dataText = await response.text();
       let token = dataText;
+      let primeiroNome = "Usuário";
+
       try {
         const js = JSON.parse(dataText);
         if (js.token) token = js.token;
+        if (js.nome) primeiroNome = js.nome.split(' ')[0];
+        else if (js.perfil && js.perfil.nome) primeiroNome = js.perfil.nome.split(' ')[0];
       } catch(err) {}
 
       localStorage.setItem('koridraws_token', token);
+      localStorage.setItem('koridraws_user_name', primeiroNome);
       window.location.href = '/index.html';
 
     } catch (error) {
@@ -133,3 +145,100 @@ if (formLogin) {
     }
   });
 }
+
+if (formForgot) {
+    formForgot.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const emailInput = document.getElementById('input-email-esqueci');
+        const mensagemContainer = document.getElementById('msg-esqueci-senha');
+        const btnSubmit = formForgot.querySelector('button[type="submit"]');
+        
+        toggleLoading(btnSubmit, true, 'Enviar Instruções');
+
+        const formData = new FormData();
+        formData.append('Email', emailInput.value.trim());
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/Auth/esqueci-senha`, {
+                method: 'POST',
+                headers: {
+                    'X-Admin-Key': 'SUA_CHAVE_AQUI'
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                mensagemContainer.textContent = "Se o e-mail estiver registado, receberá as instruções em breve.";
+                mensagemContainer.style.color = "#27ae60";
+                emailInput.value = '';
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            mensagemContainer.textContent = "Erro ao processar a solicitação. Tente novamente mais tarde.";
+            mensagemContainer.style.color = "#c0392b";
+        } finally {
+            toggleLoading(btnSubmit, false, 'Enviar Instruções');
+        }
+    });
+}
+
+if (formReset) {
+    formReset.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const emailInput = document.getElementById('input-email-reset');
+        const senhaInput = document.getElementById('input-nova-senha');
+        const tokenInput = document.getElementById('input-token-reset');
+        const mensagemContainer = document.getElementById('msg-reset-senha');
+        const btnSubmit = formReset.querySelector('button[type="submit"]');
+
+        if (senhaInput.value.length < 6) {
+            mensagemContainer.textContent = "A nova senha deve ter pelo menos 6 caracteres.";
+            mensagemContainer.style.color = "#c0392b";
+            return;
+        }
+
+        toggleLoading(btnSubmit, true, 'Salvar Nova Senha');
+
+        const formData = new FormData();
+        formData.append('Email', emailInput.value.trim());
+        formData.append('Token', tokenInput.value.trim());
+        formData.append('NovaSenha', senhaInput.value);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/Auth/resetar-senha`, {
+                method: 'POST',
+                headers: {
+                    'X-Admin-Key': 'SUA_CHAVE_AQUI'
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                mensagemContainer.textContent = "Senha redefinida com sucesso! A redirecionar...";
+                mensagemContainer.style.color = "#27ae60";
+                setTimeout(() => {
+                    window.location.href = '/assets/pages/auth.html';
+                }, 2000);
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            mensagemContainer.textContent = "Erro ao redefinir a senha. Verifique os dados fornecidos.";
+            mensagemContainer.style.color = "#c0392b";
+            toggleLoading(btnSubmit, false, 'Salvar Nova Senha');
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const tokenInput = document.getElementById('input-token-reset');
+    
+    if (token && tokenInput) {
+        tokenInput.value = token;
+    }
+});
