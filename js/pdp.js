@@ -83,7 +83,6 @@ function preencherTela(produto) {
         existingBadge.remove();
     }
 
-
     const semEstoque = produto.estoque === 0;
     const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
 
@@ -128,17 +127,18 @@ function configurarControlesQuantidade() {
     controlesContainer.style.display = 'flex';
     spanQuantidade.textContent = quantidadeSelecionada;
 
-    btnPlus.addEventListener('click', () => {
+    // Usando .onclick para evitar duplicação de eventos em atualizações da tela
+    btnPlus.onclick = () => {
         quantidadeSelecionada++;
         spanQuantidade.textContent = quantidadeSelecionada;
-    });
+    };
 
-    btnMinus.addEventListener('click', () => {
+    btnMinus.onclick = () => {
         if (quantidadeSelecionada > 1) {
             quantidadeSelecionada--;
             spanQuantidade.textContent = quantidadeSelecionada;
         }
-    });
+    };
 }
 
 function configurarBotaoComprar() {
@@ -154,7 +154,8 @@ function configurarBotaoComprar() {
         return;
     }
 
-    btnComprar.addEventListener('click', (e) => {
+    // Usando .onclick para evitar que o carrinho receba múltiplos itens do mesmo clique
+    btnComprar.onclick = (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -168,7 +169,7 @@ function configurarBotaoComprar() {
             quantidade: quantidadeSelecionada,
             estoque: produtoAtual.estoque
         });
-    });
+    };
 }
 
 function cepMask() {
@@ -257,8 +258,29 @@ function inicializarEdicaoGerente(produtoEditavel) {
         containerImagensAtuais.textContent = 'Nenhuma imagem cadastrada.';
     }
 
+    // Validação imediata: Impede de escolher mais de 4 arquivos logo na seleção
+    if (inputNovasImagens) {
+        inputNovasImagens.onchange = (e) => {
+            const checkboxesRemover = document.querySelectorAll('.checkbox-remover-img:checked');
+            const qtdImagensAtuais = produtoEditavel.imagens ? produtoEditavel.imagens.length : 0;
+            const qtdRemover = checkboxesRemover.length;
+            const qtdNovas = e.target.files.length;
+
+            if ((qtdImagensAtuais - qtdRemover + qtdNovas) > 4) {
+                if (msgContainer) {
+                    msgContainer.textContent = "Limite ultrapassado. Selecione menos imagens novas ou marque imagens antigas para remover.";
+                    msgContainer.style.color = "#c0392b";
+                }
+                e.target.value = ''; // Limpa o input instantaneamente
+            } else {
+                if (msgContainer) msgContainer.textContent = "";
+            }
+        };
+    }
+
     if (formEditarProduto) {
-        formEditarProduto.addEventListener('submit', async (e) => {
+        // Usando .onsubmit para evitar múltiplos triggers da mesma função
+        formEditarProduto.onsubmit = async (e) => {
             e.preventDefault();
 
             const checkboxesRemover = document.querySelectorAll('.checkbox-remover-img:checked');
@@ -292,7 +314,8 @@ function inicializarEdicaoGerente(produtoEditavel) {
 
             if (inputNovasImagens && inputNovasImagens.files.length > 0) {
                 for (let i = 0; i < inputNovasImagens.files.length; i++) {
-                    formData.append('NovasImagens', inputNovasImagens.files[i]);
+                    // Usando o nome "Imagens" padronizado para anexos
+                    formData.append('Imagens', inputNovasImagens.files[i]);
                 }
             }
 
@@ -309,7 +332,8 @@ function inicializarEdicaoGerente(produtoEditavel) {
                     if (msgContainer) {
                         msgContainer.textContent = "Produto atualizado com sucesso!";
                         msgContainer.style.color = "#27ae60";
-                    } setTimeout(() => {
+                    } 
+                    setTimeout(() => {
                         window.location.reload();
                     }, 1500);
 
@@ -325,11 +349,12 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Salvar Alterações Gerais";
             }
-        });
+        };
     }
 
     if (formEditarEstoque) {
-        formEditarEstoque.addEventListener('submit', async (e) => {
+        // Usando .onsubmit
+        formEditarEstoque.onsubmit = async (e) => {
             e.preventDefault();
 
             const btnSubmit = formEditarEstoque.querySelector('button[type="submit"]');
@@ -369,11 +394,12 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Atualizar Estoque";
             }
-        });
+        };
     }
 
     if (btnDeletarProduto) {
-        btnDeletarProduto.addEventListener('click', async (e) => {
+        // Usando .onclick
+        btnDeletarProduto.onclick = async (e) => {
             e.preventDefault();
 
             const confirmar = confirm(`Tem certeza que deseja excluir permanentemente o produto "${produtoEditavel.nome}"? Esta ação não pode ser desfeita.`);
@@ -411,7 +437,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnDeletarProduto.disabled = false;
                 btnDeletarProduto.textContent = "Excluir Produto";
             }
-        });
+        };
     }
 }
 
