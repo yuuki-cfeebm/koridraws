@@ -258,7 +258,6 @@ function inicializarEdicaoGerente(produtoEditavel) {
     }
 
     if (formEditarProduto) {
-        formEditarProduto.removeEventListener("submit");
         formEditarProduto.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -326,11 +325,10 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Salvar Alterações Gerais";
             }
-        });
+        }, { once: true });
     }
 
     if (formEditarEstoque) {
-        formEditarProduto.removeEventListener("submit");
         formEditarEstoque.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -371,7 +369,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Atualizar Estoque";
             }
-        });
+        }, { once: true });
     }
 
     if (btnDeletarProduto) {
