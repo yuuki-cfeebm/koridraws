@@ -5,6 +5,7 @@ let todosProdutos = [];
 let produtosFiltradosAtuais = [];
 let paginaAtual = 1;
 const produtosPorPagina = 12;
+
 async function loadProducts() {
     const spinner = document.getElementById('loading-spinner');
     
@@ -75,7 +76,6 @@ function renderizarControlesPaginacao() {
             paginationContainer = document.createElement('div');
             paginationContainer.id = 'pagination-controls-products';
             paginationContainer.className = 'pagination-container';
-            // Mantive os estilos do container pois são de layout, não visuais
             paginationContainer.style.display = 'flex';
             paginationContainer.style.justifyContent = 'center';
             paginationContainer.style.gap = '8px';
@@ -93,7 +93,6 @@ function renderizarControlesPaginacao() {
 
     if (totalPaginas <= 1) return;
 
-    // Botão Anterior
     const btnAnterior = document.createElement('button');
     btnAnterior.textContent = 'Anterior';
     btnAnterior.className = 'page-btn';
@@ -107,7 +106,6 @@ function renderizarControlesPaginacao() {
     });
     paginationContainer.appendChild(btnAnterior);
 
-    // Botões Numerados
     for (let i = 1; i <= totalPaginas; i++) {
         const btnPagina = document.createElement('button');
         btnPagina.textContent = i;
@@ -121,7 +119,6 @@ function renderizarControlesPaginacao() {
         paginationContainer.appendChild(btnPagina);
     }
 
-    // Botão Próximo
     const btnProximo = document.createElement('button');
     btnProximo.textContent = 'Próxima';
     btnProximo.className = 'page-btn';
@@ -223,15 +220,27 @@ function setupFilters() {
             
             const category = e.target.dataset.category;
             
-            // Retorna à página 1 sempre que o filtro muda
             paginaAtual = 1; 
             
             if (category === 'Todos') {
                 produtosFiltradosAtuais = [...todosProdutos];
             } else {
-                produtosFiltradosAtuais = todosProdutos.filter(produto => 
-                    produto.nome.toLowerCase().includes(category.toLowerCase())
-                );
+                produtosFiltradosAtuais = todosProdutos.filter(produto => {
+                    const nomeStr = produto.nome.toLowerCase();
+                    const catStr = category.toLowerCase();
+                    
+                    if (catStr === 'adesivos' || catStr === 'cartela') {
+                        return nomeStr.includes('adesivo') || nomeStr.includes('cartela');
+                    }
+                    if (catStr === 'bottons' || catStr === 'botton') {
+                        return nomeStr.includes('botton');
+                    }
+                    if (catStr === 'prints' || catStr === 'print') {
+                        return nomeStr.includes('print');
+                    }
+                    
+                    return nomeStr.includes(catStr);
+                });
             }
             
             renderizarPaginaAtual();
@@ -304,9 +313,9 @@ function inicializarPainelGerente() {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Post`, {
                     method: 'POST',
-                               headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                     body: formData
                 });
 
