@@ -292,6 +292,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Put/${produtoEditavel.id}`, {
                     method: 'PUT',
+                               headers: {
+                'Authorization': `Bearer ${token}`,
+            },
                     body: formData
                 });
 
@@ -334,6 +337,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/${produtoEditavel.id}/estoque`, {
                     method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                     body: formData
                 });
 
@@ -374,7 +380,10 @@ function inicializarEdicaoGerente(produtoEditavel) {
 
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Delete/${produtoEditavel.id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                               headers: {
+                'Authorization': `Bearer ${token}`,
+            }
                 });
 
                 if (response.ok) {

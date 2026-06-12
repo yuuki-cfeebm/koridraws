@@ -163,7 +163,10 @@ function initEventForm() {
 
         const resAddress = await fetch(`${API_BASE_URL}/Enderecos/Post`, {
             method: 'POST',
-            body: addressFormData
+            body: addressFormData,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
         });
 
         if (!resAddress.ok) {
@@ -194,6 +197,9 @@ function initEventForm() {
 
         const resEvent = await fetch(`${API_BASE_URL}/Eventos/Post`, {
             method: 'POST',
+                       headers: {
+                'Authorization': `Bearer ${token}`,
+            },
             body: eventFormData
         });
 

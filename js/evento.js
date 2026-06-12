@@ -206,7 +206,6 @@ function inicializarAcoesGerente(idEvento, nomeEvento) {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
                     }
                 });
 

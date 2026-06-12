@@ -43,7 +43,10 @@ async function initManage() {
     const loading = document.getElementById('loading-manage');
 
     try {
-        const response = await fetch(`${API_BASE_URL}/Pedidos`, {
+          const response = await fetch(`${API_BASE_URL}/Pedidos`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
         });
 
         if (!response.ok) {
@@ -225,6 +228,9 @@ function renderPedidos(pedidos, container) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Pedidos/status`, {
                     method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
                     body: formData
                 });
 

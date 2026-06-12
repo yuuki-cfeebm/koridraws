@@ -304,6 +304,9 @@ function inicializarPainelGerente() {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Post`, {
                     method: 'POST',
+                               headers: {
+                'Authorization': `Bearer ${token}`,
+            },
                     body: formData
                 });
 
