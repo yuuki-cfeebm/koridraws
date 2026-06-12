@@ -290,7 +290,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 formData.append('ImagensParaRemover', parseInt(checkbox.value, 10));
             });
 
-            if (inputNovasImagens) {
+            if (inputNovasImagens && inputNovasImagens.files.length > 0) {
                 for (let i = 0; i < inputNovasImagens.files.length; i++) {
                     formData.append('NovasImagens', inputNovasImagens.files[i]);
                 }
