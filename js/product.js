@@ -4,23 +4,26 @@ import { addToCart } from './cart.js';
 let todosProdutos = [];
 let produtosFiltradosAtuais = [];
 let paginaAtual = 1;
-const produtosPorPagina = 12;
+
+const corteBaixoEstoque = 5;
+const produtosPorPagina = 9;
 
 async function loadProducts() {
     const spinner = document.getElementById('loading-spinner');
-    
+
     try {
         const response = await fetch(`${API_BASE_URL}/Itens`);
         if (!response.ok) {
             throw new Error();
         }
-        
+
         let produtosDaApi = await response.json();
-        
+
+
         produtosDaApi.sort((a, b) => {
             const getPrioridade = (p) => {
                 if (p.estoque === 0) return 3;
-                if (p.estoque > 0 && p.estoque < 5) return 1;
+                if (p.estoque > 0 && p.estoque <= corteBaixoEstoque) return 1;
                 return 2;
             };
 
@@ -37,7 +40,7 @@ async function loadProducts() {
                 }
             }
 
-            return b.id - a.id;
+            return a.nome.localeCompare(b.nome);
         });
 
         todosProdutos = produtosDaApi;
@@ -46,7 +49,7 @@ async function loadProducts() {
         if (spinner) {
             spinner.style.display = 'none';
         }
-        
+
         renderizarPaginaAtual();
         setupFilters();
 
@@ -110,7 +113,7 @@ function renderizarControlesPaginacao() {
         const btnPagina = document.createElement('button');
         btnPagina.textContent = i;
         btnPagina.className = `page-btn ${i === paginaAtual ? 'active' : ''}`;
-        
+
         btnPagina.addEventListener('click', () => {
             paginaAtual = i;
             renderizarPaginaAtual();
@@ -150,7 +153,7 @@ function renderProducts(listaParaRenderizar) {
         const clone = template.content.cloneNode(true);
 
         clone.querySelector('.card').href = `/assets/pages/pdp.html?id=${produto.id}`;
-        
+
         const titleEl = clone.querySelector('.product-title') || clone.querySelector('.card-text h2');
         if (titleEl) titleEl.textContent = produto.nome;
 
@@ -159,31 +162,35 @@ function renderProducts(listaParaRenderizar) {
 
         const imgEl = clone.querySelector('.img-card');
         let imageUrl = '/assets/images/image.png';
-        
+
         if (produto.imagem) {
             const fileId = produto.imagem.caminhoCloud || produto.imagem.url;
             imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
         }
         if (imgEl) imgEl.src = imageUrl;
 
-        const imgContainer = imgEl.parentElement; 
+        const imgContainer = imgEl.parentElement;
         imgContainer.style.position = 'relative';
 
-        if (produto.estoque === 0) {
-            const badge = document.createElement('span');
-            badge.className = 'badge-estoque badge-esgotado';
-            badge.textContent = 'Esgotado';
-            imgContainer.appendChild(badge);
-        } else if (produto.estoque < 5) {
+        const semEstoque = produto.estoque === 0;
+        const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
+
+        if (poucasUnidades) {
             const badge = document.createElement('span');
             badge.className = 'badge-estoque badge-ultimas';
             badge.textContent = 'Últimas unidades';
             imgContainer.appendChild(badge);
         }
+        else if (semEstoque) {
+            const badge = document.createElement('span');
+            badge.className = 'badge-estoque badge-esgotado';
+            badge.textContent = 'Esgotado';
+            imgContainer.appendChild(badge);
+        }
 
         const btnComprar = clone.querySelector('.buy-btn');
         if (btnComprar) {
-            if (produto.estoque === 0) {
+            if (semEstoque) {
                 btnComprar.disabled = true;
                 btnComprar.textContent = "Indisponível";
                 btnComprar.style.backgroundColor = "#ccc";
@@ -193,7 +200,7 @@ function renderProducts(listaParaRenderizar) {
                 btnComprar.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    
+
                     addToCart({
                         id: produto.id,
                         nome: produto.nome,
@@ -212,23 +219,23 @@ function renderProducts(listaParaRenderizar) {
 
 function setupFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
-    
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             filterBtns.forEach(b => b.classList.remove('active'));
             e.target.classList.add('active');
-            
+
             const category = e.target.dataset.category;
-            
-            paginaAtual = 1; 
-            
+
+            paginaAtual = 1;
+
             if (category === 'Todos') {
                 produtosFiltradosAtuais = [...todosProdutos];
             } else {
                 produtosFiltradosAtuais = todosProdutos.filter(produto => {
                     const nomeStr = produto.nome.toLowerCase();
                     const catStr = category.toLowerCase();
-                    
+
                     if (catStr === 'adesivos' || catStr === 'cartela') {
                         return nomeStr.includes('adesivo') || nomeStr.includes('cartela');
                     }
@@ -238,11 +245,11 @@ function setupFilters() {
                     if (catStr === 'prints' || catStr === 'print') {
                         return nomeStr.includes('print');
                     }
-                    
+
                     return nomeStr.includes(catStr);
                 });
             }
-            
+
             renderizarPaginaAtual();
         });
     });
@@ -259,7 +266,7 @@ function inicializarPainelGerente() {
     const formNovoProduto = document.getElementById('form-novo-produto');
     const inputImagens = document.getElementById('novo-item-imagens');
     const msgContainer = document.getElementById('msg-novo-produto');
-    
+
     if (inputImagens) {
         inputImagens.addEventListener('change', (e) => {
             if (e.target.files.length > 4) {
@@ -275,11 +282,11 @@ function inicializarPainelGerente() {
             }
         });
     }
-    
+
     if (formNovoProduto) {
         formNovoProduto.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             if (inputImagens && inputImagens.files.length > 4) {
                 if (msgContainer) {
                     msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
@@ -287,14 +294,14 @@ function inicializarPainelGerente() {
                 }
                 return;
             }
-            
+
             const btnSubmit = formNovoProduto.querySelector('button[type="submit"]');
             const token = localStorage.getItem('koridraws_token');
-            
+
             const nome = document.getElementById('novo-item-nome').value.trim();
             const preco = document.getElementById('novo-item-preco').value;
             const estoque = document.getElementById('novo-item-estoque').value;
-            
+
             btnSubmit.disabled = true;
             btnSubmit.textContent = "A salvar...";
             if (msgContainer) msgContainer.textContent = "";
@@ -303,7 +310,7 @@ function inicializarPainelGerente() {
             formData.append('Nome', nome);
             formData.append('Preco', parseFloat(preco).toString().replace('.', ','));
             formData.append('Estoque', parseInt(estoque, 10));
-            
+
             if (inputImagens) {
                 for (let i = 0; i < inputImagens.files.length; i++) {
                     formData.append('Imagens', inputImagens.files[i]);
@@ -325,7 +332,7 @@ function inicializarPainelGerente() {
                         msgContainer.style.color = "#27ae60";
                     }
                     formNovoProduto.reset();
-                    
+
                     loadProducts();
                 } else {
                     throw new Error("Erro na resposta do servidor.");

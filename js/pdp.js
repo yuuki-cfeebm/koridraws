@@ -5,6 +5,8 @@ let produtoAtual = null;
 let quantidadeSelecionada = 1;
 let imagemPrincipal = '/assets/images/image.png';
 
+const corteBaixoEstoque = 5;
+
 async function carregarDetalhesDoProduto() {
     const url = new URLSearchParams(window.location.search);
     const idProduct = url.get('id');
@@ -81,17 +83,11 @@ function preencherTela(produto) {
         existingBadge.remove();
     }
 
-    if (produto.estoque === 0) {
-        const badge = document.createElement('span');
-        badge.className = 'badge-estoque badge-esgotado badge-pdp';
-        badge.textContent = 'Esgotado';
-        badge.style.position = 'static';
-        badge.style.display = 'inline-block';
-        badge.style.width = 'max-content';
-        badge.style.marginLeft = '12px';
-        badge.style.verticalAlign = 'middle';
-        pdpPrice.appendChild(badge);
-    } else if (produto.estoque < 5) {
+    
+        const semEstoque = produto.estoque === 0;
+        const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
+
+    if (poucasUnidades) {
         const badge = document.createElement('span');
         badge.className = 'badge-estoque badge-ultimas badge-pdp';
         badge.textContent = 'Últimas unidades';
@@ -102,6 +98,17 @@ function preencherTela(produto) {
         badge.style.verticalAlign = 'middle';
         pdpPrice.appendChild(badge);
     }
+    else if (semEstoque) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-estoque badge-esgotado badge-pdp';
+        badge.textContent = 'Esgotado';
+        badge.style.position = 'static';
+        badge.style.display = 'inline-block';
+        badge.style.width = 'max-content';
+        badge.style.marginLeft = '12px';
+        badge.style.verticalAlign = 'middle';
+        pdpPrice.appendChild(badge);
+    } 
 }
 
 function configurarControlesQuantidade() {
