@@ -15,7 +15,7 @@ async function carregarDetalhesDoProduto() {
 
     try {
         const resposta = await fetch(`${API_BASE_URL}/Itens/${idProduct}`);
-        
+
         if (resposta.ok) {
             produtoAtual = await resposta.json();
             preencherTela(produtoAtual);
@@ -39,22 +39,22 @@ function formatDriveLink(url) {
 function preencherTela(produto) {
     const pdpTitle = document.querySelector('.pdp-title');
     pdpTitle.textContent = produto.nome;
-    
+
     const pdpPrice = document.querySelector('.pdp-price');
     pdpPrice.textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
-    
+
     const otherImgsContainer = document.querySelector('.container-imgs');
     otherImgsContainer.style.display = "none";
     otherImgsContainer.innerHTML = "";
 
     const imgMain = document.querySelector('.img-main');
-    
+
     if (produto.imagens && produto.imagens.length > 0) {
         imagemPrincipal = formatDriveLink(produto.imagens[0].url || produto.imagens[0].caminhoCloud);
         imgMain.src = imagemPrincipal;
-        
+
         otherImgsContainer.style.display = "flex";
-        
+
         produto.imagens.forEach((item, index) => {
             const newImg = document.createElement('img');
             const currentItemUrl = item.url || item.caminhoCloud;
@@ -83,9 +83,9 @@ function preencherTela(produto) {
         existingBadge.remove();
     }
 
-    
-        const semEstoque = produto.estoque === 0;
-        const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
+
+    const semEstoque = produto.estoque === 0;
+    const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
 
     if (poucasUnidades) {
         const badge = document.createElement('span');
@@ -108,7 +108,7 @@ function preencherTela(produto) {
         badge.style.marginLeft = '12px';
         badge.style.verticalAlign = 'middle';
         pdpPrice.appendChild(badge);
-    } 
+    }
 }
 
 function configurarControlesQuantidade() {
@@ -129,8 +129,8 @@ function configurarControlesQuantidade() {
     spanQuantidade.textContent = quantidadeSelecionada;
 
     btnPlus.addEventListener('click', () => {
-            quantidadeSelecionada++;
-            spanQuantidade.textContent = quantidadeSelecionada;
+        quantidadeSelecionada++;
+        spanQuantidade.textContent = quantidadeSelecionada;
     });
 
     btnMinus.addEventListener('click', () => {
@@ -166,14 +166,14 @@ function configurarBotaoComprar() {
             preco: produtoAtual.preco,
             imagem: imagemPrincipal,
             quantidade: quantidadeSelecionada,
-            estoque: produtoAtual.estoque 
+            estoque: produtoAtual.estoque
         });
     });
 }
 
 function cepMask() {
     const inputCep = document.querySelector('.cep-mask');
-    if (!inputCep) return; 
+    if (!inputCep) return;
 
     inputCep.addEventListener('input', (evento) => {
         let valor = evento.target.value;
@@ -213,7 +213,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
     inputEstoque.value = produtoEditavel.estoque || 0;
 
     containerImagensAtuais.innerHTML = '';
-    
+
     if (produtoEditavel.imagens && produtoEditavel.imagens.length > 0) {
         produtoEditavel.imagens.forEach(img => {
             const fileId = img.caminhoCloud || img.url;
@@ -299,9 +299,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Put/${produtoEditavel.id}`, {
                     method: 'PUT',
-                               headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                     body: formData
                 });
 
@@ -309,9 +309,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
                     if (msgContainer) {
                         msgContainer.textContent = "Produto atualizado com sucesso!";
                         msgContainer.style.color = "#27ae60";
-                    }
-                formEditarProduto.reset();
-                carregarDetalhesDoProduto();
+                    } setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
 
                 } else {
                     throw new Error("Erro ao atualizar.");
@@ -333,7 +333,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
             e.preventDefault();
 
             const btnSubmit = formEditarEstoque.querySelector('button[type="submit"]');
-            
+
             btnSubmit.disabled = true;
             btnSubmit.textContent = "A atualizar...";
             if (msgEstoque) msgEstoque.textContent = "";
@@ -377,7 +377,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
             e.preventDefault();
 
             const confirmar = confirm(`Tem certeza que deseja excluir permanentemente o produto "${produtoEditavel.nome}"? Esta ação não pode ser desfeita.`);
-            
+
             if (!confirmar) return;
 
             btnDeletarProduto.disabled = true;
@@ -387,9 +387,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Delete/${produtoEditavel.id}`, {
                     method: 'DELETE',
-                               headers: {
-                'Authorization': `Bearer ${token}`,
-            }
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
                 });
 
                 if (response.ok) {
