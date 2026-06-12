@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produtos – Koridraws</title>
   <link rel="stylesheet" href="/style/style.css">
-  <!-- <link rel="stylesheet" href="/style/product.css"> -->
 </head>
 <body>
 
@@ -13,11 +12,65 @@
   <div id="navbar-placeholder"></div>
   
   <main>
+    
+    <div id="gerente-edit-panel" style="display: none; width: 100%; max-width: 800px; margin: 24px auto; background: #f9f9f9; padding: 24px; border-radius: 12px; border: 1px solid #e0e0e0;">
+      <h3 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 16px;">Painel do Gerente: Editar Produto</h3>
+      
+      <form id="form-editar-produto" class="event-form">
+        <div class="form-row">
+          <label for="edit-item-nome">Nome do Produto</label>
+          <input type="text" id="edit-item-nome" required>
+        </div>
+        
+        <div class="form-row">
+          <label for="edit-item-preco">Preço</label>
+          <input type="number" step="0.01" min="0" id="edit-item-preco" required>
+        </div>
+        
+        <div class="form-row">
+          <label>Imagens Atuais (Selecione para remover)</label>
+          <div id="edit-imagens-atuais" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;"></div>
+        </div>
+        
+        <div class="form-row" style="margin-top: 16px;">
+          <label for="edit-item-novas-imagens">Adicionar Novas Imagens</label>
+          <input type="file" id="edit-item-novas-imagens" multiple accept="image/*" style="background: #fff; padding: 8px;">
+        </div>
+        
+        <div id="msg-editar-produto" style="margin-top: 8px; font-size: 14px; font-weight: bold;"></div>
+        
+        <div class="form-actions" style="margin-top: 16px;">
+          <button type="submit" class="event-form-btn">Salvar Alterações Gerais</button>
+        </div>
+      </form>
+
+      <hr style="margin: 32px 0; border: none; border-top: 1px solid #ccc;">
+
+      <h4 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 16px;">Gestão de Estoque</h4>
+      <form id="form-editar-estoque" class="event-form">
+        <div class="form-row">
+          <label for="edit-item-estoque">Novo Estoque</label>
+          <input type="number" step="1" min="0" id="edit-item-estoque" required>
+        </div>
+        <div id="msg-editar-estoque" style="margin-top: 8px; font-size: 14px; font-weight: bold;"></div>
+        <div class="form-actions" style="margin-top: 16px;">
+          <button type="submit" class="event-form-btn" style="background-color: #2980b9;">Atualizar Estoque</button>
+        </div>
+      </form>
+
+      <hr style="margin: 32px 0; border: none; border-top: 1px solid #ccc;">
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 14px; color: #c0392b; font-weight: bold;">Zona de Perigo</span>
+        <button id="btn-deletar-produto" class="event-form-btn" style="background-color: #c0392b; width: auto; padding: 12px 24px;">Excluir Produto</button>
+      </div>
+      <div id="msg-deletar-produto" style="margin-top: 8px; font-size: 14px; font-weight: bold; text-align: right;"></div>
+    </div>
+
     <div class="pdp-container container">
       <div class="content-left">
         <img class="img-main" src="" alt="">
         <div class="container-imgs">
-
         </div>
       </div>
       <div class="content-right">
@@ -26,9 +79,6 @@
           <p class="pdp-price"></p>
         </div>
         <div class="actions">
-          <div class="variations">
-            <p>Variação</p>
-          </div>
           <div class="buy-item">
             <div class="add-itens">
               <button class="btn minus">
@@ -44,14 +94,9 @@
               Adicionar ao carrinho
             </button>
           </div>
-          <form class="calc-frete" action="">
-            <input type="text" class="cep-mask" maxlength="9" placeholder="00000-000">
-            <button class="btn-frete" type="button">Calcular Frete</button>
-          </form>
         </div>
       </div>
     </div>
-
 
   </main>
 

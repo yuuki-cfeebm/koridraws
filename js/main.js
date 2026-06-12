@@ -68,8 +68,8 @@ async function loadBannerEvents() {
     nextEvents.forEach(event => {
       const clone = templateBanner.content.cloneNode(true);
       
-      const imgUrl = event.imagens?.length > 0 
-        ? `https://drive.google.com/thumbnail?id=${event.imagens[0].caminhoCloud}&sz=w800` 
+      const imgUrl = event.imagem && event.imagem.caminhoCloud 
+        ? `https://drive.google.com/thumbnail?id=${event.imagem.caminhoCloud}&sz=w800` 
         : '/assets/images/image.png';
 
       clone.querySelector('.img-banner').src = imgUrl;

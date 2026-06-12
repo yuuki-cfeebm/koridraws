@@ -10,45 +10,87 @@
   <div id="header-placeholder"></div>
   <div id="navbar-placeholder"></div>
 
-<main class="events-main">
-<!-- 
-    <section class="events-section event-form-section">
-      <h2 class="section-title events-section-title">Adicionar novo evento</h2>
-      <form class="event-form" id="event-form">
+  <main class="events-main">
+  
+    <section id="gerente-event-panel" style="display: none; width: 100%; max-width: 800px; margin: 24px auto 48px auto; background: #f9f9f9; padding: 32px; border-radius: 12px; border: 1px solid #e0e0e0;">
+      <h3 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 24px;">Cadastrar Novo Evento</h3>
+      
+      <form id="event-form" class="event-form">
         <div class="form-row">
-          <label for="event-title">Nome do evento</label>
-          <input type="text" id="event-title" name="event-title" placeholder="Feira de Arte Urbana" required>
+          <label for="event-title">Nome do Evento</label>
+          <input type="text" id="event-title" required>
         </div>
+        
         <div class="form-row">
-          <label for="event-date">Data</label>
-          <input type="date" id="event-date" name="event-date" required>
+          <label for="event-date">Data do Evento</label>
+          <input type="date" id="event-date" required>
         </div>
+        
         <div class="form-row">
-          <label for="event-location">Local</label>
-          <input type="text" id="event-location" name="event-location" placeholder="Parque Villa-Lobos, SP" required>
+          <label for="event-details">Detalhes / Descrição</label>
+          <textarea id="event-details" rows="4" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-family: var(--font-body); resize: vertical;"></textarea>
         </div>
+
+        <h4 style="font-family: var(--font-display); margin-top: 32px; margin-bottom: 16px;">Morada do Evento</h4>
+        
         <div class="form-row">
-          <label for="event-details">Detalhes</label>
-          <textarea id="event-details" name="event-details" placeholder="Ilustrações autorais, prints e zines." rows="3" required></textarea>
+          <label for="event-cep">CEP</label>
+          <input type="text" id="event-cep" class="cep-mask" required>
         </div>
+        
         <div class="form-row">
-          <label for="event-image">Imagem</label>
-          <select id="event-image" name="event-image">
-            <option value="/assets/images/image-teste1.png">Imagem teste 1</option>
-            <option value="/assets/images/image-teste2.png">Imagem teste 2</option>
-            <option value="/assets/images/image.png">Imagem padrão</option>
-            <option value="/assets/images/Rectangle.svg">Imagem retângulo</option>
-          </select>
-          <img id="image-preview" class="event-image-preview" src="/assets/images/image-teste1.png" alt="Prévia da imagem do evento">
+          <label for="event-rua">Rua</label>
+          <input type="text" id="event-rua" required>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="event-form-btn">Adicionar evento</button>
-          <p id="event-form-message" class="event-form-message" aria-live="polite"></p>
+        
+        <div style="display: flex; gap: 16px; width: 100%;">
+          <div class="form-row" style="flex: 1;">
+            <label for="event-numero">Número</label>
+            <input type="text" id="event-numero" required>
+          </div>
+          <div class="form-row" style="flex: 2;">
+            <label for="event-bairro">Bairro</label>
+            <input type="text" id="event-bairro" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <label for="event-complemento">Complemento (Opcional)</label>
+          <input type="text" id="event-complemento">
+        </div>
+        
+        <div style="display: flex; gap: 16px; width: 100%;">
+          <div class="form-row" style="flex: 1;">
+            <label for="event-estado">Estado</label>
+            <select id="event-estado" required style="padding: 12px 16px; border: 1px solid #ccc; border-radius: 8px; font-family: var(--font-body); font-size: 16px; outline: none;">
+              <option value="" disabled selected>A carregar...</option>
+            </select>
+          </div>
+          <div class="form-row" style="flex: 2;">
+            <label for="event-cidade">Cidade</label>
+            <select id="event-cidade" required disabled style="padding: 12px 16px; border: 1px solid #ccc; border-radius: 8px; font-family: var(--font-body); font-size: 16px; outline: none;">
+              <option value="" disabled selected>Selecione um estado primeiro</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 style="font-family: var(--font-display); margin-top: 32px; margin-bottom: 16px;">Imagens</h4>
+        
+        <div class="form-row">
+          <label for="event-image">Imagens do Evento (Máximo de 4)</label>
+          <input type="file" id="event-image" multiple accept="image/*" style="background: #fff; padding: 8px;">
+          <img id="image-preview" src="" alt="" style="max-width: 200px; margin-top: 12px; border-radius: 8px; object-fit: cover;">
+        </div>
+
+        <div id="event-form-message" style="margin-top: 16px; font-size: 14px; font-weight: bold;"></div>
+
+        <div class="form-actions" style="margin-top: 24px;">
+          <button type="submit" class="event-form-btn">Adicionar Evento</button>
         </div>
       </form>
-    </section> 
-  -->
-<section class="events-section">
+    </section>
+
+    <section class="events-section">
       <h2 class="section-title events-section-title">Próximos Eventos</h2>
       <div class="container-product-carousel flex">
         <button class="back btn-product" id="btn-back-upcoming">
@@ -76,40 +118,13 @@
       </div>
     </section>
 
-      </div>
-    </section>
-
   </main>
 
   <footer id="footer-placeholder"></footer>
 
+  <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/header.js"></script>
+  <script type="module" src="/js/agenda.js"></script>
 
-  <!-- <footer class="footer">
-    <div class="container flex-col-center">
-      <h2 class="footer-title">koridraws</h2>
-      <ul class="footer-links">
-        <li><a href="index.html">Início</a></li>
-        <li><a href="#">Produtos</a></li>
-        <li><a href="agenda.html">Eventos</a></li>
-        <li><a href="#">Termos de Uso</a></li>
-        <li><a href="#">Pagamentos</a></li>
-        <li><a href="#">Envios</a></li>
-        <li><a href="#">Perguntas Frequentes</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Devoluções</a></li>
-        <li><a href="#">Reembolsos</a></li>
-      </ul>
-      <div class="footer-contact">
-        <p><a href="#">(11) 99999-9999</a></p>
-        <p><a href="#">contato@meusite.com</a></p>
-      </div>
-      <p class="footer-copy">© 2026 KORIDRAWS - Todos os direitos reservados.</p>
-    </div>
-  </footer> -->
 </body>
-
-<script type="module" src="/js/index.js"></script>
-<!-- <script type="module" src="/js/index.js"></script> -->
-<!-- <script src="/js/agenda.js" defer></script> -->
-
 </html>

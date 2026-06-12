@@ -153,4 +153,103 @@ function setupFilters() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadProducts);
+function inicializarPainelGerente() {
+    const papelUsuario = localStorage.getItem('koridraws_user_role');
+    const painelGerente = document.getElementById('gerente-panel');
+
+    if (papelUsuario === 'Gerente' && painelGerente) {
+        painelGerente.style.display = 'block';
+    }
+
+    const formNovoProduto = document.getElementById('form-novo-produto');
+    const inputImagens = document.getElementById('novo-item-imagens');
+    const msgContainer = document.getElementById('msg-novo-produto');
+    
+    if (inputImagens) {
+        inputImagens.addEventListener('change', (e) => {
+            if (e.target.files.length > 4) {
+                if (msgContainer) {
+                    msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
+                    msgContainer.style.color = "#c0392b";
+                }
+                e.target.value = '';
+            } else {
+                if (msgContainer) {
+                    msgContainer.textContent = "";
+                }
+            }
+        });
+    }
+    
+    if (formNovoProduto) {
+        formNovoProduto.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (inputImagens && inputImagens.files.length > 4) {
+                if (msgContainer) {
+                    msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
+                    msgContainer.style.color = "#c0392b";
+                }
+                return;
+            }
+            
+            const btnSubmit = formNovoProduto.querySelector('button[type="submit"]');
+            const token = localStorage.getItem('koridraws_token');
+            
+            const nome = document.getElementById('novo-item-nome').value.trim();
+            const preco = document.getElementById('novo-item-preco').value;
+            const estoque = document.getElementById('novo-item-estoque').value;
+            
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = "A salvar...";
+            if (msgContainer) msgContainer.textContent = "";
+
+            const formData = new FormData();
+            formData.append('Nome', nome);
+            formData.append('Preco', parseFloat(preco).toString().replace('.', ','));
+            formData.append('Estoque', parseInt(estoque, 10));
+            
+            if (inputImagens) {
+                for (let i = 0; i < inputImagens.files.length; i++) {
+                    formData.append('Imagens', inputImagens.files[i]);
+                }
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/Itens/Post`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    if (msgContainer) {
+                        msgContainer.textContent = "Produto cadastrado com sucesso!";
+                        msgContainer.style.color = "#27ae60";
+                    }
+                    formNovoProduto.reset();
+                    
+                    loadProducts();
+                } else {
+                    throw new Error("Erro na resposta do servidor.");
+                }
+            } catch (error) {
+                if (msgContainer) {
+                    msgContainer.textContent = "Erro ao cadastrar o produto. Verifique os dados ou as suas permissões.";
+                    msgContainer.style.color = "#c0392b";
+                }
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = "Salvar Novo Produto";
+            }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+    inicializarPainelGerente();
+});

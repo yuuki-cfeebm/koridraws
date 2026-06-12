@@ -1,5 +1,7 @@
 import { API_BASE_URL } from './config.js';
 
+let cacheEstados = [];
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, '&amp;')
@@ -16,23 +18,6 @@ function formatDateBr(dateValue) {
   return `${date.getDate()} de ${months[date.getMonth()]}, ${date.getFullYear()}`;
 }
 
-function createEventCard({ title, date, location, details, image, category }) {
-  const article = document.createElement('article');
-  article.className = `event-card ${category === 'past' ? 'event-card--past' : 'event-card--upcoming'}`;
-  article.innerHTML = `
-    <h3 class="event-card__name">${escapeHtml(title)}</h3>
-    <div class="event-card__img-wrap">
-      <img src="${escapeHtml(image)}" alt="${escapeHtml(title)}" class="event-card__img">
-    </div>
-    <div class="event-card__info">
-      <p><strong>Data:</strong> ${escapeHtml(date)}</p>
-      <p><strong>Local:</strong> ${escapeHtml(location)}</p>
-      <p><strong>Detalhes:</strong> ${escapeHtml(details)}</p>
-    </div>
-  `;
-  return article;
-}
-
 function showMessage(message, isError = false) {
   const messageEl = document.getElementById('event-form-message');
   if (!messageEl) return;
@@ -40,59 +25,218 @@ function showMessage(message, isError = false) {
   messageEl.textContent = message;
   messageEl.classList.toggle('message-error', isError);
   messageEl.classList.toggle('message-success', !isError);
+  
+  if (isError) {
+      messageEl.style.color = "#c0392b";
+  } else {
+      messageEl.style.color = "#27ae60";
+  }
+}
+
+async function loadEstados() {
+  const selectEstado = document.getElementById('event-estado');
+  if (selectEstado && selectEstado.options.length > 1 && cacheEstados.length > 0) return cacheEstados;
+  
+  try {
+    const res = await fetch(`${API_BASE_URL}/Enderecos/estados`);
+    if (res.ok) {
+      const estados = await res.json();
+      cacheEstados = estados;
+      if (selectEstado) {
+        selectEstado.innerHTML = '<option value="" disabled selected>Selecione um estado</option>';
+        estados.forEach(est => {
+          const opt = document.createElement('option');
+          opt.value = est.id;
+          opt.textContent = est.descricao || est.nome;
+          selectEstado.appendChild(opt);
+        });
+      }
+      return estados;
+    }
+  } catch (error) {
+  }
+  return [];
+}
+
+async function loadCidades(estadoId) {
+  const selectCidade = document.getElementById('event-cidade');
+  if (!selectCidade) return;
+  
+  selectCidade.innerHTML = '<option value="" disabled selected>A carregar...</option>';
+  selectCidade.disabled = true;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/Enderecos/estados/${estadoId}/cidades`);
+    if (res.ok) {
+      const cidades = await res.json();
+      selectCidade.innerHTML = '<option value="" disabled selected>Selecione uma cidade</option>';
+      
+      cidades.forEach(cid => {
+        const opt = document.createElement('option');
+        opt.value = cid.id;
+        opt.textContent = cid.descricao || cid.nome;
+        selectCidade.appendChild(opt);
+      });
+      selectCidade.disabled = false;
+    }
+  } catch (error) {
+    selectCidade.innerHTML = '<option value="" disabled selected>Erro ao carregar</option>';
+  }
 }
 
 function initEventForm() {
+  const papelUsuario = localStorage.getItem('koridraws_user_role');
+  const token = localStorage.getItem('koridraws_token');
   const form = document.getElementById('event-form');
-  const upcomingGrid = document.querySelector('.upcoming-grid');
-  const pastGrid = document.querySelector('.past-grid');
+  const formContainer = form ? form.closest('section') || form : null;
+
+  if (papelUsuario !== 'Gerente' || !token) {
+    if (formContainer) {
+        formContainer.style.display = 'none';
+    }
+    return;
+  } else {
+    if (formContainer) {
+        formContainer.style.display = 'block';
+    }
+    loadEstados();
+  }
+
+  const selectEstado = document.getElementById('event-estado');
+  if (selectEstado) {
+    selectEstado.addEventListener('change', (e) => loadCidades(e.target.value));
+  }
+
   const imageSelect = document.getElementById('event-image');
   const imagePreview = document.getElementById('image-preview');
 
-  if (!form || !upcomingGrid || !pastGrid || !imageSelect || !imagePreview) return;
+  if (imageSelect) {
+    imageSelect.addEventListener('change', (e) => {
+      if (e.target.files.length > 4) {
+        showMessage('Por favor, selecione no máximo 4 imagens.', true);
+        e.target.value = '';
+        if (imagePreview) imagePreview.src = '';
+      } else if (e.target.files.length > 0 && imagePreview) {
+        imagePreview.src = URL.createObjectURL(e.target.files[0]);
+      } else if (e.target.files.length === 0 && imagePreview) {
+        imagePreview.src = '';
+      }
+    });
+  }
 
-  imageSelect.addEventListener('change', () => {
-    imagePreview.src = imageSelect.value;
-  });
+  if (form) {
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault();
 
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
+      if (imageSelect && imageSelect.files.length > 4) {
+          showMessage('Por favor, selecione no máximo 4 imagens.', true);
+          return;
+      }
 
-    const formData = new FormData(form);
-    const title = formData.get('event-title')?.toString().trim();
-    const dateValue = formData.get('event-date')?.toString().trim();
-    const location = formData.get('event-location')?.toString().trim();
-    const details = formData.get('event-details')?.toString().trim();
-    const image = formData.get('event-image')?.toString().trim() || 'assets/images/image.png';
+      const btnSubmit = form.querySelector('button[type="submit"]');
+      
+      const title = document.getElementById('event-title')?.value.trim();
+      const dateValue = document.getElementById('event-date')?.value.trim();
+      const details = document.getElementById('event-details')?.value.trim();
 
-    if (!title || !dateValue || !location || !details) {
-      showMessage('Preencha todos os campos obrigatórios antes de adicionar o evento.', true);
-      return;
-    }
+      const rua = document.getElementById('event-rua')?.value.trim();
+      const numero = document.getElementById('event-numero')?.value.trim();
+      const bairro = document.getElementById('event-bairro')?.value.trim();
+      const cep = document.getElementById('event-cep')?.value.trim();
+      const complemento = document.getElementById('event-complemento')?.value.trim();
+      const cidadeId = document.getElementById('event-cidade')?.value;
 
-    const dateObj = new Date(`${dateValue}T00:00:00`);
-    if (Number.isNaN(dateObj.valueOf())) {
-      showMessage('Data inválida. Escolha uma data válida no campo Data.', true);
-      return;
-    }
+      if (!title || !dateValue || !rua || !numero || !bairro || !cep || !cidadeId) {
+        showMessage('Preencha os campos obrigatórios do evento e da morada.', true);
+        return;
+      }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const category = dateObj < today ? 'past' : 'upcoming';
-    const formattedDate = formatDateBr(dateValue);
+      if (btnSubmit) {
+          btnSubmit.disabled = true;
+          btnSubmit.textContent = "A criar morada...";
+      }
 
-    const newCard = createEventCard({ title, date: formattedDate, location, details, image, category });
+      showMessage('', false);
 
-    if (category === 'past') {
-      pastGrid.prepend(newCard);
-    } else {
-      upcomingGrid.prepend(newCard);
-    }
+      try {
+        const addressFormData = new FormData();
+        addressFormData.append('Rua', rua);
+        addressFormData.append('Numero', numero);
+        addressFormData.append('Bairro', bairro);
+        addressFormData.append('Cep', cep);
+        if (complemento) addressFormData.append('Complemento', complemento);
+        addressFormData.append('CidadeId', cidadeId);
 
-    form.reset();
-    imagePreview.src = imageSelect.value;
-    showMessage('Evento adicionado com sucesso!', false);
-  });
+        const resAddress = await fetch(`${API_BASE_URL}/Enderecos/Post`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'X-Admin-Key': 'SUA_CHAVE_AQUI'
+            },
+            body: addressFormData
+        });
+
+        if (!resAddress.ok) {
+            throw new Error('Erro ao criar a morada.');
+        }
+
+        const addressData = await resAddress.json();
+        const novoEnderecoId = addressData.id;
+
+        if (btnSubmit) {
+            btnSubmit.textContent = "A criar evento...";
+        }
+
+        const eventFormData = new FormData();
+        eventFormData.append('Nome', title);
+        eventFormData.append('Data', `${dateValue}T00:00:00Z`);
+        eventFormData.append('EnderecoId', parseInt(novoEnderecoId, 10));
+        
+        if (details) {
+            eventFormData.append('Descricao', details);
+        }
+
+        if (imageSelect && imageSelect.files.length > 0) {
+            for (let i = 0; i < imageSelect.files.length; i++) {
+                eventFormData.append('Imagens', imageSelect.files[i]);
+            }
+        }
+
+        const resEvent = await fetch(`${API_BASE_URL}/Eventos/Post`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'X-Admin-Key': 'SUA_CHAVE_AQUI'
+            },
+            body: eventFormData
+        });
+
+        if (!resEvent.ok) {
+            throw new Error('Erro ao criar o evento.');
+        }
+
+        showMessage('Morada e Evento adicionados com sucesso!', false);
+        form.reset();
+        if (imagePreview) imagePreview.src = '';
+        
+        const selectCidade = document.getElementById('event-cidade');
+        if (selectCidade) {
+            selectCidade.innerHTML = '<option value="" disabled selected>Selecione um estado primeiro</option>';
+            selectCidade.disabled = true;
+        }
+        
+        loadEventsAPI();
+
+      } catch (error) {
+        showMessage(error.message || 'Erro ao processar a requisição. Verifique os dados.', true);
+      } finally {
+          if (btnSubmit) {
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = "Adicionar Evento";
+          }
+      }
+    });
+  }
 }
 
 async function loadEventsAPI() {
@@ -100,6 +244,9 @@ async function loadEventsAPI() {
   const pastContainer = document.getElementById('past-carousel');
 
   if (!upcomingContainer || !pastContainer) return;
+
+  upcomingContainer.innerHTML = '';
+  pastContainer.innerHTML = '';
 
   try {
     const response = await fetch(`${API_BASE_URL}/Eventos`);
@@ -119,29 +266,33 @@ async function loadEventsAPI() {
       article.className = `event-card ${isPast ? 'event-card--past' : 'event-card--upcoming'}`;
       article.style.minWidth = '280px'; 
       article.style.flexShrink = '0';
+      article.style.cursor = 'pointer';
 
-   let imgSrc = '/assets/images/image.png';
-      if (evento.imagens && evento.imagens.length > 0) {
-        imgSrc = `https://drive.google.com/thumbnail?id=${evento.imagens[0].caminhoCloud}&sz=w800`;
+      article.addEventListener('click', () => {
+          window.location.href = `/assets/pages/evento.html?id=${evento.id}`;
+      });
+
+      let imgSrc = '/assets/images/pinguim.jpg';
+      if (evento.imagem != null) {
+        imgSrc = `https://drive.google.com/thumbnail?id=${evento.imagem.caminhoCloud}&sz=w800`;
       }
 
       let localStr = 'Local a definir';
       if (evento.endereco) {
-        localStr = `${evento.endereco.rua}, ${evento.endereco.numero} - ${evento.endereco.bairro}, ${evento.endereco.cidade.descricao}`;
+        localStr = `${evento.endereco.rua}, ${evento.endereco.numero} - ${evento.endereco.bairro}, ${evento.endereco.cidadeNome}`;
       }
 
       const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' };
       const dateStr = eventDate.toLocaleDateString('pt-BR', dateOptions);
 
       article.innerHTML = `
-        <h3 class="event-card__name">${evento.nome}</h3>
+        <h3 class="event-card__name">${escapeHtml(evento.nome)}</h3>
         <div class="event-card__img-wrap">
-          <img src="${imgSrc}" alt="${evento.nome}" class="event-card__img">
+          <img src="${imgSrc}" alt="${escapeHtml(evento.nome)}" class="event-card__img">
         </div>
         <div class="event-card__info">
-          <p><strong>Data:</strong> ${dateStr}</p>
-          <p><strong>Local:</strong> ${localStr}</p>
-          <p><strong>Detalhes:</strong> ${evento.descricao}</p>
+          <p><strong>Data:</strong> ${escapeHtml(dateStr)}</p>
+          <p><strong>Local:</strong> ${escapeHtml(localStr)}</p>
         </div>
       `;
 
@@ -177,10 +328,15 @@ function setupEventCarousels() {
 
   carousels.forEach(c => {
     if (c.container && c.back && c.next) {
-      c.next.addEventListener('click', () => {
+      const newNext = c.next.cloneNode(true);
+      const newBack = c.back.cloneNode(true);
+      c.next.parentNode.replaceChild(newNext, c.next);
+      c.back.parentNode.replaceChild(newBack, c.back);
+
+      newNext.addEventListener('click', () => {
         c.container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       });
-      c.back.addEventListener('click', () => {
+      newBack.addEventListener('click', () => {
         c.container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
       });
     }
@@ -188,5 +344,4 @@ function setupEventCarousels() {
 }
 
 document.addEventListener('DOMContentLoaded', loadEventsAPI);
-
 document.addEventListener('DOMContentLoaded', initEventForm);

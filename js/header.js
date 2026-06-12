@@ -44,23 +44,33 @@ export function handleUserAuthMenu() {
       
       if (!isShowing) {
         const token = localStorage.getItem('koridraws_token');
+        const userRole = localStorage.getItem('koridraws_user_role');
         
-        if (!token) {
-          dropdown.innerHTML = `
-            <a href="/assets/pages/auth.html">Entrar</a>
-            <a href="/assets/pages/auth.html">Criar Conta</a>
-          `;
-        } else {
-          dropdown.innerHTML = `
-            <a href="/assets/pages/perfil.html">Meu Perfil</a>
-            <button id="btn-logoff">Sair</button>
-          `;
-          
+     if (!token) {
+  dropdown.innerHTML = `
+    <a href="/assets/pages/auth.html">Entrar</a>
+    <a href="/assets/pages/auth.html">Criar Conta</a>
+  `;
+} else if (userRole === 'Gerente') {
+  dropdown.innerHTML = `
+    <a href="/assets/pages/manage.html">Gerir Pedidos</a>
+    <button id="btn-logoff" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: inherit; color: #c0392b; font-weight: bold;">Sair</button>
+  `;
+} else {
+  dropdown.innerHTML = `
+    <a href="/assets/pages/perfil.html">Meu Perfil</a>
+    <button id="btn-logoff" style="width: 100%; text-align: left; background: none; border: none; padding: 10px 16px; cursor: pointer; font-family: inherit; font-size: inherit;">Sair</button>
+  `;
+}
+
+        if (token) {
           setTimeout(() => {
             const btnLogoff = document.getElementById('btn-logoff');
             if (btnLogoff) {
               btnLogoff.addEventListener('click', () => {
                 localStorage.removeItem('koridraws_token');
+                localStorage.removeItem('koridraws_user_name');
+                localStorage.removeItem('koridraws_user_role');
                 window.location.href = '/index.html';
               });
             }
@@ -76,26 +86,22 @@ export function handleUserAuthMenu() {
 export async function updateHeaderGreeting() {
   const greetingElement = document.getElementById('header-user-greeting');
   
-  // Se o elemento não existir na tela, aborta a função (evita erros invisíveis)
   if (!greetingElement) {
-    console.warn("[Header] Elemento #header-user-greeting não foi encontrado.");
     return;
   }
 
   const token = localStorage.getItem('koridraws_token');
 
-  // Se não houver token, mostra o link para login
   if (!token) {
     greetingElement.innerHTML = '<a href="/assets/pages/auth.html" style="text-decoration: none; color: inherit;">Entre ou Cadastre-se</a>';
     return;
   }
 
   let userName = localStorage.getItem('koridraws_user_name');
+  let userRole = localStorage.getItem('koridraws_user_role');
 
-  // Verifica se o nome não existe ou se foi salvo incorretamente como a string "undefined"
-  if (!userName || userName === "undefined" || userName === "null") {
+  if (!userName || userName === "undefined" || userName === "null" || !userRole) {
     try {
-      console.log("[Header] Buscando dados do perfil na API...");
       const response = await fetch(`${API_BASE_URL}/Perfil`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -104,20 +110,20 @@ export async function updateHeaderGreeting() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("[Header] Dados recebidos da API:", data);
         
-        // Navega até o nome dentro do objeto perfil retornado pelo seu JSON
         const fullName = data.perfil?.nome || '';
-        userName = fullName.split(' ')[0]; // Pega apenas o primeiro nome
+        userName = fullName.split(' ')[0];
+        userRole = data.perfil?.papel || 'Cliente';
         
         if (userName) {
           localStorage.setItem('koridraws_user_name', userName);
+          localStorage.setItem('koridraws_user_role', userRole);
         }
       } else {
-        console.warn("[Header] Token inválido ou expirado. Status:", response.status);
         if (response.status === 401) {
           localStorage.removeItem('koridraws_token');
           localStorage.removeItem('koridraws_user_name');
+          localStorage.removeItem('koridraws_user_role');
           greetingElement.innerHTML = '<a href="/assets/pages/auth.html" style="text-decoration: none; color: inherit;">Entre ou Cadastre-se</a>';
           return;
         }
@@ -127,17 +133,32 @@ export async function updateHeaderGreeting() {
     }
   }
 
-  // Define a mensagem final
   if (userName && userName !== "undefined" && userName !== "null") {
     greetingElement.textContent = `Olá, ${userName}!`;
   } else {
     greetingElement.textContent = "Olá!";
   }
+
+  ajustarInterfaceGerente();
 }
+
+export function ajustarInterfaceGerente() {
+  const papel = localStorage.getItem('koridraws_user_role');
+
+  if (papel === 'Gerente') {
+    const carrinhoNavBtns = document.querySelectorAll('.cart-btn, [aria-label="Carrinho"]');
+    carrinhoNavBtns.forEach(btn => {
+        btn.style.display = 'none';
+    });
+  }
+}
+
 function initHeader() {
   handleNavbarItem();
   handleUserAuthMenu();
+  updateHeaderGreeting();
   initCartGlobal();
+  ajustarInterfaceGerente();
 }
 
 if (document.readyState === 'loading') {

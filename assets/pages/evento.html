@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalhes do Evento – Koridraws</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/evento.css">
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+  <div id="navbar-placeholder"></div>
+  
+  <main class="evento-main-container">
+    <div id="evento-container" style="display: none; width: 100%; justify-content: center;">
+      <div class="evento-frame">
+        
+        <div class="evento-header">
+          <h1 class="evento-title" id="evento-title"></h1>
+        </div>
+        
+        <div class="evento-info-grid">
+          <div class="evento-info-box">
+            <strong>Data e Hora:</strong>
+            <span id="evento-date"></span>
+          </div>
+          <div class="evento-info-box">
+            <strong>Local:</strong>
+            <span id="evento-location"></span>
+          </div>
+        </div>
+
+        <div class="evento-description-box">
+          <strong>Sobre o Evento:</strong>
+          <p id="evento-description"></p>
+        </div>
+
+        <div id="evento-slider-section" style="display: none;">
+          <div class="evento-slider-wrapper">
+            <button class="evento-nav-btn prev" id="btn-evento-prev">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            
+            <div class="evento-carousel" id="evento-carousel-track">
+            </div>
+
+            <button class="evento-nav-btn next" id="btn-evento-next">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+          <div class="evento-bullets" id="evento-bullets-container">
+          </div>
+        </div>
+
+        <div id="gerente-actions" style="display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid #eaeaea; text-align: right;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 14px; color: #c0392b; font-weight: bold;">Zona de Perigo</span>
+            <button id="btn-delete-evento" class="event-form-btn" style="background-color: #c0392b; width: auto; padding: 12px 24px; cursor: pointer;">Excluir Evento</button>
+          </div>
+          <div id="msg-delete-evento" style="margin-top: 8px; font-size: 14px; font-weight: bold; text-align: right;"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="evento-error" style="display: none; text-align: center; padding: 64px 24px;">
+      <h2 style="font-family: var(--font-display); color: #c0392b;">Evento não encontrado</h2>
+      <p style="font-family: var(--font-body); margin-top: 16px;">O evento que procura não existe ou foi removido.</p>
+      <a href="/assets/pages/agenda.html" class="event-form-btn" style="display: inline-block; margin-top: 24px; text-decoration: none; padding: 12px 24px; width: auto;">Voltar para a Agenda</a>
+    </div>
+  </main>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script type="module" src="/js/index.js"></script>
+  <script type="module" src="/js/header.js"></script>
+  <script type="module" src="/js/evento.js"></script>
+
+</body>
+</html>

@@ -79,16 +79,18 @@ if (formRegister) {
       const dataText = await resLogin.text();
       let token = dataText;
       let primeiroNome = nome.split(' ')[0];
+      let papelUsuario = "Cliente";
 
       try {
         const js = JSON.parse(dataText);
         if (js.token) token = js.token;
-        if (js.nome) primeiroNome = js.nome.split(' ')[0];
-        else if (js.perfil && js.perfil.nome) primeiroNome = js.perfil.nome.split(' ')[0];
+        if (js.usuario && js.usuario.nome) primeiroNome = js.usuario.nome.split(' ')[0];
+        if (js.usuario && js.usuario.papel) papelUsuario = js.usuario.papel;
       } catch(err) {}
 
       localStorage.setItem('koridraws_token', token);
       localStorage.setItem('koridraws_user_name', primeiroNome);
+      localStorage.setItem('koridraws_user_role', papelUsuario);
       window.location.href = '/assets/pages/perfil.html';
 
     } catch (error) {
@@ -126,16 +128,18 @@ if (formLogin) {
       const dataText = await response.text();
       let token = dataText;
       let primeiroNome = "Usuário";
+      let papelUsuario = "Cliente";
 
       try {
         const js = JSON.parse(dataText);
         if (js.token) token = js.token;
-        if (js.nome) primeiroNome = js.nome.split(' ')[0];
-        else if (js.perfil && js.perfil.nome) primeiroNome = js.perfil.nome.split(' ')[0];
+        if (js.usuario && js.usuario.nome) primeiroNome = js.usuario.nome.split(' ')[0];
+        if (js.usuario && js.usuario.papel) papelUsuario = js.usuario.papel;
       } catch(err) {}
 
       localStorage.setItem('koridraws_token', token);
       localStorage.setItem('koridraws_user_name', primeiroNome);
+      localStorage.setItem('koridraws_user_role', papelUsuario);
       window.location.href = '/index.html';
 
     } catch (error) {
