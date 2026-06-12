@@ -310,7 +310,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                         msgContainer.textContent = "Produto atualizado com sucesso!";
                         msgContainer.style.color = "#27ae60";
                     }
-                    
+                formEditarProduto.reset();
                 carregarDetalhesDoProduto();
 
                 } else {
@@ -355,6 +355,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                         msgEstoque.textContent = "Estoque atualizado com sucesso!";
                         msgEstoque.style.color = "#27ae60";
                     }
+                    formEditarEstoque.reset();
                     carregarDetalhesDoProduto();
                 } else {
                     throw new Error("Erro ao atualizar estoque.");
