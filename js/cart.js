@@ -169,7 +169,9 @@ export function renderCartModal() {
 
   let cartContainer = modalCart.querySelector('.cart-items-list');
   let totalContainer = modalCart.querySelector('.cart-total-info');
+  let checkoutContainer = modalCart.querySelector('.checkout-container');
 
+  // Inicialização da estrutura se ainda não existir
   if (!cartContainer) {
     modalCart.innerHTML = `
       <div class="cart-header" style="display:flex; justify-content:space-between; align-items:center; padding: 24px; border-bottom: 2px solid #000;">
@@ -179,11 +181,12 @@ export function renderCartModal() {
       <div class="cart-items-list" style="display:flex; flex-direction:column; gap: 16px; padding: 24px; flex-grow: 1; overflow-y: auto;"></div>
       <div class="cart-footer" style="padding: 24px; border-top: 2px solid #000; background: #fff;">
         <div class="cart-total-info" style="display:flex; justify-content:space-between; font-family: var(--font-display); font-weight:900; font-size: 20px; margin-bottom: 24px; color: var(--text-title);"></div>
-        <a href="/assets/pages/checkout.html" class="buy-btn" style="text-align:center; display:block; width: 100%; text-decoration: none;">Finalizar Compra</a>
+        <div class="checkout-container"></div>
       </div>
     `;
     cartContainer = modalCart.querySelector('.cart-items-list');
     totalContainer = modalCart.querySelector('.cart-total-info');
+    checkoutContainer = modalCart.querySelector('.checkout-container');
   }
 
   const cart = getCart();
@@ -193,10 +196,12 @@ export function renderCartModal() {
   if (cart.length === 0) {
     cartContainer.innerHTML = '<p style="font-family: var(--font-body); color: var(--text-primary); text-align: center; margin-top: 40px;">O seu carrinho está vazio.</p>';
     totalContainer.innerHTML = '';
+    checkoutContainer.innerHTML = ''; // Botão escondido
     updateCartBadge();
     return;
   }
 
+  // Renderizar itens
   cart.forEach(item => {
     total += item.preco * item.quantidade;
     const formatPrice = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.preco);
@@ -225,11 +230,18 @@ export function renderCartModal() {
     `;
   });
 
+  // Mostrar Total
   totalContainer.innerHTML = `
     <span>Total:</span>
     <span>${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(total)}</span>
   `;
 
+  // Mostrar Botão Finalizar Compra
+  checkoutContainer.innerHTML = `
+    <a href="/assets/pages/checkout.html" class="buy-btn" style="text-align:center; display:block; width: 100%; text-decoration: none;">Finalizar Compra</a>
+  `;
+
+  // Eventos de Qtd e Remover
   modalCart.querySelectorAll('.qtd-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const id = e.target.dataset.id;

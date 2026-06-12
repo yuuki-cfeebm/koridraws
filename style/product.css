@@ -1,7 +1,6 @@
 .products-main {
   width: 100%;
-  min-height: calc(100vh - 150px);
-  padding: 40px 16px 80px;
+
   display: flex;
   justify-content: center;
 }
@@ -33,8 +32,10 @@
   gap: 32px;
   width: 100%;
   justify-items: center;
-  min-height: 480px;
+  min-height: 10px;
 }
+
+
 
 /* Garante que o card ocupe o espaço corretamente no grid sem amassar */
 .products-grid .card {
@@ -68,6 +69,20 @@
   overflow: visible;
 }
 
+.page-btn {
+  background: transparent;
+  border: 2px solid var(--cor-amarelo-teste);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--cor-amarelo-teste);
+  overflow: visible;
+}
+
 .filter-btn:hover {
   background: #f0f0f0;
 }
@@ -75,4 +90,16 @@
 .filter-btn.active {
   background: var(--text-title);
   color: #fff;
+}
+
+.page-btn.active {
+ background: var(--text-title);
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #ccc;
 }

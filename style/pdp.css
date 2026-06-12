@@ -2,41 +2,50 @@
   display: flex;
   align-items: start;
   gap: 20px;
-  padding: 60px 0px;
+  padding: 40px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  max-width: 1200px;
+  margin: 40px auto;
+  box-sizing: border-box; /* Garante que o padding não quebre a largura */
 }
 
 .content-left {
   display: flex;
   flex-direction: row-reverse;
   align-items: start;
-  max-width: 60%;
-  width: 100%;
   gap: 16px;
+  flex: 1; /* Ocupa o espaço proporcional */
+  min-width: 0; /* IMPORTANTE: Impede que o conteúdo vaze da div */
 }
 
 .container-imgs {
   width: 120px;
-  height: auto;
+  flex-shrink: 0; /* Impede que as miniaturas encolham */
   display: flex;
   flex-direction: column;
   gap: 16px;
-
 }
 
 .img-other {
   width: 100px;
   height: 100px;
+  flex-shrink: 0;
   object-fit: cover;
   cursor: pointer;
   opacity: 0.6;
   transition: all 0.3s ease;
   display: block;
+  border-radius: 8px;
+  aspect-ratio: 1 / 1; 
 }
 
 .img-other.active {
-    opacity: 1;
-    outline: 2px solid black;
-    outline-offset: -2px;
+  opacity: 1;
+  outline: 2px solid black;
+  outline-offset: -2px;
 }
 
 .img-other:hover {
@@ -44,21 +53,26 @@
 }
 
 .img-main {
-  width: 600px;
-  height: 600px;
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  min-width: 0; /* IMPORTANTE: Permite que a imagem encolha se o container for pequeno */
 }
 
 .content-right {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* gap: 56px; */
   max-width: 40%;
   width: 100%;
-  height:600px;
+  flex-shrink: 0; /* Impede que o lado direito seja comprimido */
+  height: 600px;
 }
 
+/* --- Restante dos estilos mantidos iguais --- */
 .info-product {
   display: flex;
   flex-direction: column;
@@ -108,7 +122,6 @@
 .add-itens span {
   font-size: 20px;
   font-weight: 500;
-  /* max-width: 50px; */
   width: 40px;
   text-align: center;
 }
@@ -127,7 +140,6 @@
 .calc-frete {
   display: flex;
   align-items: center;
-  /* gap: 4px; */
   border: 2px solid black;
   border-radius: 12px;
   overflow: hidden;

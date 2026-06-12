@@ -292,10 +292,6 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Put/${produtoEditavel.id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                    },
                     body: formData
                 });
 
@@ -338,10 +334,6 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/${produtoEditavel.id}/estoque`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                    },
                     body: formData
                 });
 
@@ -382,11 +374,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
 
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Delete/${produtoEditavel.id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                    }
+                    method: 'DELETE'
                 });
 
                 if (response.ok) {

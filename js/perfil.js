@@ -171,7 +171,7 @@ function renderPedidos(pedidos) {
       <div class="pedido-header" style="border-bottom: 1px solid #ccc; margin-bottom: 12px; padding-bottom: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="margin: 0; font-family: var(--font-display);">Pedido #${pedido.id}</h4>
-          <button class="btn-detalhes-pedido" data-id="${pedido.id}" style="background: transparent; border: 1px solid #000; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-family: var(--font-body); font-size: 0.85em; font-weight: bold;">Ver Detalhes</button>
+         
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: var(--text-primary);">
           <span style="display: flex; align-items: center; gap: 6px;"><strong>Status:</strong> ${iconeStatus} ${statusUI}</span>
@@ -267,7 +267,7 @@ async function editEndereco(id, enderecos) {
     selectCidade.disabled = true;
   }
 
-  formTitle.textContent = 'Editar Morada';
+  formTitle.textContent = 'Editar Endereço';
   formEnderecoContainer.style.display = 'block';
   
   formEnderecoContainer.scrollIntoView({ behavior: 'smooth' });
@@ -288,7 +288,7 @@ async function deleteEndereco(id) {
 
     await loadProfile();
   } catch (error) {
-    alert('Erro ao remover a morada.');
+    alert('Erro ao remover o endereço.');
   }
 }
 
@@ -318,7 +318,7 @@ function initProfile() {
     btnNovoEndereco.addEventListener('click', () => {
       formEndereco.reset();
       document.getElementById('end-id').value = '';
-      formTitle.textContent = 'Adicionar Nova Morada';
+      formTitle.textContent = 'Adicionar Novo Endereço';
       selectCidade.innerHTML = '<option value="" disabled selected>Selecione um estado primeiro</option>';
       selectCidade.disabled = true;
       formEnderecoContainer.style.display = 'block';
@@ -371,7 +371,7 @@ function initProfile() {
         formEndereco.reset();
         await loadProfile();
       } catch (error) {
-        alert('Erro ao guardar a morada.');
+        alert('Erro ao guardar o endereço.');
       }
     });
   }

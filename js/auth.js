@@ -166,9 +166,6 @@ if (formForgot) {
         try {
             const response = await fetch(`${API_BASE_URL}/Auth/esqueci-senha`, {
                 method: 'POST',
-                headers: {
-                    'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                },
                 body: formData
             });
 
@@ -214,9 +211,6 @@ if (formReset) {
         try {
             const response = await fetch(`${API_BASE_URL}/Auth/resetar-senha`, {
                 method: 'POST',
-                headers: {
-                    'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                },
                 body: formData
             });
 

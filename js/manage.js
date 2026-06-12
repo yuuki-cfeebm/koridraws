@@ -44,10 +44,6 @@ async function initManage() {
 
     try {
         const response = await fetch(`${API_BASE_URL}/Pedidos`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'X-Admin-Key': 'SUA_CHAVE_AQUI'
-            }
         });
 
         if (!response.ok) {
@@ -229,10 +225,6 @@ function renderPedidos(pedidos, container) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Pedidos/status`, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'X-Admin-Key': 'SUA_CHAVE_AQUI'
-                    },
                     body: formData
                 });
 

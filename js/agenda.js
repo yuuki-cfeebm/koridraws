@@ -108,19 +108,13 @@ function initEventForm() {
   }
 
   const imageSelect = document.getElementById('event-image');
-  const imagePreview = document.getElementById('image-preview');
 
   if (imageSelect) {
     imageSelect.addEventListener('change', (e) => {
       if (e.target.files.length > 4) {
         showMessage('Por favor, selecione no máximo 4 imagens.', true);
         e.target.value = '';
-        if (imagePreview) imagePreview.src = '';
-      } else if (e.target.files.length > 0 && imagePreview) {
-        imagePreview.src = URL.createObjectURL(e.target.files[0]);
-      } else if (e.target.files.length === 0 && imagePreview) {
-        imagePreview.src = '';
-      }
+              } 
     });
   }
 
@@ -147,13 +141,13 @@ function initEventForm() {
       const cidadeId = document.getElementById('event-cidade')?.value;
 
       if (!title || !dateValue || !rua || !numero || !bairro || !cep || !cidadeId) {
-        showMessage('Preencha os campos obrigatórios do evento e da morada.', true);
+        showMessage('Preencha os campos obrigatórios do evento e do endereço.', true);
         return;
       }
 
       if (btnSubmit) {
           btnSubmit.disabled = true;
-          btnSubmit.textContent = "A criar morada...";
+          btnSubmit.textContent = "Criando endereço...";
       }
 
       showMessage('', false);
@@ -169,22 +163,18 @@ function initEventForm() {
 
         const resAddress = await fetch(`${API_BASE_URL}/Enderecos/Post`, {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'X-Admin-Key': 'SUA_CHAVE_AQUI'
-            },
             body: addressFormData
         });
 
         if (!resAddress.ok) {
-            throw new Error('Erro ao criar a morada.');
+            throw new Error('Erro ao criar a endereço.');
         }
 
         const addressData = await resAddress.json();
         const novoEnderecoId = addressData.id;
 
         if (btnSubmit) {
-            btnSubmit.textContent = "A criar evento...";
+            btnSubmit.textContent = "Criando evento...";
         }
 
         const eventFormData = new FormData();
@@ -204,10 +194,6 @@ function initEventForm() {
 
         const resEvent = await fetch(`${API_BASE_URL}/Eventos/Post`, {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'X-Admin-Key': 'SUA_CHAVE_AQUI'
-            },
             body: eventFormData
         });
 
@@ -215,7 +201,7 @@ function initEventForm() {
             throw new Error('Erro ao criar o evento.');
         }
 
-        showMessage('Morada e Evento adicionados com sucesso!', false);
+        showMessage('Evento adicionado com sucesso!', false);
         form.reset();
         if (imagePreview) imagePreview.src = '';
         
