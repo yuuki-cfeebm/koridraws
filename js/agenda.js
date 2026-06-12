@@ -244,10 +244,23 @@ async function loadEventsAPI() {
     const eventos = await response.json();
     const today = new Date();
 
+    const eventosProximos = [];
+    const eventosPassados = [];
+
     eventos.forEach(evento => {
       const eventDate = new Date(evento.data);
-      const isPast = eventDate < today;
+      if (eventDate < today) {
+        eventosPassados.push(evento);
+      } else {
+        eventosProximos.push(evento);
+      }
+    });
 
+    eventosProximos.sort((a, b) => new Date(a.data) - new Date(b.data));
+    eventosPassados.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+    function criarCartaoEvento(evento, isPast, container) {
+      const eventDate = new Date(evento.data);
       const article = document.createElement('article');
       article.className = `event-card ${isPast ? 'event-card--past' : 'event-card--upcoming'}`;
       article.style.minWidth = '280px'; 
@@ -282,12 +295,11 @@ async function loadEventsAPI() {
         </div>
       `;
 
-      if (isPast) {
-        pastContainer.appendChild(article);
-      } else {
-        upcomingContainer.appendChild(article);
-      }
-    });
+      container.appendChild(article);
+    }
+
+    eventosProximos.forEach(evento => criarCartaoEvento(evento, false, upcomingContainer));
+    eventosPassados.forEach(evento => criarCartaoEvento(evento, true, pastContainer));
 
     setupEventCarousels();
 

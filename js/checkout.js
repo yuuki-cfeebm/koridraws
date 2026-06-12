@@ -427,6 +427,8 @@ async function finalizarPedido(event) {
         });
 
         if (resposta.ok) {
+            const dadosDoPedido = await resposta.json();
+            localStorage.setItem('koridraws_novo_pedido_id', dadosDoPedido.id);
             mostrarMensagem("Pedido criado com sucesso! Redirecionando...", false);
             clearCart();
             setTimeout(() => {

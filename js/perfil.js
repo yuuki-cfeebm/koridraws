@@ -77,9 +77,82 @@ async function loadProfile() {
 
     renderEnderecos(data.enderecos || []);
     renderPedidos(data.pedidos || []);
+    checkNovoPedidoPopup(data.pedidos || []);
   } catch (error) {
     if (perfilNome) perfilNome.textContent = "Erro ao carregar dados";
   }
+}
+
+function exibirModalQRCode(pedido, tituloModal, textoModal) {
+  let overlay = document.getElementById('modal-qrcode-overlay');
+  
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'modal-qrcode-overlay';
+    overlay.className = 'modal-qrcode-overlay';
+
+    overlay.innerHTML = `
+      <div class="modal-qrcode-content">
+        <h3 id="modal-qr-titulo"></h3>
+        <p id="modal-qr-msg"></p>
+        <div id="qrcode-popup-container"></div>
+        <button id="btn-fechar-modal-qrcode">
+          Fechar
+        </button>
+      </div>
+    `;
+    
+    document.body.appendChild(overlay);
+
+    document.getElementById('btn-fechar-modal-qrcode').addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
+  }
+
+  document.getElementById('modal-qr-titulo').textContent = tituloModal;
+  document.getElementById('modal-qr-msg').textContent = textoModal;
+
+  overlay.style.display = 'flex';
+  const container = document.getElementById('qrcode-popup-container');
+  container.innerHTML = '';
+
+  let texto = `PEDIDO #${pedido.id}\n`;
+  texto += `Data: ${new Date(pedido.dataEmissao).toLocaleString('pt-BR')}\n`;
+  texto += `Valor Total: R$ ${pedido.valorTotal.toFixed(2)}\n`;
+  texto += `Itens:\n`;
+
+  if (pedido.itens) {
+    pedido.itens.forEach(item => {
+      texto += `- ${item.quantidade}x ${item.nomeProduto} (R$ ${item.precoUnitario.toFixed(2)})\n`;
+    });
+  }
+
+  new QRCode(container, {
+    text: texto,
+    width: 200,
+    height: 200,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
+function checkNovoPedidoPopup(pedidos) {
+  const novoPedidoId = localStorage.getItem('koridraws_novo_pedido_id');
+  
+  if (!novoPedidoId) return;
+
+  const pedido = pedidos.find(p => p.id.toString() === novoPedidoId.toString());
+  
+  if (!pedido) return;
+
+  localStorage.removeItem('koridraws_novo_pedido_id');
+
+  exibirModalQRCode(
+    pedido, 
+    "Pedido Confirmado!", 
+    "O seu pedido foi recebido com sucesso. Escaneie o QR Code abaixo para visualizar os detalhes e proceder com o pagamento."
+  );
 }
 
 function renderEnderecos(enderecos) {
@@ -87,7 +160,7 @@ function renderEnderecos(enderecos) {
   enderecosList.innerHTML = '';
 
   if (!enderecos || enderecos.length === 0) {
-    enderecosList.innerHTML = '<p class="empty-state">Não possui nenhuma morada guardada.</p>';
+    enderecosList.innerHTML = '<p class="empty-state">Não possui nenhum endereço.</p>';
     return;
   }
 
@@ -106,9 +179,9 @@ function renderEnderecos(enderecos) {
         <p>${end.bairro} - CEP: ${end.cep}</p>
         <p>${formatCidadeEstado}</p>
       </div>
-      <div class="endereco-actions" style="margin-top: 12px; display: flex; gap: 8px;">
-        <button class="btn-edit" data-id="${end.id}" style="background: #3498db; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Editar</button>
-        <button class="btn-delete" data-id="${end.id}" style="background: #c0392b; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Remover</button>
+      <div class="endereco-actions-container">
+        <button class="btn-edit" data-id="${end.id}">Editar</button>
+        <button class="btn-delete" data-id="${end.id}">Remover</button>
       </div>
     `;
 
@@ -136,11 +209,6 @@ function renderPedidos(pedidos) {
   pedidos.forEach(pedido => {
     const card = document.createElement('div');
     card.className = 'pedido-card';
-    card.style.border = '1px solid #e0e0e0';
-    card.style.borderRadius = '8px';
-    card.style.padding = '16px';
-    card.style.marginBottom = '16px';
-    card.style.background = '#fafafa';
 
     const dataFormatada = new Date(pedido.dataEmissao).toLocaleDateString('pt-BR');
     const valorFormatado = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pedido.valorTotal);
@@ -150,45 +218,66 @@ function renderPedidos(pedidos) {
     const iconeStatus = statusIconMap[pedido.status] || '';
 
     let itensHtml = '';
-    pedido.itens.forEach(item => {
-      const precoItem = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.precoUnitario);
-      itensHtml += `<li style="margin-bottom: 4px;">${item.quantidade}x ${item.nomeProduto} - ${precoItem}</li>`;
-    });
+    if (pedido.itens && pedido.itens.length > 0) {
+      pedido.itens.forEach(item => {
+        const precoItem = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.precoUnitario);
+        itensHtml += `<li class="pedido-item-li">${item.quantidade}x ${item.nomeProduto} - ${precoItem}</li>`;
+      });
+    }
 
     let freteHtml = '';
-    if (pedido.frete) {
+    if (pedido.frete && pedido.frete.valor !== undefined) {
       const valorFrete = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(pedido.frete.valor);
       freteHtml = `
-        <div style="border-top: 1px dashed #ccc; margin-top: 8px; padding-top: 8px;">
-            <p style="font-size: 0.9em; margin: 0; color: var(--text-primary);">
-                <strong>Frete (${pedido.frete.servico}):</strong> ${valorFrete} <span style="color: #666; font-size: 0.9em;">(Até ${pedido.frete.prazoDias} dias úteis)</span>
-            </p>
+        <div class="pedido-frete-container">
+          <p class="pedido-frete-text">
+            <strong>Frete (${pedido.frete.servico}):</strong> ${valorFrete} <span class="pedido-frete-obs">(Até ${pedido.frete.prazoDias || ''} dias úteis)</span>
+          </p>
         </div>
       `;
     }
 
+    const btnVerDetalhes = pedido.status === 'AguardandoPagamento' 
+      ? `<button class="btn-detalhes-pedido" data-id="${pedido.id}">Realizar Pagamento</button>` 
+      : '';
+
     card.innerHTML = `
-      <div class="pedido-header" style="border-bottom: 1px solid #ccc; margin-bottom: 12px; padding-bottom: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h4 style="margin: 0; font-family: var(--font-display);">Pedido #${pedido.id}</h4>
-         
+      <div class="pedido-header">
+        <div class="pedido-header-top">
+          <h4 class="pedido-header-title">Pedido #${pedido.id}</h4>
+          ${btnVerDetalhes}
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.9em; color: var(--text-primary);">
-          <span style="display: flex; align-items: center; gap: 6px;"><strong>Status:</strong> ${iconeStatus} ${statusUI}</span>
+        <div class="pedido-header-bottom">
+          <span class="pedido-status-badge"><strong>Status:</strong> ${iconeStatus} ${statusUI}</span>
           <span><strong>Data:</strong> ${dataFormatada}</span>
           <span><strong>Pagamento:</strong> ${pagamentoUI}</span>
         </div>
       </div>
       <div class="pedido-body">
-        <p style="font-size: 0.9em; margin-bottom: 8px;"><strong>Entrega:</strong> ${pedido.enderecoEntregaResumido}</p>
-        <ul class="pedido-items-list" style="margin-bottom: 0;">
+        <p class="pedido-entrega-text"><strong>Entrega:</strong> ${pedido.enderecoEntregaResumido || pedido.enderecoCompleto || 'Endereço não informado'}</p>
+        <ul class="pedido-items-list">
           ${itensHtml}
         </ul>
         ${freteHtml}
-        <p style="text-align: right; font-size: 1.1em; margin-top: 12px; margin-bottom: 0;"><strong>Total: ${valorFormatado}</strong></p>
+        <p class="pedido-total-text"><strong>Total: ${valorFormatado}</strong></p>
       </div>
     `;
     pedidosList.appendChild(card);
+  });
+
+  document.querySelectorAll('.btn-detalhes-pedido').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const pedidoId = e.target.dataset.id;
+      const pedido = pedidos.find(p => p.id.toString() === pedidoId.toString());
+
+      if (pedido) {
+        exibirModalQRCode(
+          pedido, 
+          `Pedido #${pedido.id}`, 
+          "Escaneie o QR Code abaixo para visualizar os detalhes deste pedido e prosseguir com o pagamento."
+        );
+      }
+    });
   });
 }
 
@@ -288,7 +377,7 @@ async function deleteEndereco(id) {
 
     await loadProfile();
   } catch (error) {
-    alert('Erro ao remover o endereço.');
+    alert('Erro ao remover endereço.');
   }
 }
 
@@ -371,7 +460,7 @@ function initProfile() {
         formEndereco.reset();
         await loadProfile();
       } catch (error) {
-        alert('Erro ao guardar o endereço.');
+        alert('Erro ao salvar endereço.');
       }
     });
   }

@@ -54,7 +54,7 @@ async function loadBannerEvents() {
 
     if (nextEvents.length === 0) {
       const clone = templateBanner.content.cloneNode(true);
-      clone.querySelector('.img-banner').src = '/assets/images/image.png'; 
+      clone.querySelector('.img-banner').src = '/assets/images/pinguim.jpg'; 
       clone.querySelector('.img-banner').alt = 'Nenhum evento';
       clone.querySelector('.event-name-label').textContent = "Nenhum evento no momento";
       carousel.appendChild(clone);
@@ -70,11 +70,25 @@ async function loadBannerEvents() {
       
       const imgUrl = event.imagem && event.imagem.caminhoCloud 
         ? `https://drive.google.com/thumbnail?id=${event.imagem.caminhoCloud}&sz=w800` 
-        : '/assets/images/image.png';
+        : '/assets/images/pinguim.jpg';
 
-      clone.querySelector('.img-banner').src = imgUrl;
-      clone.querySelector('.img-banner').alt = event.nome;
-      clone.querySelector('.event-name-label').textContent = event.nome;
+      const imgBanner = clone.querySelector('.img-banner');
+      const labelBanner = clone.querySelector('.event-name-label');
+      
+      imgBanner.src = imgUrl;
+      imgBanner.alt = event.nome;
+      labelBanner.textContent = event.nome;
+
+      // Adicionando evento de clique para redirecionamento
+      imgBanner.style.cursor = 'pointer';
+      labelBanner.style.cursor = 'pointer';
+      
+      imgBanner.addEventListener('click', () => {
+          window.location.href = `/assets/pages/evento.html?id=${event.id}`;
+      });
+      labelBanner.addEventListener('click', () => {
+          window.location.href = `/assets/pages/evento.html?id=${event.id}`;
+      });
       
       carousel.appendChild(clone);  
     });
@@ -133,19 +147,6 @@ async function loadBannerEvents() {
   }
 }
 
-// const bannerText = [{ src: "/assets/images/image-teste1.png", text: "Bottons, Adesivos e Prints!", color: "000"}];
-// const templateBannerText = document.querySelector('.section-template');
-// const containerBannerText = document.querySelector('.banner-text');
-
-// if (templateBannerText && containerBannerText) {
-//   bannerText.forEach(item => {
-//     const clone = templateBannerText.content.cloneNode(true);
-//     clone.querySelector('.banner-content p').textContent = item.text;
-//     clone.querySelector('.banner-text-img').src = item.src;
-//     containerBannerText.appendChild(clone);
-//   });
-// }
-
 async function loadHomeProductsAPI() {
   const templateCards = document.querySelector('.template-cards');
   const sectionNovidades = document.querySelector('#section-novidades');
@@ -179,16 +180,11 @@ async function loadHomeProductsAPI() {
       renderProductList(sectionUltimas, ultimas, templateCards);
     }
 
-    // ... seu código do discountProducts.forEach(...) ...
-
-    // --- NOVA LÓGICA DO CARROSSEL DE PRODUTOS ---
     const cardsContainer = document.querySelector('#section-discount'); 
     const productCarousel = document.querySelector('.container-product-carousel');
     const btnNextProduct = productCarousel.querySelector('.next.btn-product');
     const btnBackProduct = productCarousel.querySelector('.back.btn-product');
 
-    // Define o quanto a tela vai rolar para o lado a cada clique (ex: 300 pixels)
-    // Você pode ajustar esse valor para o tamanho exato do seu card!
     const scrollAmount = 377; 
 
     btnNextProduct?.addEventListener('click', () => {
