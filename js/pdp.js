@@ -310,9 +310,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                         msgContainer.textContent = "Produto atualizado com sucesso!";
                         msgContainer.style.color = "#27ae60";
                     }
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
+                    formEditarProduto.reset();
                 } else {
                     throw new Error("Erro ao atualizar.");
                 }
@@ -355,9 +353,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                         msgEstoque.textContent = "Estoque atualizado com sucesso!";
                         msgEstoque.style.color = "#27ae60";
                     }
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
+                    formEditarEstoque.reset();
                 } else {
                     throw new Error("Erro ao atualizar estoque.");
                 }
