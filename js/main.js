@@ -213,8 +213,8 @@ function renderProductList(container, productsList, template) {
     
     const imgEl = clone.querySelector('.img-card');
     let imageUrl = '/assets/images/image.png';
-    if (produto.imagens && produto.imagens.length > 0) {
-      imageUrl = `https://drive.google.com/thumbnail?id=${produto.imagens[0].caminhoCloud}&sz=w800`;
+    if (produto.imagem) {
+      imageUrl = `https://drive.google.com/thumbnail?id=${produto.imagem.caminhoCloud}&sz=w800`;
     }
     imgEl.src = imageUrl;
 

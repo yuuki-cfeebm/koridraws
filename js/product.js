@@ -160,8 +160,8 @@ function renderProducts(listaParaRenderizar) {
         const imgEl = clone.querySelector('.img-card');
         let imageUrl = '/assets/images/image.png';
         
-        if (produto.imagens && produto.imagens.length > 0) {
-            const fileId = produto.imagens[0].caminhoCloud || produto.imagens[0].url;
+        if (produto.imagem) {
+            const fileId = produto.imagem.caminhoCloud || produto.imagem.url;
             imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
         }
         if (imgEl) imgEl.src = imageUrl;
