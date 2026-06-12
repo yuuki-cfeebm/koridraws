@@ -14,42 +14,47 @@
   <main>
     
     <div id="gerente-edit-panel" style="display: none; width: 100%; max-width: 800px; margin: 24px auto; background: #f9f9f9; padding: 24px; border-radius: 12px; border: 1px solid #e0e0e0;">
-      <h3 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 16px;">Editar Produto</h3>
+      <h3 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 16px;">Painel do Gerente: Editar Produto</h3>
       
-      <div class="form-row">
-        <label for="edit-item-nome">Nome do Produto</label>
-        <input type="text" id="edit-item-nome" form="form-editar-produto" required>
-      </div>
-      
-      <div class="form-row" style="margin-top: 16px;">
-        <label for="edit-item-preco">Preço</label>
-        <input type="number" step="0.01" min="0" id="edit-item-preco" form="form-editar-produto" required>
-      </div>
-
-      
+      <form id="form-editar-produto" class="event-form">
+        <div class="form-row">
+          <label for="edit-item-nome">Nome do Produto</label>
+          <input type="text" id="edit-item-nome" required>
+        </div>
+        
+        <div class="form-row">
+          <label for="edit-item-preco">Preço</label>
+          <input type="number" step="0.01" min="0" id="edit-item-preco" required>
+        </div>
+        
+        <div class="form-row">
+          <label>Imagens Atuais (Selecione para remover)</label>
+          <div id="edit-imagens-atuais" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;"></div>
+        </div>
+        
         <div class="form-row" style="margin-top: 16px;">
-  <label for="edit-item-estoque">Estoque Atual</label>
-  <div style="display: flex; gap: 12px;">
-    <input type="number" step="1" min="0" id="edit-item-estoque" required style="flex: 1; margin: 0;">
-    <button type="button" id="btn-atualizar-estoque" class="event-form-btn" style="background-color: #2980b9; width: auto; margin: 0; padding: 0 24px;">Atualizar Estoque</button>
-  </div>
-</div>
-<div id="msg-editar-estoque" style="margin-top: 8px; font-size: 14px; font-weight: bold;"></div>
-      
-      <div class="form-row" style="margin-top: 24px;">
-        <label>Imagens Atuais (Selecione para remover)</label>
-        <div id="edit-imagens-atuais" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;"></div>
-      </div>
-      
-      <div class="form-row" style="margin-top: 16px;">
-        <label for="edit-item-novas-imagens">Adicionar Novas Imagens</label>
-        <input type="file" id="edit-item-novas-imagens" form="form-editar-produto" multiple accept="image/*" style="background: #fff; padding: 8px;">
-      </div>
-      
-      <form id="form-editar-produto" class="event-form" style="margin-top: 24px;">
-        <div id="msg-editar-produto" style="margin-bottom: 8px; font-size: 14px; font-weight: bold;"></div>
-        <div class="form-actions">
+          <label for="edit-item-novas-imagens">Adicionar Novas Imagens</label>
+          <input type="file" id="edit-item-novas-imagens" multiple accept="image/*" style="background: #fff; padding: 8px;">
+        </div>
+        
+        <div id="msg-editar-produto" style="margin-top: 8px; font-size: 14px; font-weight: bold;"></div>
+        
+        <div class="form-actions" style="margin-top: 16px;">
           <button type="submit" class="event-form-btn">Salvar Alterações Gerais</button>
+        </div>
+      </form>
+
+      <hr style="margin: 32px 0; border: none; border-top: 1px solid #ccc;">
+
+      <h3 style="font-family: var(--font-display); margin-top: 0; margin-bottom: 16px;">Estoque</h3>
+      <form id="form-editar-estoque" class="event-form">
+        <div class="form-row">
+          <label for="edit-item-estoque">Estoque Atual</label>
+          <input type="number" step="1" min="0" id="edit-item-estoque" required>
+        </div>
+        <div id="msg-editar-estoque" style="margin-top: 8px; font-size: 14px; font-weight: bold;"></div>
+        <div class="form-actions" style="margin-top: 16px;">
+          <button type="submit" class="event-form-btn" style="background-color: #2980b9;">Atualizar Estoque</button>
         </div>
       </form>
 

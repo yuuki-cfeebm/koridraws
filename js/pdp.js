@@ -15,7 +15,7 @@ async function carregarDetalhesDoProduto() {
 
     try {
         const resposta = await fetch(`${API_BASE_URL}/Itens/${idProduct}`);
-
+        
         if (resposta.ok) {
             produtoAtual = await resposta.json();
             preencherTela(produtoAtual);
@@ -39,22 +39,22 @@ function formatDriveLink(url) {
 function preencherTela(produto) {
     const pdpTitle = document.querySelector('.pdp-title');
     pdpTitle.textContent = produto.nome;
-
+    
     const pdpPrice = document.querySelector('.pdp-price');
     pdpPrice.textContent = `R$ ${produto.preco.toFixed(2).replace('.', ',')}`;
-
+    
     const otherImgsContainer = document.querySelector('.container-imgs');
     otherImgsContainer.style.display = "none";
     otherImgsContainer.innerHTML = "";
 
     const imgMain = document.querySelector('.img-main');
-
+    
     if (produto.imagens && produto.imagens.length > 0) {
         imagemPrincipal = formatDriveLink(produto.imagens[0].url || produto.imagens[0].caminhoCloud);
         imgMain.src = imagemPrincipal;
-
+        
         otherImgsContainer.style.display = "flex";
-
+        
         produto.imagens.forEach((item, index) => {
             const newImg = document.createElement('img');
             const currentItemUrl = item.url || item.caminhoCloud;
@@ -83,8 +83,9 @@ function preencherTela(produto) {
         existingBadge.remove();
     }
 
-    const semEstoque = produto.estoque === 0;
-    const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
+    
+        const semEstoque = produto.estoque === 0;
+        const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
 
     if (poucasUnidades) {
         const badge = document.createElement('span');
@@ -107,7 +108,7 @@ function preencherTela(produto) {
         badge.style.marginLeft = '12px';
         badge.style.verticalAlign = 'middle';
         pdpPrice.appendChild(badge);
-    }
+    } 
 }
 
 function configurarControlesQuantidade() {
@@ -127,18 +128,17 @@ function configurarControlesQuantidade() {
     controlesContainer.style.display = 'flex';
     spanQuantidade.textContent = quantidadeSelecionada;
 
-    // Usando .onclick para evitar duplicação de eventos em atualizações da tela
-    btnPlus.onclick = () => {
-        quantidadeSelecionada++;
-        spanQuantidade.textContent = quantidadeSelecionada;
-    };
+    btnPlus.addEventListener('click', () => {
+            quantidadeSelecionada++;
+            spanQuantidade.textContent = quantidadeSelecionada;
+    });
 
-    btnMinus.onclick = () => {
+    btnMinus.addEventListener('click', () => {
         if (quantidadeSelecionada > 1) {
             quantidadeSelecionada--;
             spanQuantidade.textContent = quantidadeSelecionada;
         }
-    };
+    });
 }
 
 function configurarBotaoComprar() {
@@ -154,8 +154,7 @@ function configurarBotaoComprar() {
         return;
     }
 
-    // Usando .onclick para evitar que o carrinho receba múltiplos itens do mesmo clique
-    btnComprar.onclick = (e) => {
+    btnComprar.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -167,14 +166,14 @@ function configurarBotaoComprar() {
             preco: produtoAtual.preco,
             imagem: imagemPrincipal,
             quantidade: quantidadeSelecionada,
-            estoque: produtoAtual.estoque
+            estoque: produtoAtual.estoque 
         });
-    };
+    });
 }
 
 function cepMask() {
     const inputCep = document.querySelector('.cep-mask');
-    if (!inputCep) return;
+    if (!inputCep) return; 
 
     inputCep.addEventListener('input', (evento) => {
         let valor = evento.target.value;
@@ -214,7 +213,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
     inputEstoque.value = produtoEditavel.estoque || 0;
 
     containerImagensAtuais.innerHTML = '';
-
+    
     if (produtoEditavel.imagens && produtoEditavel.imagens.length > 0) {
         produtoEditavel.imagens.forEach(img => {
             const fileId = img.caminhoCloud || img.url;
@@ -258,29 +257,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
         containerImagensAtuais.textContent = 'Nenhuma imagem cadastrada.';
     }
 
-    // Validação imediata: Impede de escolher mais de 4 arquivos logo na seleção
-    if (inputNovasImagens) {
-        inputNovasImagens.onchange = (e) => {
-            const checkboxesRemover = document.querySelectorAll('.checkbox-remover-img:checked');
-            const qtdImagensAtuais = produtoEditavel.imagens ? produtoEditavel.imagens.length : 0;
-            const qtdRemover = checkboxesRemover.length;
-            const qtdNovas = e.target.files.length;
-
-            if ((qtdImagensAtuais - qtdRemover + qtdNovas) > 4) {
-                if (msgContainer) {
-                    msgContainer.textContent = "Limite ultrapassado. Selecione menos imagens novas ou marque imagens antigas para remover.";
-                    msgContainer.style.color = "#c0392b";
-                }
-                e.target.value = ''; // Limpa o input instantaneamente
-            } else {
-                if (msgContainer) msgContainer.textContent = "";
-            }
-        };
-    }
-
     if (formEditarProduto) {
-        // Usando .onsubmit para evitar múltiplos triggers da mesma função
-        formEditarProduto.onsubmit = async (e) => {
+        formEditarProduto.removeEventListener("submit");
+        formEditarProduto.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const checkboxesRemover = document.querySelectorAll('.checkbox-remover-img:checked');
@@ -314,17 +293,16 @@ function inicializarEdicaoGerente(produtoEditavel) {
 
             if (inputNovasImagens && inputNovasImagens.files.length > 0) {
                 for (let i = 0; i < inputNovasImagens.files.length; i++) {
-                    // Usando o nome "Imagens" padronizado para anexos
-                    formData.append('Imagens', inputNovasImagens.files[i]);
+                    formData.append('NovasImagens', inputNovasImagens.files[i]);
                 }
             }
 
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Put/${produtoEditavel.id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
+                               headers: {
+                'Authorization': `Bearer ${token}`,
+            },
                     body: formData
                 });
 
@@ -332,10 +310,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
                     if (msgContainer) {
                         msgContainer.textContent = "Produto atualizado com sucesso!";
                         msgContainer.style.color = "#27ae60";
-                    } 
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
+                    }
+                formEditarProduto.reset();
+                carregarDetalhesDoProduto();
 
                 } else {
                     throw new Error("Erro ao atualizar.");
@@ -349,16 +326,16 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Salvar Alterações Gerais";
             }
-        };
+        });
     }
 
     if (formEditarEstoque) {
-        // Usando .onsubmit
-        formEditarEstoque.onsubmit = async (e) => {
+        formEditarProduto.removeEventListener("submit");
+        formEditarEstoque.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const btnSubmit = formEditarEstoque.querySelector('button[type="submit"]');
-
+            
             btnSubmit.disabled = true;
             btnSubmit.textContent = "A atualizar...";
             if (msgEstoque) msgEstoque.textContent = "";
@@ -394,16 +371,15 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = "Atualizar Estoque";
             }
-        };
+        });
     }
 
     if (btnDeletarProduto) {
-        // Usando .onclick
-        btnDeletarProduto.onclick = async (e) => {
+        btnDeletarProduto.addEventListener('click', async (e) => {
             e.preventDefault();
 
             const confirmar = confirm(`Tem certeza que deseja excluir permanentemente o produto "${produtoEditavel.nome}"? Esta ação não pode ser desfeita.`);
-
+            
             if (!confirmar) return;
 
             btnDeletarProduto.disabled = true;
@@ -413,9 +389,9 @@ function inicializarEdicaoGerente(produtoEditavel) {
             try {
                 const response = await fetch(`${API_BASE_URL}/Itens/Delete/${produtoEditavel.id}`, {
                     method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    }
+                               headers: {
+                'Authorization': `Bearer ${token}`,
+            }
                 });
 
                 if (response.ok) {
@@ -437,7 +413,7 @@ function inicializarEdicaoGerente(produtoEditavel) {
                 btnDeletarProduto.disabled = false;
                 btnDeletarProduto.textContent = "Excluir Produto";
             }
-        };
+        });
     }
 }
 
