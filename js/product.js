@@ -115,7 +115,7 @@ function setupSorting() {
     sortSelect.style.fontFamily = 'var(--font-body)';
     sortSelect.style.fontWeight = 'bold';
     sortSelect.style.cursor = 'pointer';
-    sortSelect.style.backgroundColor = 'transparent';
+    sortSelect.style.backgroundColor = 'white';
 
     const options = [
         { val: 'default', text: 'Ordenar' },
