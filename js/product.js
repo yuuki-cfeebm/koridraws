@@ -236,7 +236,8 @@ function setupFilters() {
                     const nomeStr = produto.nome.toLowerCase();
                     const catStr = category.toLowerCase();
 
-                    if (catStr === 'adesivos' || catStr === 'cartela') {
+                    // O método .includes() captura automaticamente as variações no plural se buscarmos o singular
+                    if (catStr === 'adesivos' || catStr === 'adesivo' || catStr === 'cartela' || catStr === 'cartelas') {
                         return nomeStr.includes('adesivo') || nomeStr.includes('cartela');
                     }
                     if (catStr === 'bottons' || catStr === 'botton') {
@@ -244,6 +245,9 @@ function setupFilters() {
                     }
                     if (catStr === 'prints' || catStr === 'print') {
                         return nomeStr.includes('print');
+                    }
+                    if (catStr === 'chaveiros' || catStr === 'chaveiro') {
+                        return nomeStr.includes('chaveiro') || nomeStr.includes('phonecharm');
                     }
 
                     return nomeStr.includes(catStr);
