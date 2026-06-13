@@ -209,7 +209,6 @@ function initEventForm() {
 
         showMessage('Evento adicionado com sucesso!', false);
         form.reset();
-        if (imagePreview) imagePreview.src = '';
         
         const selectCidade = document.getElementById('event-cidade');
         if (selectCidade) {
