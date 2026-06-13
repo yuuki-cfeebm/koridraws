@@ -51,7 +51,7 @@ if (formRegister) {
     formDataRegistro.append('Nome', `${nome} ${sobrenome}`);
     formDataRegistro.append('Email', email);
     formDataRegistro.append('Senha', senha);
-    formDataRegistro.append('Perfil', 'Cliente');
+    formDataRegistro.append('Papel', 'Cliente');
 
     try {
       const resRegistro = await fetch(`${API_BASE_URL}/Auth/registro`, {
