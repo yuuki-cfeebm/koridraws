@@ -11,6 +11,163 @@ let ordenacaoAtual = 'default';
 const corteBaixoEstoque = 5;
 const produtosPorPagina = 9;
 
+// ==========================================
+// HANDLERS NOMEADOS PARA EVENT LISTENERS
+// ==========================================
+
+function handleSortChange(e) {
+    ordenacaoAtual = e.target.value;
+    aplicarFiltrosEOrdenacao();
+}
+
+function handleFilterClick(e) {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+
+    categoriaAtual = e.target.dataset.category;
+    aplicarFiltrosEOrdenacao();
+}
+
+function handleBtnAnteriorClick() {
+    if (paginaAtual > 1) {
+        paginaAtual--;
+        renderizarPaginaAtual();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function handleBtnProximoClick() {
+    const totalPaginas = Math.ceil(produtosFiltradosAtuais.length / produtosPorPagina);
+    if (paginaAtual < totalPaginas) {
+        paginaAtual++;
+        renderizarPaginaAtual();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function handleBtnPaginaClick(e) {
+    const page = parseInt(e.currentTarget.dataset.page, 10);
+    paginaAtual = page;
+    renderizarPaginaAtual();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleBtnComprarClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const btn = e.currentTarget;
+
+    addToCart({
+        id: btn.dataset.id,
+        nome: btn.dataset.nome,
+        preco: parseFloat(btn.dataset.preco),
+        imagem: btn.dataset.imagem,
+        estoque: parseInt(btn.dataset.estoque, 10),
+        quantidade: 1
+    });
+}
+
+function handleImagensChange(e) {
+    const msgContainer = document.getElementById('msg-novo-produto');
+    if (e.target.files.length > 4) {
+        if (msgContainer) {
+            msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
+            msgContainer.classList.remove('msg-success');
+            msgContainer.classList.add('msg-error');
+        }
+        e.target.value = '';
+    } else {
+        if (msgContainer) {
+            msgContainer.textContent = "";
+            msgContainer.classList.remove('msg-error', 'msg-success');
+        }
+    }
+}
+
+async function handleNovoProdutoSubmit(e) {
+    e.preventDefault();
+    const formNovoProduto = e.currentTarget;
+    const inputImagens = document.getElementById('novo-item-imagens');
+    const msgContainer = document.getElementById('msg-novo-produto');
+
+    if (inputImagens && inputImagens.files.length > 4) {
+        if (msgContainer) {
+            msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
+            msgContainer.classList.remove('msg-success');
+            msgContainer.classList.add('msg-error');
+        }
+        return;
+    }
+
+    const btnSubmit = formNovoProduto.querySelector('button[type="submit"]');
+    const token = localStorage.getItem('koridraws_token');
+
+    const nome = document.getElementById('novo-item-nome').value.trim();
+    const preco = document.getElementById('novo-item-preco').value;
+    const estoque = document.getElementById('novo-item-estoque').value;
+
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = "A salvar...";
+    
+    if (msgContainer) {
+        msgContainer.textContent = "";
+        msgContainer.classList.remove('msg-error', 'msg-success');
+    }
+
+    const formData = new FormData();
+    formData.append('Nome', nome);
+    formData.append('Preco', parseFloat(preco).toString().replace('.', ','));
+    formData.append('Estoque', parseInt(estoque, 10));
+
+    if (inputImagens) {
+        for (let i = 0; i < inputImagens.files.length; i++) {
+            formData.append('Imagens', inputImagens.files[i]);
+        }
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Itens/Post`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            if (msgContainer) {
+                msgContainer.textContent = "Produto cadastrado com sucesso!";
+                msgContainer.classList.remove('msg-error');
+                msgContainer.classList.add('msg-success');
+            }
+            formNovoProduto.reset();
+            loadProducts();
+        } else {
+            throw new Error("Erro na resposta do servidor.");
+        }
+    } catch (error) {
+        if (msgContainer) {
+            msgContainer.textContent = "Erro ao cadastrar o produto. Verifique os dados ou as suas permissões.";
+            msgContainer.classList.remove('msg-success');
+            msgContainer.classList.add('msg-error');
+        }
+    } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Salvar Novo Produto";
+    }
+}
+
+function handleDOMContentLoaded() {
+    loadProducts();
+    inicializarPainelGerente();
+}
+
+// ==========================================
+// FUNÇÕES PRINCIPAIS
+// ==========================================
+
 async function loadProducts() {
     const spinner = document.getElementById('loading-spinner');
 
@@ -23,7 +180,7 @@ async function loadProducts() {
         todosProdutos = await response.json();
 
         if (spinner) {
-            spinner.style.display = 'none';
+            spinner.classList.add('d-none');
         }
 
         setupFilters();
@@ -33,7 +190,7 @@ async function loadProducts() {
     } catch (error) {
         if (spinner) {
             spinner.textContent = "Não foi possível carregar os produtos no momento.";
-            spinner.style.color = "#c0392b";
+            spinner.classList.add('msg-error');
         }
     }
 }
@@ -102,58 +259,45 @@ function setupSorting() {
     const filtersContainer = document.querySelector('.filters-container');
     if (!filtersContainer) return;
 
-    const sortContainer = document.createElement('div');
-    sortContainer.className = 'sort-container';
-    sortContainer.style.marginLeft = 'auto';
+    let sortContainer = document.querySelector('.sort-container');
+    if (!sortContainer) {
+        sortContainer = document.createElement('div');
+        sortContainer.className = 'sort-container';
 
-    const sortSelect = document.createElement('select');
-    sortSelect.id = 'sort-select';
-    sortSelect.style.padding = '10px 10px';
-    sortSelect.style.borderRadius = '8px';
-    sortSelect.style.border = '2px solid var(--cor-amarelo-teste)';
-    sortSelect.style.color = 'var(--cor-amarelo-teste)';
-    sortSelect.style.fontFamily = 'var(--font-body)';
-    sortSelect.style.fontWeight = 'bold';
-    sortSelect.style.cursor = 'pointer';
-    sortSelect.style.backgroundColor = 'white';
+        const sortSelect = document.createElement('select');
+        sortSelect.id = 'sort-select';
 
-    const options = [
-        { val: 'default', text: 'Ordenar' },
-        { val: 'id_desc', text: 'Lançamentos' },
-        { val: 'preco_asc', text: 'Menor Preço' },
-        { val: 'preco_desc', text: 'Maior Preço' },
-        { val: 'alfa_asc', text: 'A - Z' },
-        { val: 'alfa_desc', text: 'Z - A' },
-        { val: 'id_asc', text: 'Mais Antigos' }
-    ];
+        const options = [
+            { val: 'default', text: 'Ordenar' },
+            { val: 'id_desc', text: 'Lançamentos' },
+            { val: 'preco_asc', text: 'Menor Preço' },
+            { val: 'preco_desc', text: 'Maior Preço' },
+            { val: 'alfa_asc', text: 'A - Z' },
+            { val: 'alfa_desc', text: 'Z - A' },
+            { val: 'id_asc', text: 'Mais Antigos' }
+        ];
 
-    options.forEach(opt => {
-        const optionEl = document.createElement('option');
-        optionEl.value = opt.val;
-        optionEl.textContent = opt.text;
-        sortSelect.appendChild(optionEl);
-    });
+        options.forEach(opt => {
+            const optionEl = document.createElement('option');
+            optionEl.value = opt.val;
+            optionEl.textContent = opt.text;
+            sortSelect.appendChild(optionEl);
+        });
 
-    sortSelect.addEventListener('change', (e) => {
-        ordenacaoAtual = e.target.value;
-        aplicarFiltrosEOrdenacao();
-    });
+        sortSelect.removeEventListener('change', handleSortChange);
+        sortSelect.addEventListener('change', handleSortChange);
 
-    sortContainer.appendChild(sortSelect);
-    filtersContainer.appendChild(sortContainer);
+        sortContainer.appendChild(sortSelect);
+        filtersContainer.appendChild(sortContainer);
+    }
 }
 
 function setupFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
 
     filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-
-            categoriaAtual = e.target.dataset.category;
-            aplicarFiltrosEOrdenacao();
-        });
+        btn.removeEventListener('click', handleFilterClick);
+        btn.addEventListener('click', handleFilterClick);
     });
 }
 
@@ -175,12 +319,6 @@ function renderizarControlesPaginacao() {
             paginationContainer = document.createElement('div');
             paginationContainer.id = 'pagination-controls-products';
             paginationContainer.className = 'pagination-container';
-            paginationContainer.style.display = 'flex';
-            paginationContainer.style.justifyContent = 'center';
-            paginationContainer.style.gap = '8px';
-            paginationContainer.style.marginTop = '32px';
-            paginationContainer.style.width = '100%';
-            paginationContainer.style.gridColumn = '1 / -1';
             grid.parentNode.insertBefore(paginationContainer, grid.nextSibling);
         } else {
             return;
@@ -196,25 +334,19 @@ function renderizarControlesPaginacao() {
     btnAnterior.textContent = 'Anterior';
     btnAnterior.className = 'page-btn';
     btnAnterior.disabled = paginaAtual === 1;
-    btnAnterior.addEventListener('click', () => {
-        if (paginaAtual > 1) {
-            paginaAtual--;
-            renderizarPaginaAtual();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    });
+    btnAnterior.removeEventListener('click', handleBtnAnteriorClick);
+    btnAnterior.addEventListener('click', handleBtnAnteriorClick);
     paginationContainer.appendChild(btnAnterior);
 
     for (let i = 1; i <= totalPaginas; i++) {
         const btnPagina = document.createElement('button');
         btnPagina.textContent = i;
         btnPagina.className = `page-btn ${i === paginaAtual ? 'active' : ''}`;
-
-        btnPagina.addEventListener('click', () => {
-            paginaAtual = i;
-            renderizarPaginaAtual();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        
+        btnPagina.dataset.page = i;
+        btnPagina.removeEventListener('click', handleBtnPaginaClick);
+        btnPagina.addEventListener('click', handleBtnPaginaClick);
+        
         paginationContainer.appendChild(btnPagina);
     }
 
@@ -222,13 +354,8 @@ function renderizarControlesPaginacao() {
     btnProximo.textContent = 'Próxima';
     btnProximo.className = 'page-btn';
     btnProximo.disabled = paginaAtual === totalPaginas;
-    btnProximo.addEventListener('click', () => {
-        if (paginaAtual < totalPaginas) {
-            paginaAtual++;
-            renderizarPaginaAtual();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    });
+    btnProximo.removeEventListener('click', handleBtnProximoClick);
+    btnProximo.addEventListener('click', handleBtnProximoClick);
     paginationContainer.appendChild(btnProximo);
 }
 
@@ -241,7 +368,7 @@ function renderProducts(listaParaRenderizar) {
     grid.innerHTML = '';
 
     if (listaParaRenderizar.length === 0) {
-        grid.innerHTML = '<p style="text-align:center; grid-column: 1 / -1; font-family: var(--font-body); margin-top: 40px;">Nenhum produto encontrado nesta categoria.</p>';
+        grid.innerHTML = '<p class="empty-products-msg">Nenhum produto encontrado nesta categoria.</p>';
         return;
     }
 
@@ -266,8 +393,7 @@ function renderProducts(listaParaRenderizar) {
         if (imgEl) imgEl.src = imageUrl;
 
         const imgContainer = imgEl.parentElement;
-        imgContainer.style.position = 'relative';
-
+        
         const semEstoque = produto.estoque === 0;
         const poucasUnidades = produto.estoque > 0 && produto.estoque <= corteBaixoEstoque;
 
@@ -289,23 +415,16 @@ function renderProducts(listaParaRenderizar) {
             if (semEstoque) {
                 btnComprar.disabled = true;
                 btnComprar.textContent = "Indisponível";
-                btnComprar.style.backgroundColor = "#ccc";
-                btnComprar.style.cursor = "not-allowed";
-                btnComprar.style.color = "#666";
+                btnComprar.classList.add('buy-btn-disabled');
             } else {
-                btnComprar.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                btnComprar.dataset.id = produto.id;
+                btnComprar.dataset.nome = produto.nome;
+                btnComprar.dataset.preco = produto.preco;
+                btnComprar.dataset.imagem = imageUrl;
+                btnComprar.dataset.estoque = produto.estoque;
 
-                    addToCart({
-                        id: produto.id,
-                        nome: produto.nome,
-                        preco: produto.preco,
-                        imagem: imageUrl,
-                        estoque: produto.estoque,
-                        quantidade: 1
-                    });
-                });
+                btnComprar.removeEventListener('click', handleBtnComprarClick);
+                btnComprar.addEventListener('click', handleBtnComprarClick);
             }
         }
 
@@ -318,97 +437,22 @@ function inicializarPainelGerente() {
     const painelGerente = document.getElementById('gerente-panel');
 
     if (papelUsuario === 'Gerente' && painelGerente) {
-        painelGerente.style.display = 'block';
+        painelGerente.classList.remove('d-none');
+        painelGerente.style.display = 'block'; // Fallback visual
+    }
+
+    const inputImagens = document.getElementById('novo-item-imagens');
+    if (inputImagens) {
+        inputImagens.removeEventListener('change', handleImagensChange);
+        inputImagens.addEventListener('change', handleImagensChange);
     }
 
     const formNovoProduto = document.getElementById('form-novo-produto');
-    const inputImagens = document.getElementById('novo-item-imagens');
-    const msgContainer = document.getElementById('msg-novo-produto');
-
-    if (inputImagens) {
-        inputImagens.addEventListener('change', (e) => {
-            if (e.target.files.length > 4) {
-                if (msgContainer) {
-                    msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
-                    msgContainer.style.color = "#c0392b";
-                }
-                e.target.value = '';
-            } else {
-                if (msgContainer) {
-                    msgContainer.textContent = "";
-                }
-            }
-        });
-    }
-
     if (formNovoProduto) {
-        formNovoProduto.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (inputImagens && inputImagens.files.length > 4) {
-                if (msgContainer) {
-                    msgContainer.textContent = "Por favor, selecione no máximo 4 imagens.";
-                    msgContainer.style.color = "#c0392b";
-                }
-                return;
-            }
-
-            const btnSubmit = formNovoProduto.querySelector('button[type="submit"]');
-            const token = localStorage.getItem('koridraws_token');
-
-            const nome = document.getElementById('novo-item-nome').value.trim();
-            const preco = document.getElementById('novo-item-preco').value;
-            const estoque = document.getElementById('novo-item-estoque').value;
-
-            btnSubmit.disabled = true;
-            btnSubmit.textContent = "A salvar...";
-            if (msgContainer) msgContainer.textContent = "";
-
-            const formData = new FormData();
-            formData.append('Nome', nome);
-            formData.append('Preco', parseFloat(preco).toString().replace('.', ','));
-            formData.append('Estoque', parseInt(estoque, 10));
-
-            if (inputImagens) {
-                for (let i = 0; i < inputImagens.files.length; i++) {
-                    formData.append('Imagens', inputImagens.files[i]);
-                }
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/Itens/Post`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    if (msgContainer) {
-                        msgContainer.textContent = "Produto cadastrado com sucesso!";
-                        msgContainer.style.color = "#27ae60";
-                    }
-                    formNovoProduto.reset();
-
-                    loadProducts();
-                } else {
-                    throw new Error("Erro na resposta do servidor.");
-                }
-            } catch (error) {
-                if (msgContainer) {
-                    msgContainer.textContent = "Erro ao cadastrar o produto. Verifique os dados ou as suas permissões.";
-                    msgContainer.style.color = "#c0392b";
-                }
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = "Salvar Novo Produto";
-            }
-        });
+        formNovoProduto.removeEventListener('submit', handleNovoProdutoSubmit);
+        formNovoProduto.addEventListener('submit', handleNovoProdutoSubmit);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    inicializarPainelGerente();
-});
+document.removeEventListener('DOMContentLoaded', handleDOMContentLoaded);
+document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);

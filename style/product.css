@@ -103,3 +103,100 @@
   border-color: #ccc;
   color: #ccc;
 }
+
+.gerente-panel {
+  display: none;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 32px auto;
+  background: #f9f9f9;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.gerente-panel-title {
+  font-family: var(--font-display);
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.file-input-bg {
+  background: #fff;
+  padding: 8px;
+}
+
+.feedback-msg {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.actions-spaced {
+  margin-top: 16px;
+}
+
+.d-none {
+  display: none;
+}
+
+/* Container de Ordenação */
+.sort-container {
+  margin-left: auto;
+}
+
+#sort-select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid var(--cor-amarelo-teste);
+  color: var(--cor-amarelo-teste);
+  font-family: var(--font-body);
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+}
+
+/* Paginação */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+/* Mensagem de grade vazia */
+.empty-products-msg {
+  text-align: center;
+  grid-column: 1 / -1;
+  font-family: var(--font-body);
+  margin-top: 40px;
+}
+
+/* Ajuste no container da imagem do card */
+.container-img {
+  position: relative;
+}
+
+/* Estados do botão de compra */
+.buy-btn:disabled,
+.buy-btn-disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+  color: #666 !important;
+}
+
+/* Mensagens de Feedback */
+.msg-error {
+  color: #c0392b;
+}
+
+.msg-success {
+  color: #27ae60;
+}
+
+/* Classe utilitária para esconder elementos */
+.d-none {
+  display: none !important;
+}
