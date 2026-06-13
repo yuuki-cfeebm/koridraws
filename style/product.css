@@ -9,7 +9,7 @@
 .products-section {
   width: 100%;
   max-width: 1200px;
-  overflow: visible; /* Permite que os cards cresçam sem restrição */
+  overflow: visible;
 }
 
 .products-section .section-title {
@@ -37,11 +37,11 @@
 
 
 
-/* Garante que o card ocupe o espaço corretamente no grid sem amassar */
+
 .products-grid .card {
   width: 100%;
   max-width: 300px;
-  height: 100%; /* Padroniza a altura caso os títulos variem */
+  height: 100%; 
   justify-content: space-between; 
 }
 
