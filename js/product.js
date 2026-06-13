@@ -5,6 +5,9 @@ let todosProdutos = [];
 let produtosFiltradosAtuais = [];
 let paginaAtual = 1;
 
+let categoriaAtual = 'Todos';
+let ordenacaoAtual = 'default';
+
 const corteBaixoEstoque = 5;
 const produtosPorPagina = 9;
 
@@ -17,41 +20,15 @@ async function loadProducts() {
             throw new Error();
         }
 
-        let produtosDaApi = await response.json();
-
-
-        produtosDaApi.sort((a, b) => {
-            const getPrioridade = (p) => {
-                if (p.estoque === 0) return 3;
-                if (p.estoque > 0 && p.estoque <= corteBaixoEstoque) return 1;
-                return 2;
-            };
-
-            const prioA = getPrioridade(a);
-            const prioB = getPrioridade(b);
-
-            if (prioA !== prioB) {
-                return prioA - prioB;
-            }
-
-            if (prioA === 1) {
-                if (a.estoque !== b.estoque) {
-                    return a.estoque - b.estoque;
-                }
-            }
-
-            return a.nome.localeCompare(b.nome);
-        });
-
-        todosProdutos = produtosDaApi;
-        produtosFiltradosAtuais = [...todosProdutos];
+        todosProdutos = await response.json();
 
         if (spinner) {
             spinner.style.display = 'none';
         }
 
-        renderizarPaginaAtual();
         setupFilters();
+        setupSorting();
+        aplicarFiltrosEOrdenacao();
 
     } catch (error) {
         if (spinner) {
@@ -59,6 +36,125 @@ async function loadProducts() {
             spinner.style.color = "#c0392b";
         }
     }
+}
+
+function aplicarFiltrosEOrdenacao() {
+    if (categoriaAtual === 'Todos') {
+        produtosFiltradosAtuais = [...todosProdutos];
+    } else {
+        produtosFiltradosAtuais = todosProdutos.filter(produto => {
+            const nomeStr = produto.nome.toLowerCase();
+            const catStr = categoriaAtual.toLowerCase();
+
+            if (catStr === 'adesivos' || catStr === 'adesivo' || catStr === 'cartela' || catStr === 'cartelas') {
+                return nomeStr.includes('adesivo') || nomeStr.includes('cartela');
+            }
+            if (catStr === 'bottons' || catStr === 'botton') {
+                return nomeStr.includes('botton');
+            }
+            if (catStr === 'prints' || catStr === 'print') {
+                return nomeStr.includes('print');
+            }
+            if (catStr === 'chaveiros' || catStr === 'chaveiro') {
+                return nomeStr.includes('chaveiro') || nomeStr.includes('phonecharm');
+            }
+
+            return nomeStr.includes(catStr);
+        });
+    }
+
+    produtosFiltradosAtuais.sort((a, b) => {
+        switch (ordenacaoAtual) {
+            case 'preco_asc':
+                return a.preco - b.preco;
+            case 'preco_desc':
+                return b.preco - a.preco;
+            case 'alfa_asc':
+                return a.nome.localeCompare(b.nome);
+            case 'alfa_desc':
+                return b.nome.localeCompare(a.nome);
+            case 'id_desc':
+                return b.id - a.id;
+            case 'id_asc':
+                return a.id - b.id;
+            default:
+                const getPrioridade = (p) => {
+                    if (p.estoque === 0) return 3;
+                    if (p.estoque > 0 && p.estoque <= corteBaixoEstoque) return 1;
+                    return 2;
+                };
+
+                const prioA = getPrioridade(a);
+                const prioB = getPrioridade(b);
+
+                if (prioA !== prioB) return prioA - prioB;
+                if (prioA === 1 && a.estoque !== b.estoque) return a.estoque - b.estoque;
+                
+                return a.nome.localeCompare(b.nome);
+        }
+    });
+
+    paginaAtual = 1;
+    renderizarPaginaAtual();
+}
+
+function setupSorting() {
+    const filtersContainer = document.querySelector('.filters-container');
+    if (!filtersContainer) return;
+
+    const sortContainer = document.createElement('div');
+    sortContainer.className = 'sort-container';
+    sortContainer.style.marginLeft = 'auto';
+
+    const sortSelect = document.createElement('select');
+    sortSelect.id = 'sort-select';
+    sortSelect.style.padding = '10px 10px';
+    sortSelect.style.borderRadius = '8px';
+    sortSelect.style.border = '2px solid var(--cor-amarelo-teste)';
+    sortSelect.style.color = 'var(--cor-amarelo-teste)';
+    sortSelect.style.fontFamily = 'var(--font-body)';
+    sortSelect.style.fontWeight = 'bold';
+    sortSelect.style.cursor = 'pointer';
+    sortSelect.style.backgroundColor = 'transparent';
+
+    const options = [
+        { val: 'default', text: 'Ordenar' },
+        { val: 'id_desc', text: 'Lançamentos' },
+        { val: 'preco_asc', text: 'Menor Preço' },
+        { val: 'preco_desc', text: 'Maior Preço' },
+        { val: 'alfa_asc', text: 'A - Z' },
+        { val: 'alfa_desc', text: 'Z - A' },
+        { val: 'id_asc', text: 'Mais Antigos' }
+    ];
+
+    options.forEach(opt => {
+        const optionEl = document.createElement('option');
+        optionEl.value = opt.val;
+        optionEl.textContent = opt.text;
+        sortSelect.appendChild(optionEl);
+    });
+
+    sortSelect.addEventListener('change', (e) => {
+        ordenacaoAtual = e.target.value;
+        aplicarFiltrosEOrdenacao();
+    });
+
+    sortContainer.appendChild(sortSelect);
+    filtersContainer.appendChild(sortContainer);
+}
+
+function setupFilters() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+
+            categoriaAtual = e.target.dataset.category;
+            aplicarFiltrosEOrdenacao();
+        });
+    });
 }
 
 function renderizarPaginaAtual() {
@@ -214,48 +310,6 @@ function renderProducts(listaParaRenderizar) {
         }
 
         grid.appendChild(clone);
-    });
-}
-
-function setupFilters() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-
-            const category = e.target.dataset.category;
-
-            paginaAtual = 1;
-
-            if (category === 'Todos') {
-                produtosFiltradosAtuais = [...todosProdutos];
-            } else {
-                produtosFiltradosAtuais = todosProdutos.filter(produto => {
-                    const nomeStr = produto.nome.toLowerCase();
-                    const catStr = category.toLowerCase();
-
-                    // O método .includes() captura automaticamente as variações no plural se buscarmos o singular
-                    if (catStr === 'adesivos' || catStr === 'adesivo' || catStr === 'cartela' || catStr === 'cartelas') {
-                        return nomeStr.includes('adesivo') || nomeStr.includes('cartela');
-                    }
-                    if (catStr === 'bottons' || catStr === 'botton') {
-                        return nomeStr.includes('botton');
-                    }
-                    if (catStr === 'prints' || catStr === 'print') {
-                        return nomeStr.includes('print');
-                    }
-                    if (catStr === 'chaveiros' || catStr === 'chaveiro') {
-                        return nomeStr.includes('chaveiro') || nomeStr.includes('phonecharm');
-                    }
-
-                    return nomeStr.includes(catStr);
-                });
-            }
-
-            renderizarPaginaAtual();
-        });
     });
 }
 
